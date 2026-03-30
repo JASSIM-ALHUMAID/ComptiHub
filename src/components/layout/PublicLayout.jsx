@@ -1,11 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../navigation/Navbar'
 
 export default function PublicLayout() {
-  return (
-    <div>
-      <Navbar />
-      <Outlet />
-    </div>
-  )
+  return <Outlet />
 }
