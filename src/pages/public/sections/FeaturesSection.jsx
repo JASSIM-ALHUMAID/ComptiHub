@@ -1,13 +1,14 @@
 import {
   Award,
   ClipboardList,
-  Compass,
+  RefreshCw,
   Search,
   SlidersHorizontal,
-  RefreshCw,
   Users,
 } from "lucide-react";
 import Card from "../../../components/ui/Card";
+import { cn } from "../../../lib/utils/cn";
+import { useInViewOnce } from "../../../lib/utils/useInViewOnce";
 
 const features = [
   {
@@ -44,8 +45,11 @@ const features = [
 ];
 
 export default function FeaturesSection() {
+  const [sectionRef, isSectionVisible] = useInViewOnce();
+
   return (
     <section
+      ref={sectionRef}
       id="features"
       className="relative overflow-hidden px-5 py-24 sm:px-8 sm:py-32 lg:px-24 lg:py-40 xl:py-48"
     >
@@ -53,35 +57,52 @@ export default function FeaturesSection() {
 
       <div className="relative mx-auto max-w-[1920px]">
         <header className="mb-16 text-center sm:mb-20 lg:mb-24 xl:mb-32">
-          <h2 className="landing-display text-[clamp(3rem,11vw,7rem)] font-black uppercase text-(--landing-text)">
+          <h2
+            className={cn(
+              "landing-section-title landing-inview-display text-[clamp(3rem,11vw,7rem)] text-(--landing-text)",
+              isSectionVisible && "is-visible",
+            )}
+            style={{ "--reveal-order": 0 }}
+          >
             KEY <span className="text-(--landing-gold)">FEATURES</span>
           </h2>
-          <div className="mx-auto mt-6 h-1.5 w-20 bg-(--landing-gold) sm:mt-8 sm:h-2 sm:w-28" />
+          <div
+            className={cn(
+              "landing-inview mx-auto mt-6 h-1.5 w-20 bg-(--landing-gold) sm:mt-8 sm:h-2 sm:w-28",
+              isSectionVisible && "is-visible",
+            )}
+            style={{ "--reveal-order": 1 }}
+          />
         </header>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:gap-10">
-          {features.map(({ title, copy, Icon }) => (
-            <Card
-              key={title}
-              className={[
-                "group rounded-[22px] border bg-[#23262d] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition-all duration-300 sm:p-6 xl:p-7",
-                "border-[rgba(77,70,50,0.38)] hover:border-(--landing-gold)",
-              ].join(" ")}
+          {features.map((feature, index) => (
+            <div
+              key={feature.title}
+              className={cn("landing-inview", isSectionVisible && "is-visible")}
+              style={{ "--reveal-order": index + 2 }}
             >
-              <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(250,204,21,0.12)] transition-colors duration-300 sm:h-12 sm:w-12">
-                <Icon
-                  className="h-5 w-5 text-(--landing-gold) sm:h-6 sm:w-6"
-                  aria-hidden="true"
-                  strokeWidth={2.1}
-                />
-              </div>
-              <h3 className="max-w-54 text-[1.46rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-(--landing-text) sm:text-[1.68rem]">
-                {title}
-              </h3>
-              <p className="mt-4 max-w-70 text-[0.98rem] leading-7 tracking-[-0.01em] text-(--landing-text) sm:text-[1rem] sm:leading-8">
-                {copy}
-              </p>
-            </Card>
+              <Card
+                className={[
+                  "group rounded-[22px] border bg-[#23262d] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition-all duration-300 sm:p-6 xl:p-7",
+                  "border-[rgba(77,70,50,0.38)] hover:border-(--landing-gold)",
+                ].join(" ")}
+              >
+                <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(250,204,21,0.12)] transition-colors duration-300 sm:h-12 sm:w-12">
+                  <feature.Icon
+                    className="h-5 w-5 text-(--landing-gold) sm:h-6 sm:w-6"
+                    aria-hidden="true"
+                    strokeWidth={2.1}
+                  />
+                </div>
+                <h3 className="landing-title max-w-54 text-[1.46rem] text-(--landing-text) sm:text-[1.68rem]">
+                  {feature.title}
+                </h3>
+                <p className="landing-copy mt-4 max-w-70 text-[0.98rem] text-(--landing-text) sm:text-[1rem]">
+                  {feature.copy}
+                </p>
+              </Card>
+            </div>
           ))}
         </div>
       </div>

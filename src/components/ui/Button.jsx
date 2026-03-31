@@ -1,14 +1,13 @@
 import { cn } from '../../lib/utils/cn'
 
 const variantClasses = {
-  primary:
-    'landing-button-primary rounded-full border border-[var(--landing-gold)] hover:shadow-[0_0_40px_rgba(250,204,21,0.3)]',
-  secondary: 'landing-button-secondary rounded-2xl border-2',
+  primary: 'landing-button-primary',
+  secondary: 'landing-button-secondary',
 }
 
 const sizeClasses = {
-  nav: 'px-6 py-3 text-[0.68rem] tracking-[0.24em] sm:px-8 sm:text-xs',
-  hero: 'px-8 py-4 text-xs tracking-[0.25em] sm:px-12 sm:py-6 sm:text-sm',
+  nav: 'min-h-11 px-6 text-[0.78rem] sm:min-h-12 sm:px-8 sm:text-[0.84rem]',
+  hero: 'min-h-14 px-8 text-[0.84rem] sm:min-h-16 sm:px-10 sm:text-[0.9rem]',
 }
 
 export default function Button({
@@ -25,7 +24,7 @@ export default function Button({
   return (
     <Component
       className={cn(
-        'inline-flex items-center justify-center font-black uppercase transition-all duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--landing-gold)]',
+        'landing-button inline-flex items-center justify-center whitespace-nowrap border transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold)',
         variantClasses[variant],
         sizeClasses[size],
         className,

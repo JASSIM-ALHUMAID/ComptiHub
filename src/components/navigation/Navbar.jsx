@@ -18,17 +18,19 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-[1920px] items-center justify-between px-5 py-5 sm:px-8 lg:px-16">
         <a
           href="#hero"
-          className="landing-wordmark text-xl font-black text-[var(--landing-gold)] transition-colors duration-200 hover:text-[var(--landing-gold-soft)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--landing-gold)] sm:text-2xl"
+          className="landing-link-accent landing-wordmark text-xl font-black text-(--landing-gold) transition-colors duration-200 hover:text-(--landing-gold-soft) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold) sm:text-2xl"
+          style={{ '--link-underline-offset': '-0.35rem' }}
         >
           COMPTIHUB
         </a>
 
         <div className="hidden items-center gap-8 md:flex lg:gap-12">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-[0.72rem] font-bold tracking-[0.22em] text-[var(--landing-text)] transition-colors duration-200 hover:text-[var(--landing-gold)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--landing-gold)]"
+              className="landing-link-accent landing-nav-link landing-ui-text text-[0.78rem] text-(--landing-text) transition-colors duration-200 hover:text-(--landing-gold) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold)"
+              style={{ '--nav-index': index }}
             >
               {item.label}
             </a>
@@ -44,7 +46,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsOpen((open) => !open)}
-          className="inline-flex h-11 w-11 items-center justify-center border border-[rgba(77,70,50,0.28)] text-[var(--landing-text)] transition-colors duration-200 hover:border-[var(--landing-gold)] hover:text-[var(--landing-gold)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--landing-gold)] md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(77,70,50,0.28)] text-(--landing-text) transition-all duration-300 hover:-translate-y-0.5 hover:border-(--landing-gold) hover:text-(--landing-gold) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold) md:hidden"
           aria-expanded={isOpen}
           aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
@@ -53,14 +55,15 @@ export default function Navbar() {
       </div>
 
       {isOpen ? (
-        <div className="border-t border-[rgba(77,70,50,0.16)] bg-[rgba(12,14,18,0.96)] px-5 py-5 md:hidden">
+        <div className="landing-nav-panel border-t border-[rgba(77,70,50,0.16)] bg-[rgba(12,14,18,0.96)] px-5 py-5 md:hidden">
           <div className="flex flex-col gap-4">
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
               <a
                 key={item.label}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="text-xs font-bold tracking-[0.22em] text-[var(--landing-text)] transition-colors duration-200 hover:text-[var(--landing-gold)]"
+                className="landing-link-accent landing-nav-link landing-ui-text w-fit text-[0.82rem] text-(--landing-text) transition-colors duration-200 hover:text-(--landing-gold)"
+                style={{ '--nav-index': index }}
               >
                 {item.label}
               </a>
