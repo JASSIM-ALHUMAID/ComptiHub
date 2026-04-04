@@ -7,5 +7,6 @@ export const routes = {
   teams: '/teams',
   applications: '/applications',
   profile: '/profile',
+  profileEdit: '/profile/edit',
   admin: '/admin',
 }

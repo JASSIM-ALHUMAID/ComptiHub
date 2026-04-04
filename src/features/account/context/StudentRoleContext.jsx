@@ -1,17 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useMemo, useState } from 'react'
+import { createContext, useMemo } from 'react'
+import { useAuth } from '../../auth/hooks/useAuth'
 
 export const StudentRoleContext = createContext(null)
 
 export function StudentRoleProvider({ children }) {
-  const [activeRole, setActiveRole] = useState('competitor')
+  const { user, updateActiveRole } = useAuth()
 
   const value = useMemo(
     () => ({
-      activeRole,
-      setActiveRole,
+      activeRole: user?.activeRole ?? user?.defaultRole ?? 'competitor',
+      setActiveRole: updateActiveRole,
     }),
-    [activeRole],
+    [updateActiveRole, user],
   )
 
   return (

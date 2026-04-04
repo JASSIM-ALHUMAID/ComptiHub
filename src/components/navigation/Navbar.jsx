@@ -37,7 +37,10 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <Button as={Link} to={routes.login} variant="secondary" size="nav">
+            LOGIN
+          </Button>
           <Button as={Link} to={routes.signup} size="nav">
             GET STARTED
           </Button>
@@ -68,6 +71,16 @@ export default function Navbar() {
                 {item.label}
               </a>
             ))}
+            <Button
+              as={Link}
+              to={routes.login}
+              onClick={() => setIsOpen(false)}
+              variant="secondary"
+              size="nav"
+              className="w-full justify-center"
+            >
+              LOGIN
+            </Button>
             <Button
               as={Link}
               to={routes.signup}
