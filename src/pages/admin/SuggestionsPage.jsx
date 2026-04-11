@@ -82,7 +82,7 @@ export default function SuggestionsPage() {
           </div>
         </div>
 
-        <div className="grid gap-4 rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.62)] p-5">
+          <div className="grid gap-4 rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.62)] p-5">
           <div>
             <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.78)]">Total pending</p>
             <p className="mt-2 text-3xl font-black tracking-tight text-[var(--admin-text)]">{totalPending}</p>
@@ -103,7 +103,7 @@ export default function SuggestionsPage() {
 
           <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_auto_auto]">
             <label className="space-y-2">
-              <span className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.7)]">Search queue</span>
+              <span className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.7)]">Search queue</span>
               <div className="relative">
                 <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[rgba(209,198,171,0.52)]" />
                 <Input
@@ -149,7 +149,7 @@ export default function SuggestionsPage() {
                   <div className="flex items-start gap-4">
                     <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--admin-gold)]" />
                     <div className="space-y-2">
-                      <h3 className="text-xl font-black uppercase tracking-[0.02em] text-[var(--admin-text)]">
+                      <h3 className="text-lg font-black uppercase tracking-[0.03em] text-[var(--admin-text)]">
                         {suggestion.title}
                       </h3>
                       <div className="flex flex-wrap items-center gap-3 text-[0.7rem] uppercase tracking-[0.12em] text-[rgba(209,198,171,0.66)]">

@@ -366,7 +366,7 @@ export default function ManageCompetitionsPage() {
           <div className="grid gap-4 rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.62)] p-5">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="admin-ui-text text-[0.6rem] text-[rgba(250,204,21,0.76)]">Registry</p>
+                <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.76)]">Registry</p>
                 <p className="mt-2 text-3xl font-black tracking-tight text-[var(--admin-text)]">
                   {competitions.length}
                 </p>
@@ -385,19 +385,19 @@ export default function ManageCompetitionsPage() {
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <article className="rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-            <p className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.66)]">Active</p>
+            <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Active</p>
             <p className="mt-3 text-3xl font-black text-[var(--admin-text)]">{stats.active}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-            <p className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.66)]">Upcoming</p>
+            <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Upcoming</p>
             <p className="mt-3 text-3xl font-black text-[var(--admin-text)]">{stats.upcoming}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-            <p className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.66)]">Drafts</p>
+            <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Drafts</p>
             <p className="mt-3 text-3xl font-black text-[var(--admin-text)]">{stats.drafts}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-            <p className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.66)]">Prize pool</p>
+            <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Prize pool</p>
             <p className="mt-3 text-2xl font-black text-[var(--admin-text)]">{stats.totalPrizePool}</p>
           </article>
         </section>
@@ -411,7 +411,7 @@ export default function ManageCompetitionsPage() {
 
             <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_220px_auto]">
               <label className="space-y-2">
-                <span className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.7)]">Search</span>
+                <span className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.7)]">Search</span>
                 <div className="relative">
                   <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[rgba(209,198,171,0.52)]" />
                   <Input
@@ -424,7 +424,7 @@ export default function ManageCompetitionsPage() {
               </label>
 
               <label className="space-y-2">
-                <span className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.7)]">Status filter</span>
+                <span className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.7)]">Status filter</span>
                 <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
                   <option value="all">All statuses</option>
                   <option value="draft">Draft</option>
@@ -548,12 +548,13 @@ export default function ManageCompetitionsPage() {
 
                   <div className="grid gap-3 text-sm text-[rgba(209,198,171,0.76)] sm:grid-cols-2">
                     <div className="rounded-[1rem] bg-[rgba(255,255,255,0.02)] p-3">
-                      <p className="admin-ui-text text-[0.58rem] text-[rgba(209,198,171,0.64)]">Duration</p>
+                      <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Duration</p>
+                      
                       <p className="mt-2">{formatDisplayDate(competition.startDate)}</p>
                       <p>{formatDisplayDate(competition.endDate)}</p>
                     </div>
                     <div className="rounded-[1rem] bg-[rgba(255,255,255,0.02)] p-3">
-                      <p className="admin-ui-text text-[0.58rem] text-[rgba(209,198,171,0.64)]">Registration</p>
+                      <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Registration</p>
                       <p className="mt-2">{formatDisplayDate(competition.registrationDeadline)}</p>
                       <p>{competition.teamCount} teams</p>
                     </div>
@@ -596,7 +597,7 @@ export default function ManageCompetitionsPage() {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="admin-ui-text text-[0.6rem] text-[rgba(250,204,21,0.74)]">DB sync</p>
+                  <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.74)]">DB sync</p>
                   <h3 className="admin-title mt-1 text-lg text-[var(--admin-text)]">Locked and verified</h3>
                 </div>
               </div>
@@ -607,7 +608,7 @@ export default function ManageCompetitionsPage() {
             </article>
 
             <article className="rounded-[1.3rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-              <p className="admin-ui-text text-[0.6rem] text-[rgba(209,198,171,0.66)]">Operational snapshot</p>
+              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Operational snapshot</p>
               <div className="mt-4 grid gap-3 text-sm text-[rgba(209,198,171,0.76)]">
                 <div className="flex items-center justify-between gap-4">
                   <span className="inline-flex items-center gap-2">

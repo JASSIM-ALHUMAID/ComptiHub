@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
     <main className="admin-page space-y-8 xl:space-y-10">
       <header className="grid gap-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[linear-gradient(135deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] p-6 lg:grid-cols-[minmax(0,1.4fr)_320px] xl:p-7">
         <div className="space-y-4">
-          <p className="admin-ui-text text-[0.7rem] text-[rgba(250,204,21,0.82)]">System overview</p>
+          <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.82)]">System overview</p>
           <div className="space-y-3">
             <h1 className="admin-display max-w-4xl text-4xl leading-none text-[var(--admin-text)] sm:text-5xl xl:text-6xl">
               Command center for competitions and platform health.
@@ -82,11 +82,11 @@ export default function AdminDashboardPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-[1.15rem] border border-[rgba(77,70,50,0.16)] bg-[rgba(255,255,255,0.02)] p-4">
-              <p className="admin-ui-text text-[0.58rem] text-[rgba(209,198,171,0.66)]">Competitions</p>
+              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Competitions</p>
               <p className="mt-2 text-2xl font-bold text-[var(--admin-text)]">24</p>
             </div>
             <div className="rounded-[1.15rem] border border-[rgba(77,70,50,0.16)] bg-[rgba(255,255,255,0.02)] p-4">
-              <p className="admin-ui-text text-[0.58rem] text-[rgba(209,198,171,0.66)]">Alerts</p>
+              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Alerts</p>
               <p className="mt-2 text-2xl font-bold text-[var(--admin-text)]">31</p>
             </div>
           </div>

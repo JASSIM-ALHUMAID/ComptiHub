@@ -16,15 +16,16 @@ import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
 
 const links = [
-  { label: 'Dashboard', to: routes.admin, icon: LayoutDashboard },
+  { label: 'Dashboard', to: routes.admin, icon: LayoutDashboard, end: true },
   { label: 'Competitions', to: routes.adminCompetitions, icon: Trophy },
   { label: 'Suggestions', to: routes.adminSuggestions, icon: Sparkles },
   { label: 'Moderation', to: routes.adminModeration, icon: Gavel },
 ]
 
-function AdminNavLink({ label, to, icon }) {
+function AdminNavLink({ end = false, label, to, icon }) {
   return (
     <NavLink
+      end={end}
       to={to}
       className={({ isActive }) =>
         [
@@ -158,23 +159,6 @@ export default function AdminNav() {
         </div>
       </header>
 
-      <nav className="admin-mobile-nav lg:hidden">
-        {links.map(({ label, to, icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              [
-                'flex flex-col items-center gap-1 text-[0.62rem] uppercase tracking-[0.22em] transition-colors duration-200',
-                isActive ? 'text-[var(--admin-gold)]' : 'text-[rgba(209,198,171,0.72)]',
-              ].join(' ')
-            }
-          >
-            {createElement(icon, { className: 'h-4 w-4' })}
-            <span>{label}</span>
-          </NavLink>
-        ))}
-      </nav>
     </>
   )
 }
