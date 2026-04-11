@@ -552,7 +552,7 @@ html {
   }
 
   .tag-badge {
-    @apply rounded-full border surface-outline bg-[rgba(12,14,18,0.6)] px-2 py-0.5 text-[0.65rem] text-muted-lighter;
+    @apply rounded-full border border-[rgba(77,70,50,0.28)] bg-[rgba(12,14,18,0.6)] px-2 py-0.5 text-[0.65rem] text-[rgba(226,226,232,0.45)];
   }
 
   .page-section {
@@ -576,7 +576,7 @@ html {
   }
 
   .btn-icon {
-    @apply inline-flex h-11 w-11 items-center justify-center rounded-full border surface-outline transition-all duration-300 hover:-translate-y-0.5 hover:border-(--landing-gold) hover:text-(--landing-gold) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold);
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(77,70,50,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:border-(--landing-gold) hover:text-(--landing-gold) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold);
   }
 }
 
