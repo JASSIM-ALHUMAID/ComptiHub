@@ -3,10 +3,13 @@ import StudentRoleSwitcher from '../../features/account/components/StudentRoleSw
 import MobileNav from '../navigation/MobileNav'
 import Sidebar from '../navigation/Sidebar'
 import StudentNav from '../navigation/StudentNav'
+import { useIsMobileViewport } from '../../lib/utils/useIsMobileViewport'
 
 export default function AppLayout() {
+  const isMobileViewport = useIsMobileViewport()
+
   return (
-    <div className="admin-theme min-h-screen pb-24 lg:pb-8">
+    <div className={`admin-theme min-h-screen ${isMobileViewport ? 'pb-24' : 'pb-0'}`}>
       <StudentNav />
 
       <div className="admin-shell grid gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-8 lg:py-6">
@@ -19,7 +22,7 @@ export default function AppLayout() {
         </div>
       </div>
 
-      <MobileNav />
+      {isMobileViewport ? <MobileNav /> : null}
     </div>
   )
 }

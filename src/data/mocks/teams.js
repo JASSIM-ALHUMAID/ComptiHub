@@ -25,16 +25,17 @@ export const teams = [
     leaderId: 'user-leader-2',
     leaderName: 'Reem Al-Zahrani',
     description:
-      'Full-stack team for the smart cities hackathon. We need a UI/UX designer to complete our team.',
-    openSlots: 1,
+      'Full-stack smart cities team with the final UI/UX seat already filled and the sprint roadmap locked in.',
+    openSlots: 0,
     totalSlots: 4,
     members: [
       { id: 'user-leader-2', username: 'Reem Al-Zahrani', role: 'Team Leader' },
       { id: 'user-3', username: 'Faisal Omer', role: 'Backend' },
       { id: 'user-4', username: 'Nora Khalid', role: 'Frontend' },
+      { id: 'user-2', username: 'Sara Al-Otaibi', role: 'UI/UX Designer' },
     ],
     requiredSkills: ['UI/UX Design', 'Figma', 'React'],
-    status: 'recruiting',
+    status: 'full',
   },
   {
     id: 'team-3',
@@ -63,12 +64,13 @@ export const teams = [
     leaderName: 'Khalid Bin Nasser',
     description:
       'Mechanical and electrical engineers building an autonomous navigation robot. Seeking a software engineer for computer vision.',
-    openSlots: 2,
+    openSlots: 1,
     totalSlots: 5,
     members: [
       { id: 'user-leader-4', username: 'Khalid Bin Nasser', role: 'Team Leader' },
       { id: 'user-6', username: 'Dina Yousef', role: 'Mechanical Engineer' },
       { id: 'user-7', username: 'Omar Taher', role: 'Electrical Engineer' },
+      { id: 'user-leader-1', username: 'Ali Hassan', role: 'Software Lead' },
     ],
     requiredSkills: ['Python', 'Computer Vision', 'ROS'],
     status: 'recruiting',

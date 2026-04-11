@@ -1,15 +1,8 @@
 import { storage } from '../../../lib/utils/storage'
+import { demoUsers } from '../../../data/mocks/user'
 
 const USERS_KEY = 'compitihub.auth.users'
 const SESSION_KEY = 'compitihub.auth.session'
-const DEFAULT_ADMIN_USER = {
-  id: 'admin-1',
-  username: 'admin',
-  email: 'admin@admin.com',
-  password: '123456789',
-  accountType: 'admin',
-  defaultRole: 'admin',
-}
 
 function readJson(key, fallback) {
   const value = storage.get(key)
@@ -46,13 +39,17 @@ function sanitizeUser(user, activeRole = user.defaultRole) {
 
 function getStoredUsers() {
   const storedUsers = readJson(USERS_KEY, [])
-  const hasAdminAccount = storedUsers.some((user) => user.email === DEFAULT_ADMIN_USER.email)
+  const mergedUsers = [...demoUsers]
 
-  if (hasAdminAccount) {
-    return storedUsers
-  }
+  storedUsers.forEach((storedUser) => {
+    if (mergedUsers.some((demoUser) => demoUser.email === storedUser.email)) {
+      return
+    }
 
-  return [DEFAULT_ADMIN_USER, ...storedUsers]
+    mergedUsers.push(storedUser)
+  })
+
+  return mergedUsers
 }
 
 function setStoredUsers(users) {

@@ -68,6 +68,19 @@ ComptiHub streamlines the competition and team formation experience for universi
    ```
    The application will be available at `http://localhost:5173`
 
+## Demo Accounts
+
+Use these seeded accounts to review the mock data across the main tabs:
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Competitor Demo** | `competitor@demo.com` | `123456789` |
+| **Team Leader Demo** | `leader@demo.com` | `123456789` |
+| **Admin Demo** | `admin@admin.com` | `123456789` |
+
+- The competitor demo includes populated `Teams`, `Applications`, `Dashboard`, and `Profile` views.
+- The team leader demo includes populated `Teams`, `Applications`, `Dashboard`, `Join Requests`, and `Profile` views.
+
 ## Available Scripts
 
 - **`npm run dev`** - Start the development server with hot module replacement

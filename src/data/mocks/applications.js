@@ -1,6 +1,7 @@
 export const applications = [
   {
     id: 'app-1',
+    ownerId: 'user-2',
     teamId: 'team-1',
     teamName: 'ByteForge',
     competitionTitle: 'ACM ICPC Regional 2025',
@@ -10,6 +11,7 @@ export const applications = [
   },
   {
     id: 'app-2',
+    ownerId: 'user-2',
     teamId: 'team-2',
     teamName: 'NovaBuild',
     competitionTitle: 'Saudi Hackathon: Smart Cities',
@@ -19,11 +21,22 @@ export const applications = [
   },
   {
     id: 'app-3',
+    ownerId: 'user-leader-1',
+    teamId: 'team-4',
+    teamName: 'SteelBot',
+    competitionTitle: 'National Robotics Competition',
+    appliedAt: '2025-03-20',
+    status: 'accepted',
+    message: 'I can contribute with software architecture and computer vision support when the robotics team needs a coding lead.',
+  },
+  {
+    id: 'app-4',
+    ownerId: 'user-leader-1',
     teamId: 'team-3',
     teamName: 'Venture X',
     competitionTitle: 'KAUST Entrepreneurship Challenge',
-    appliedAt: '2025-03-20',
-    status: 'rejected',
-    message: 'I have built two React Native apps and am comfortable with Firebase backends.',
+    appliedAt: '2025-02-16',
+    status: 'pending',
+    message: 'I have startup pitch experience and can help shape the technical roadmap alongside the business team.',
   },
 ]

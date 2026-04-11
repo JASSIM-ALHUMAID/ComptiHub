@@ -7,7 +7,6 @@ import { routes } from '../../lib/constants/routes'
 import Button from '../ui/Button'
 
 export default function StudentNav() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { user, logout } = useAuth()
   const { activeRole } = useStudentRole()
   const navigate = useNavigate()
@@ -55,16 +54,6 @@ export default function StudentNav() {
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="btn-icon sm:hidden"
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="student-mobile-menu"
-            aria-label={isMobileMenuOpen ? 'Close student menu' : 'Open student menu'}
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </div>
       </div>
     </header>

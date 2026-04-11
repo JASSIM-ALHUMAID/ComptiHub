@@ -7,7 +7,7 @@ export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => authService.getSession())
-  const [applications, setApplications] = useState(mockApplications)
+  const [allApplications, setAllApplications] = useState(mockApplications)
 
   const login = useCallback(async (credentials) => {
     const sessionUser = await authService.login(credentials)
@@ -47,8 +47,13 @@ export function AuthProvider({ children }) {
   )
 
   const addApplication = useCallback((teamId, teamName, competitionTitle, message) => {
+    if (!user) {
+      return
+    }
+
     const newApp = {
       id: `app-${Date.now()}`,
+      ownerId: user.id,
       teamId,
       teamName,
       competitionTitle,
@@ -56,8 +61,13 @@ export function AuthProvider({ children }) {
       status: 'pending',
       message,
     }
-    setApplications((prev) => [...prev, newApp])
-  }, [])
+    setAllApplications((prev) => [...prev, newApp])
+  }, [user])
+
+  const applications = useMemo(
+    () => allApplications.filter((application) => application.ownerId === user?.id),
+    [allApplications, user?.id],
+  )
 
   const hasApplied = useCallback(
     (teamId) => applications.some((a) => a.teamId === teamId),

@@ -1,30 +1,14 @@
 import { useState } from 'react'
 import { useStudentRole } from '../../features/account/hooks/useStudentRole'
-
-const mockRequests = [
-  {
-    id: 'req-1',
-    teamName: 'ByteForge',
-    applicantName: 'Yousef Al-Salem',
-    message: 'I have strong experience in competitive programming and have solved 400+ problems on Codeforces.',
-    skills: ['C++', 'Algorithms', 'Graph Theory'],
-    appliedAt: '2025-04-02',
-    status: 'pending',
-  },
-  {
-    id: 'req-2',
-    teamName: 'NovaBuild',
-    applicantName: 'Dana Mirza',
-    message: 'I am a UI/UX designer with 2 years of Figma experience and a strong portfolio.',
-    skills: ['Figma', 'UI/UX', 'React'],
-    appliedAt: '2025-04-03',
-    status: 'pending',
-  },
-]
+import EmptyState from '../../components/feedback/EmptyState'
+import { useAuth } from '../../features/auth/hooks/useAuth'
+import { routes } from '../../lib/constants/routes'
+import { teamRequests as seedRequests } from '../../data/mocks/teamRequests'
 
 export default function TeamRequestsPage() {
+  const { user } = useAuth()
   const { activeRole } = useStudentRole()
-  const [requests, setRequests] = useState(mockRequests)
+  const [requests, setRequests] = useState(seedRequests)
 
   function updateStatus(id, status) {
     setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)))
@@ -38,8 +22,9 @@ export default function TeamRequestsPage() {
     )
   }
 
-  const pending = requests.filter((r) => r.status === 'pending')
-  const reviewed = requests.filter((r) => r.status !== 'pending')
+  const myRequests = requests.filter((request) => request.leaderId === user?.id)
+  const pending = myRequests.filter((r) => r.status === 'pending')
+  const reviewed = myRequests.filter((r) => r.status !== 'pending')
 
   return (
     <main className="space-y-6">
@@ -50,9 +35,12 @@ export default function TeamRequestsPage() {
       </header>
 
       {pending.length === 0 && reviewed.length === 0 && (
-        <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-8 text-center">
-          <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">No requests yet.</p>
-        </div>
+        <EmptyState
+          title="No join requests yet"
+          message="Your recruiting queue is empty right now. Once competitors apply to your teams, you will be able to review them from this tab."
+          actionLabel="Back to Teams"
+          actionTo={routes.teams}
+        />
       )}
 
       {pending.length > 0 && (

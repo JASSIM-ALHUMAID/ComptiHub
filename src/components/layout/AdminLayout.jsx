@@ -1,9 +1,13 @@
 import { Outlet } from 'react-router-dom'
+import AdminMobileNav from '../navigation/AdminMobileNav'
 import AdminNav, { AdminSidebar } from '../navigation/AdminNav'
+import { useIsMobileViewport } from '../../lib/utils/useIsMobileViewport'
 
 export default function AdminLayout() {
+  const isMobileViewport = useIsMobileViewport()
+
   return (
-    <div className="admin-theme min-h-screen pb-24 lg:pb-8">
+    <div className={`admin-theme min-h-screen ${isMobileViewport ? 'pb-24' : 'pb-0'}`}>
       <AdminNav />
       <div className="admin-shell grid gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-8 lg:py-6">
         <AdminSidebar />
@@ -13,6 +17,7 @@ export default function AdminLayout() {
           </div>
         </div>
       </div>
+      {isMobileViewport ? <AdminMobileNav /> : null}
     </div>
   )
 }

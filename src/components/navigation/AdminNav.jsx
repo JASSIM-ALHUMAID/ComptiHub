@@ -14,6 +14,7 @@ import { createElement, useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
+import Button from '../ui/Button'
 
 const links = [
   { label: 'Dashboard', to: routes.admin, icon: LayoutDashboard, end: true },
@@ -97,11 +98,15 @@ export default function AdminNav() {
             </div>
             <button
               aria-label="Open notifications"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(77,70,50,0.24)] bg-[rgba(255,255,255,0.02)] text-[var(--admin-text)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.32)] hover:text-[var(--admin-gold-soft)]"
+              className="hidden h-11 w-11 items-center justify-center rounded-full border border-[rgba(77,70,50,0.24)] bg-[rgba(255,255,255,0.02)] text-[var(--admin-text)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.32)] hover:text-[var(--admin-gold-soft)] sm:flex"
               type="button"
             >
               <Bell className="h-4 w-4" />
             </button>
+            <Button className="min-w-0 px-4 sm:hidden" onClick={handleLogout} variant="secondary" size="nav">
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
             <div className="relative hidden sm:block" ref={accountMenuRef}>
               <button
                 aria-expanded={isAccountMenuOpen}
