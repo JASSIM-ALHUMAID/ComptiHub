@@ -3,23 +3,31 @@ import AdminRoute from './guards/AdminRoute'
 import ProtectedRoute from './guards/ProtectedRoute'
 import PublicOnlyRoute from './guards/PublicOnlyRoute'
 import StudentRoleRoute from './guards/StudentRoleRoute'
+
 import AdminLayout from '../components/layout/AdminLayout'
 import AppLayout from '../components/layout/AppLayout'
 import AuthLayout from '../components/layout/AuthLayout'
 import PublicLayout from '../components/layout/PublicLayout'
+
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage'
 import ManageCompetitionsPage from '../pages/admin/ManageCompetitionsPage'
 import ModerationPage from '../pages/admin/ModerationPage'
 import SuggestionsPage from '../pages/admin/SuggestionsPage'
+
 import MyApplicationsPage from '../pages/applications/MyApplicationsPage'
 import LoginPage from '../pages/auth/LoginPage'
 import SignupPage from '../pages/auth/SignupPage'
+
 import CompetitionDetailsPage from '../pages/competitions/CompetitionDetailsPage'
 import CompetitionsPage from '../pages/competitions/CompetitionsPage'
+
 import DashboardPage from '../pages/dashboard/DashboardPage'
+
 import EditProfilePage from '../pages/profile/EditProfilePage'
 import ProfilePage from '../pages/profile/ProfilePage'
+
 import LandingPage from '../pages/public/LandingPage'
+
 import CreateTeamPage from '../pages/teams/CreateTeamPage'
 import MyTeamsPage from '../pages/teams/MyTeamsPage'
 import TeamDetailsPage from '../pages/teams/TeamDetailsPage'
@@ -49,10 +57,22 @@ export const router = createBrowserRouter([
       {
         element: <AppLayout />,
         children: [
-          { path: '/dashboard', element: <DashboardPage /> },
-          { path: '/competitions', element: <CompetitionsPage /> },
-          { path: '/competitions/:competitionId', element: <CompetitionDetailsPage /> },
-          { path: '/teams', element: <StudentRoleRoute />,
+          {
+            path: '/dashboard',
+            element: <StudentRoleRoute />,
+            children: [{ index: true, element: <DashboardPage /> }],
+          },
+          {
+            path: '/competitions',
+            element: <StudentRoleRoute />,
+            children: [
+              { index: true, element: <CompetitionsPage /> },
+              { path: ':competitionId', element: <CompetitionDetailsPage /> },
+            ],
+          },
+          {
+            path: '/teams',
+            element: <StudentRoleRoute />,
             children: [
               { index: true, element: <MyTeamsPage /> },
               { path: 'create', element: <CreateTeamPage /> },
@@ -60,9 +80,19 @@ export const router = createBrowserRouter([
               { path: 'requests', element: <TeamRequestsPage /> },
             ],
           },
-          { path: '/applications', element: <MyApplicationsPage /> },
-          { path: '/profile', element: <ProfilePage /> },
-          { path: '/profile/edit', element: <EditProfilePage /> },
+          {
+            path: '/applications',
+            element: <StudentRoleRoute />,
+            children: [{ index: true, element: <MyApplicationsPage /> }],
+          },
+          {
+            path: '/profile',
+            element: <StudentRoleRoute />,
+            children: [
+              { index: true, element: <ProfilePage /> },
+              { path: 'edit', element: <EditProfilePage /> },
+            ],
+          },
         ],
       },
     ],
