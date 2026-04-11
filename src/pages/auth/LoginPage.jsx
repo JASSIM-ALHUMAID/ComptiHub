@@ -10,6 +10,21 @@ const initialForm = {
   password: "",
 };
 
+function resolvePostLoginRoute(sessionUser, fromPathname) {
+  const isAdmin = sessionUser.accountType === "admin";
+  const isAdminPath = typeof fromPathname === "string" && fromPathname.startsWith("/admin");
+
+  if (isAdmin) {
+    return isAdminPath ? fromPathname : routes.admin;
+  }
+
+  if (isAdminPath) {
+    return routes.dashboard;
+  }
+
+  return fromPathname || routes.dashboard;
+}
+
 export default function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,9 +49,10 @@ export default function LoginPage() {
 
     try {
       const sessionUser = await login(form);
-      const redirectTo =
-        location.state?.from?.pathname ??
-        (sessionUser.accountType === "admin" ? routes.admin : routes.dashboard);
+      const redirectTo = resolvePostLoginRoute(
+        sessionUser,
+        location.state?.from?.pathname,
+      );
 
       navigate(redirectTo, { replace: true });
     } catch (submissionError) {
