@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import FilterButton from '../../components/ui/FilterButton'
+import Alert from '../../components/ui/Alert'
+import Input from '../../components/ui/Input'
 import { competitions } from '../../data/mocks/competitions'
 
 const categories = ['All', 'Business', 'Competitive Programming', 'Hackathon', 'Robotics', 'Design', 'AI / ML']
@@ -29,89 +33,79 @@ export default function CompetitionsPage() {
         </p>
       </header>
 
-      <div className="space-y-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-4">
-        <input
+      <Card className="space-y-3">
+        <Input
           type="text"
           placeholder="Search competitions or organizers…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-2xl border border-[rgba(77,70,50,0.35)] bg-[rgba(12,14,18,0.78)] px-4 py-3 text-sm text-(--landing-text) placeholder:text-[rgba(226,226,232,0.4)] focus:border-(--landing-gold) focus:outline-none focus:ring-2 focus:ring-[rgba(250,204,21,0.2)]"
         />
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
-            <button
+            <FilterButton
               key={cat}
-              type="button"
+              isActive={selectedCategory === cat}
               onClick={() => setSelectedCategory(cat)}
-              className={[
-                'rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors duration-200',
-                selectedCategory === cat
-                  ? 'border-(--landing-gold) bg-[rgba(250,204,21,0.12)] text-(--landing-gold-soft)'
-                  : 'border-[rgba(77,70,50,0.3)] text-[rgba(226,226,232,0.6)] hover:border-(--landing-gold) hover:text-(--landing-gold-soft)',
-              ].join(' ')}
             >
               {cat}
-            </button>
+            </FilterButton>
           ))}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {['all', 'open', 'closed'].map((s) => (
-            <button
+            <FilterButton
               key={s}
-              type="button"
+              isActive={statusFilter === s}
               onClick={() => setStatusFilter(s)}
-              className={[
-                'rounded-full border px-3 py-1.5 text-xs font-semibold capitalize transition-colors duration-200',
-                statusFilter === s
-                  ? 'border-(--landing-gold) bg-[rgba(250,204,21,0.12)] text-(--landing-gold-soft)'
-                  : 'border-[rgba(77,70,50,0.3)] text-[rgba(226,226,232,0.6)] hover:border-(--landing-gold) hover:text-(--landing-gold-soft)',
-              ].join(' ')}
             >
               {s === 'all' ? 'All Statuses' : s}
-            </button>
+            </FilterButton>
           ))}
         </div>
-      </div>
+      </Card>
 
       {filtered.length === 0 ? (
-        <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-8 text-center">
-          <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">No competitions match your filters.</p>
-        </div>
+        <Alert
+          variant="info"
+          title="No results"
+          message="No competitions match your filters. Try adjusting your search."
+        />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((comp) => (
             <Link
               key={comp.id}
               to={`/competitions/${comp.id}`}
-              className="group block rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 transition-all duration-200 hover:border-(--landing-gold) hover:bg-[rgba(250,204,21,0.04)]"
+              className="group block"
             >
-              <div className="mb-3 flex items-start justify-between gap-3">
-                <h2 className="landing-title text-[1.1rem] leading-tight text-(--landing-text) transition-colors duration-200 group-hover:text-(--landing-gold-soft)">
-                  {comp.title}
-                </h2>
-                <span
-                  className={[
-                    'shrink-0 rounded-full border px-2.5 py-1 text-[0.68rem] font-semibold uppercase',
-                    comp.status === 'open'
-                      ? 'border-green-500/30 bg-green-500/10 text-green-400'
-                      : 'border-[rgba(255,180,171,0.3)] bg-[rgba(255,180,171,0.08)] text-(--landing-danger)',
-                  ].join(' ')}
-                >
-                  {comp.status}
-                </span>
-              </div>
-              <p className="landing-copy mb-3 text-xs text-[rgba(226,226,232,0.55)]">by {comp.organizer}</p>
-              <p className="landing-copy mb-4 line-clamp-2 text-sm text-[rgba(226,226,232,0.7)]">{comp.description}</p>
-              <div className="mb-3 flex flex-wrap gap-2">
-                {comp.tags.map((tag) => (
-                  <Badge key={tag} className="text-[0.68rem]">{tag}</Badge>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-4 text-xs text-[rgba(226,226,232,0.55)]">
-                <span>🏆 {comp.prize}</span>
-                <span>👥 {comp.teamSize} members</span>
-                <span>📅 {comp.deadline}</span>
-              </div>
+              <Card variant="interactive" className="h-full">
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <h2 className="landing-title text-[1.1rem] leading-tight text-(--landing-text) transition-colors duration-200 group-hover:text-(--landing-gold-soft)">
+                    {comp.title}
+                  </h2>
+                  <Badge
+                    variant={comp.status === 'open' ? 'success' : 'danger'}
+                    size="md"
+                    className="shrink-0"
+                  >
+                    {comp.status}
+                  </Badge>
+                </div>
+                <p className="landing-copy mb-3 text-xs text-[rgba(226,226,232,0.55)]">by {comp.organizer}</p>
+                <p className="landing-copy mb-4 line-clamp-2 text-sm text-[rgba(226,226,232,0.7)]">{comp.description}</p>
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {comp.tags.map((tag) => (
+                    <Badge key={tag} variant="default" size="sm">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-[rgba(226,226,232,0.55)]">
+                  <span>🏆 {comp.prize}</span>
+                  <span>👥 {comp.teamSize} members</span>
+                  <span>📅 {comp.deadline}</span>
+                </div>
+              </Card>
             </Link>
           ))}
         </div>

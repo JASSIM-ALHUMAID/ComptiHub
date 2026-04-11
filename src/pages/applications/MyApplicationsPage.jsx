@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
+import Card from '../../components/ui/Card'
+import Badge from '../../components/ui/Badge'
+import Alert from '../../components/ui/Alert'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 
-const statusStyles = {
-  pending: 'border-[rgba(250,204,21,0.3)] bg-[rgba(250,204,21,0.08)] text-(--landing-gold)',
-  accepted: 'border-green-500/30 bg-green-500/10 text-green-400',
-  rejected: 'border-[rgba(255,180,171,0.3)] bg-[rgba(255,180,171,0.08)] text-(--landing-danger)',
+const statusVariants = {
+  pending: 'gold',
+  accepted: 'success',
+  rejected: 'danger',
 }
 
 export default function MyApplicationsPage() {
@@ -21,35 +24,37 @@ export default function MyApplicationsPage() {
       </header>
 
       {applications.length === 0 ? (
-        <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-8 text-center">
-          <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
-            You haven't applied to any teams yet.{' '}
-            <Link className="text-(--landing-gold) hover:text-(--landing-gold-soft)" to="/competitions">
-              Browse competitions
-            </Link>
-            .
-          </p>
-        </div>
+        <Card className="text-center">
+          <Alert
+            variant="info"
+            title="No applications yet"
+            message={
+              <>
+                You haven't applied to any teams yet.{' '}
+                <Link className="text-(--landing-gold) hover:text-(--landing-gold-soft)" to="/competitions">
+                  Browse competitions
+                </Link>
+                .
+              </>
+            }
+          />
+        </Card>
       ) : (
         <div className="grid gap-4">
           {applications.map((app) => (
-            <div
-              key={app.id}
-              className="space-y-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5"
-            >
+            <Card key={app.id} className="space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="landing-title text-base text-(--landing-text)">{app.teamName}</h2>
                   <p className="mt-0.5 text-xs text-[rgba(226,226,232,0.5)]">{app.competitionTitle}</p>
                 </div>
-                <span
-                  className={[
-                    'shrink-0 rounded-full border px-3 py-1 text-xs font-semibold capitalize',
-                    statusStyles[app.status],
-                  ].join(' ')}
+                <Badge
+                  variant={statusVariants[app.status] || 'default'}
+                  size="md"
+                  className="shrink-0 capitalize"
                 >
                   {app.status}
-                </span>
+                </Badge>
               </div>
 
               <div className="rounded-2xl border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
@@ -66,7 +71,7 @@ export default function MyApplicationsPage() {
                   View team →
                 </Link>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}

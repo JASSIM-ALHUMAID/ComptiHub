@@ -513,6 +513,73 @@ html {
   }
 }
 
+@layer components {
+  /* Design system utilities for consistency */
+  .card-border {
+    @apply border-[rgba(77,70,50,0.22)];
+  }
+
+  .card-border-hover {
+    @apply hover:border-(--landing-gold);
+  }
+
+  .card-bg {
+    @apply bg-[rgba(12,14,18,0.48)];
+  }
+
+  .card-bg-alt {
+    @apply bg-[rgba(12,14,18,0.32)];
+  }
+
+  .card-surface {
+    @apply bg-[rgba(17,19,23,0.78)];
+  }
+
+  .surface-outline {
+    @apply border-[rgba(77,70,50,0.28)];
+  }
+
+  .text-muted {
+    @apply text-[rgba(226,226,232,0.65)];
+  }
+
+  .text-muted-soft {
+    @apply text-[rgba(226,226,232,0.55)];
+  }
+
+  .text-muted-lighter {
+    @apply text-[rgba(226,226,232,0.45)];
+  }
+
+  .tag-badge {
+    @apply rounded-full border surface-outline bg-[rgba(12,14,18,0.6)] px-2 py-0.5 text-[0.65rem] text-muted-lighter;
+  }
+
+  .page-section {
+    @apply space-y-6;
+  }
+
+  .section-header {
+    @apply space-y-3 mb-6;
+  }
+
+  .card-spacing {
+    @apply p-5 sm:p-6;
+  }
+
+  .grid-gap {
+    @apply gap-4;
+  }
+
+  .grid-gap-lg {
+    @apply gap-6;
+  }
+
+  .btn-icon {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full border surface-outline transition-all duration-300 hover:-translate-y-0.5 hover:border-(--landing-gold) hover:text-(--landing-gold) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

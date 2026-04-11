@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import Textarea from '../../components/ui/Textarea'
+import Alert from '../../components/ui/Alert'
 import { competitions } from '../../data/mocks/competitions'
 import { teams } from '../../data/mocks/teams'
 import { useAuth } from '../../features/auth/hooks/useAuth'
@@ -20,7 +23,7 @@ function TeamCard({ team, competitionTitle }) {
   }
 
   return (
-    <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 space-y-3 transition-all duration-200 hover:border-[rgba(77,70,50,0.4)]">
+    <Card className="space-y-3 transition-all duration-200 hover:border-(--landing-gold)">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="landing-title text-base text-(--landing-text)">{team.name}</h3>
@@ -35,12 +38,9 @@ function TeamCard({ team, competitionTitle }) {
 
       <div className="flex flex-wrap gap-1.5">
         {team.requiredSkills.map((skill) => (
-          <span
-            key={skill}
-            className="rounded-full border border-[rgba(77,70,50,0.3)] bg-[rgba(12,14,18,0.6)] px-2 py-0.5 text-[0.65rem] text-[rgba(226,226,232,0.65)]"
-          >
+          <Badge key={skill} variant="default" size="sm">
             {skill}
-          </span>
+          </Badge>
         ))}
       </div>
 
@@ -49,40 +49,42 @@ function TeamCard({ team, competitionTitle }) {
       </div>
 
       {alreadyApplied ? (
-        <div className="rounded-2xl border border-green-500/30 bg-green-500/10 px-4 py-3">
-          <p className="text-sm font-semibold text-green-400">✓ Application submitted!</p>
-        </div>
+        <Alert variant="success" title="✓ Application submitted!" showIcon={false} />
       ) : showForm ? (
         <form onSubmit={handleApply} className="space-y-3 pt-1">
-          <textarea
+          <Textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
             rows={3}
             placeholder="Tell the team why you'd be a great fit…"
-            className="w-full resize-none rounded-2xl border border-[rgba(77,70,50,0.35)] bg-[rgba(12,14,18,0.78)] px-4 py-3 text-sm text-(--landing-text) placeholder:text-[rgba(226,226,232,0.4)] focus:border-(--landing-gold) focus:outline-none focus:ring-2 focus:ring-[rgba(250,204,21,0.2)]"
           />
           <div className="flex gap-3">
-            <Button type="submit" size="nav">Submit</Button>
-            <button
+            <Button type="submit" variant="outline-gold" size="md">
+              Submit
+            </Button>
+            <Button
               type="button"
               onClick={() => setShowForm(false)}
-              className="rounded-full border border-[rgba(77,70,50,0.28)] px-5 py-2.5 text-sm text-[rgba(226,226,232,0.7)] transition-colors duration-200 hover:border-(--landing-gold) hover:text-(--landing-gold-soft)"
+              variant="outline"
+              size="md"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       ) : (
-        <button
+        <Button
           type="button"
           onClick={() => setShowForm(true)}
-          className="rounded-full border border-[rgba(250,204,21,0.3)] bg-[rgba(250,204,21,0.06)] px-5 py-2.5 text-sm font-semibold text-(--landing-gold) transition-colors duration-200 hover:border-(--landing-gold) hover:bg-[rgba(250,204,21,0.12)]"
+          variant="outline-gold"
+          size="md"
+          fullWidth
         >
           Apply to Join
-        </button>
+        </Button>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -96,7 +98,11 @@ export default function CompetitionDetailsPage() {
   if (!competition) {
     return (
       <main className="space-y-4">
-        <p className="landing-copy text-sm text-[rgba(226,226,232,0.65)]">Competition not found.</p>
+        <Alert
+          variant="error"
+          title="Not found"
+          message="Competition not found."
+        />
         <Link className="text-sm text-(--landing-gold) hover:text-(--landing-gold-soft)" to={routes.competitions}>
           ← Back to competitions
         </Link>
@@ -118,32 +124,31 @@ export default function CompetitionDetailsPage() {
       </div>
 
       <header className="space-y-3">
-        <div className="flex flex-wrap items-start gap-3">
-          <h1 className="landing-title flex-1 text-2xl text-(--landing-text) sm:text-3xl">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <h1 className="landing-title text-2xl sm:text-3xl text-(--landing-text)">
             {competition.title}
           </h1>
-          <span
-            className={[
-              'rounded-full border px-3 py-1.5 text-xs font-semibold uppercase',
-              competition.status === 'open'
-                ? 'border-green-500/30 bg-green-500/10 text-green-400'
-                : 'border-[rgba(255,180,171,0.3)] bg-[rgba(255,180,171,0.08)] text-(--landing-danger)',
-            ].join(' ')}
+          <Badge
+            variant={competition.status === 'open' ? 'success' : 'danger'}
+            size="lg"
+            className="shrink-0"
           >
             {competition.status}
-          </span>
+          </Badge>
         </div>
         <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
           Organized by {competition.organizer}
         </p>
         <div className="flex flex-wrap gap-2">
           {competition.tags.map((tag) => (
-            <Badge key={tag} className="text-[0.68rem]">{tag}</Badge>
+            <Badge key={tag} variant="default" size="sm">
+              {tag}
+            </Badge>
           ))}
         </div>
       </header>
 
-      <div className="grid grid-cols-2 gap-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-4 sm:grid-cols-4">
+      <Card className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {[
           { label: 'Prize', value: competition.prize },
           { label: 'Team Size', value: competition.teamSize + ' members' },
@@ -155,16 +160,16 @@ export default function CompetitionDetailsPage() {
             <p className="mt-1 text-sm font-semibold text-(--landing-text)">{item.value}</p>
           </div>
         ))}
-      </div>
+      </Card>
 
-      <section className="space-y-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5">
+      <Card className="space-y-3">
         <h2 className="landing-ui-text text-[0.78rem] text-(--landing-gold)">About</h2>
         <p className="landing-copy text-sm leading-relaxed text-[rgba(226,226,232,0.75)]">
           {competition.description}
         </p>
-      </section>
+      </Card>
 
-      <section className="space-y-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5">
+      <Card className="space-y-3">
         <h2 className="landing-ui-text text-[0.78rem] text-(--landing-gold)">Requirements</h2>
         <ul className="space-y-2">
           {competition.requirements.map((req) => (
@@ -174,7 +179,7 @@ export default function CompetitionDetailsPage() {
             </li>
           ))}
         </ul>
-      </section>
+      </Card>
 
       {competition.status === 'open' && (
         <section className="space-y-4">
@@ -186,13 +191,13 @@ export default function CompetitionDetailsPage() {
           </div>
 
           {recruitingTeams.length === 0 ? (
-            <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-6 text-center">
-              <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
-                No teams are recruiting for this competition yet.
-              </p>
-            </div>
+            <Alert
+              variant="info"
+              title="No teams recruiting"
+              message="No teams are recruiting for this competition yet."
+            />
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
               {recruitingTeams.map((team) => (
                 <TeamCard key={team.id} team={team} competitionTitle={competition.title} />
               ))}

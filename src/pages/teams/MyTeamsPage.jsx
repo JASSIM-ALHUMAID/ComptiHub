@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
+import Card from '../../components/ui/Card'
+import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import Alert from '../../components/ui/Alert'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { useStudentRole } from '../../features/account/hooks/useStudentRole'
 import { teams } from '../../data/mocks/teams'
@@ -39,74 +42,75 @@ export default function MyTeamsPage() {
       </header>
 
       {isLeader && (
-        <div className="flex">
-          <Link
-            to={routes.teamRequests}
-            className="rounded-full border border-[rgba(77,70,50,0.28)] px-5 py-2.5 text-sm font-semibold text-[rgba(226,226,232,0.72)] transition-colors duration-200 hover:border-(--landing-gold) hover:text-(--landing-gold-soft)"
-          >
-            View Join Requests →
-          </Link>
-        </div>
+        <Button
+          as={Link}
+          to={routes.teamRequests}
+          variant="outline"
+          size="md"
+        >
+          View Join Requests →
+        </Button>
       )}
 
       {displayTeams.length === 0 ? (
-        <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-8 text-center space-y-3">
-          <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
-            You are not in any teams yet.
-          </p>
+        <Card className="text-center space-y-3">
+          <Alert
+            variant="info"
+            title="No teams yet"
+            message="You are not in any teams yet."
+          />
           <Link
             className="inline-block text-sm text-(--landing-gold) hover:text-(--landing-gold-soft) transition-colors duration-200"
             to={routes.competitions}
           >
             Browse competitions to find a team →
           </Link>
-        </div>
+        </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {displayTeams.map((team) => (
             <Link
               key={team.id}
               to={`/teams/${team.id}`}
-              className="group block rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 transition-all duration-200 hover:border-(--landing-gold) hover:bg-[rgba(250,204,21,0.04)]"
+              className="group"
             >
-              <div className="mb-1 flex items-start justify-between gap-3">
-                <h2 className="landing-title text-[1.1rem] text-(--landing-text) transition-colors duration-200 group-hover:text-(--landing-gold-soft)">
-                  {team.name}
-                </h2>
-                <span
-                  className={[
-                    'shrink-0 rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase',
-                    team.status === 'recruiting'
-                      ? 'border-green-500/30 bg-green-500/10 text-green-400'
-                      : 'border-[rgba(77,70,50,0.3)] text-[rgba(226,226,232,0.45)]',
-                  ].join(' ')}
-                >
-                  {team.status}
-                </span>
-              </div>
+              <Card variant="interactive" className="h-full">
+                <div className="mb-1 flex items-start justify-between gap-3">
+                  <h2 className="landing-title text-[1.1rem] text-(--landing-text) transition-colors duration-200 group-hover:text-(--landing-gold-soft)">
+                    {team.name}
+                  </h2>
+                  <Badge
+                    variant={team.status === 'recruiting' ? 'success' : 'default'}
+                    size="md"
+                    className="shrink-0"
+                  >
+                    {team.status}
+                  </Badge>
+                </div>
 
-              <p className="landing-copy mb-1 text-xs text-[rgba(226,226,232,0.5)]">{team.competitionTitle}</p>
+                <p className="landing-copy mb-1 text-xs text-[rgba(226,226,232,0.5)]">{team.competitionTitle}</p>
 
-              <div className="mt-1 mb-3 inline-flex rounded-full border border-[rgba(77,70,50,0.28)] px-2.5 py-1 text-[0.65rem] text-[rgba(226,226,232,0.55)]">
-                {team.leaderId === user?.id ? 'You are the leader' : 'Member'}
-              </div>
+                <div className="mt-1 mb-3 inline-flex rounded-full border surface-outline px-2.5 py-1 text-[0.65rem] text-[rgba(226,226,232,0.55)]">
+                  {team.leaderId === user?.id ? 'You are the leader' : 'Member'}
+                </div>
 
-              <p className="landing-copy mb-4 line-clamp-2 text-sm text-[rgba(226,226,232,0.7)]">
-                {team.description}
-              </p>
+                <p className="landing-copy mb-4 line-clamp-2 text-sm text-[rgba(226,226,232,0.7)]">
+                  {team.description}
+                </p>
 
-              <div className="flex items-center justify-between text-xs text-[rgba(226,226,232,0.5)]">
-                <span>👥 {team.members.length}/{team.totalSlots} members</span>
-                {team.openSlots > 0 && (
-                  <span className="text-green-400">{team.openSlots} open slot{team.openSlots !== 1 ? 's' : ''}</span>
-                )}
-              </div>
+                <div className="flex items-center justify-between text-xs text-[rgba(226,226,232,0.5)]">
+                  <span>👥 {team.members.length}/{team.totalSlots} members</span>
+                  {team.openSlots > 0 && (
+                    <span className="text-green-400">{team.openSlots} open slot{team.openSlots !== 1 ? 's' : ''}</span>
+                  )}
+                </div>
+              </Card>
             </Link>
           ))}
         </div>
       )}
 
-      <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.32)] p-4">
+      <Card className="outline" variant="outline">
         <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
           Looking to join a team?{' '}
           <Link
@@ -117,7 +121,7 @@ export default function MyTeamsPage() {
           </Link>
           {' '}and find recruiting teams on each competition's page.
         </p>
-      </div>
+      </Card>
     </main>
   )
 }

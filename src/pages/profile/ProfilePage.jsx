@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { roleConfig } from '../../features/account/utils/roleConfig'
@@ -14,7 +15,7 @@ export default function ProfilePage() {
         <h1 className="landing-title text-3xl text-(--landing-text)">Profile</h1>
       </header>
 
-      <section className="grid gap-4 rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 sm:grid-cols-2">
+      <Card className="grid gap-4 sm:grid-cols-2">
         <div>
           <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Username</p>
           <p className="mt-2 text-lg font-semibold">{user?.username}</p>
@@ -27,26 +28,26 @@ export default function ProfilePage() {
 
         <div>
           <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Default Role</p>
-          <Badge>{roleConfig[user?.defaultRole]?.label ?? 'Competitor'}</Badge>
+          <Badge variant="gold">{roleConfig[user?.defaultRole]?.label ?? 'Competitor'}</Badge>
         </div>
 
         <div>
           <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Current View</p>
-          <Badge>{roleConfig[user?.activeRole]?.label ?? 'Competitor'}</Badge>
+          <Badge variant="gold">{roleConfig[user?.activeRole]?.label ?? 'Competitor'}</Badge>
         </div>
-      </section>
+      </Card>
 
-      <section className="rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5">
+      <Card className="space-y-4">
         <p className="landing-copy max-w-2xl text-sm text-[rgba(226,226,232,0.72)] sm:text-base">
           Your default role decides how ComptiHub opens when you log in. You can still switch views anytime from the in-app role switcher.
         </p>
         <Link
-          className="landing-link-accent landing-ui-text mt-4 inline-flex text-[0.78rem] text-(--landing-gold)"
+          className="landing-link-accent landing-ui-text inline-flex text-[0.78rem] text-(--landing-gold)"
           to={routes.profileEdit}
         >
-          Edit default role
+          Edit default role →
         </Link>
-      </section>
+      </Card>
     </main>
   )
 }
