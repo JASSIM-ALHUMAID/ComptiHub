@@ -58,7 +58,7 @@ export default function Navbar() {
       </div>
 
       {isOpen ? (
-        <div className="landing-nav-panel border-t border-[rgba(77,70,50,0.16)] bg-[rgba(12,14,18,0.96)] px-5 py-5 md:hidden">
+        <div className="landing-nav-panel max-h-[calc(100vh-5.5rem)] overflow-y-auto border-t border-[rgba(77,70,50,0.16)] bg-[rgba(12,14,18,0.96)] px-5 py-5 md:hidden">
           <div className="flex flex-col gap-4">
             {navItems.map((item, index) => (
               <a

@@ -7,16 +7,16 @@ import Card from '../ui/Card'
 
 export default function AppLayout() {
   return (
-    <div className="landing-theme min-h-screen pb-24 lg:pb-0">
+    <div className="landing-theme flex min-h-screen flex-col pb-24 lg:pb-8">
       <StudentNav />
 
       {/* Desktop Layout - Sidebar visible */}
-      <div className="hidden lg:block mx-auto w-full max-w-7xl gap-6 px-8 py-6">
-        <div className="grid grid-cols-[260px_1fr] gap-6">
+      <div className="hidden w-full flex-1 lg:block lg:px-8 lg:py-6">
+        <div className="grid w-full grid-cols-[280px_minmax(0,1fr)] gap-6">
           <Sidebar />
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <StudentRoleSwitcher />
-            <Card variant="elevated" className="min-h-screen">
+            <Card variant="elevated" className="min-h-[calc(100vh-11.5rem)]">
               <Outlet />
             </Card>
           </div>
@@ -24,10 +24,10 @@ export default function AppLayout() {
       </div>
 
       {/* Tablet & Mobile Layout - Sidebar hidden, stacked content */}
-      <div className="lg:hidden mx-auto w-full px-5 py-6 sm:px-8">
+      <div className="w-full px-5 py-6 sm:px-8 lg:hidden">
         <div className="space-y-6">
           <StudentRoleSwitcher />
-          <Card variant="elevated">
+          <Card variant="elevated" className="min-h-[calc(100vh-14rem)]">
             <Outlet />
           </Card>
         </div>
