@@ -137,7 +137,7 @@ html {
 
 .admin-main-panel {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .admin-shell,
@@ -179,8 +179,8 @@ html {
 @media (min-width: 1024px) {
   .admin-sidebar {
     position: sticky;
-    top: 0;
-    height: calc(100vh - 4.5rem - 3rem);
+    top: 6rem;
+    align-self: start;
   }
 }
 

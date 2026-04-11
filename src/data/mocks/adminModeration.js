@@ -1,0 +1,38 @@
+export const adminModerationUsers = [
+  {
+    id: 'AR-9920-X',
+    name: 'Alex Rivera',
+    email: 'alex.rivera@compitihub.sys',
+    role: 'Team Leader',
+    engagement: '1,240 pts',
+    lastActive: '2 mins ago',
+    status: 'Flagged',
+  },
+  {
+    id: 'SM-8821-P',
+    name: 'Sarah Miller',
+    email: 's.miller@compitihub.sys',
+    role: 'Moderator',
+    engagement: '890 pts',
+    lastActive: '1 hour ago',
+    status: 'Monitored',
+  },
+  {
+    id: 'FN-4012-Q',
+    name: 'Faisal Nasser',
+    email: 'f.nasser@compitihub.sys',
+    role: 'Competitor',
+    engagement: '640 pts',
+    lastActive: 'Today',
+    status: 'Clear',
+  },
+  {
+    id: 'LH-3199-T',
+    name: 'Lina Haddad',
+    email: 'l.haddad@compitihub.sys',
+    role: 'Team Leader',
+    engagement: '1,540 pts',
+    lastActive: 'Yesterday',
+    status: 'Flagged',
+  },
+]
