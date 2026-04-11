@@ -1,10 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
+import { useAuth } from '../../features/auth/hooks/useAuth'
 import { teams } from '../../data/mocks/teams'
 import { routes } from '../../lib/constants/routes'
 
 export default function TeamDetailsPage() {
   const { teamId } = useParams()
+  const { user } = useAuth()
   const team = teams.find((t) => t.id === teamId)
 
   if (!team) {
@@ -17,6 +19,20 @@ export default function TeamDetailsPage() {
       </main>
     )
   }
+
+  // Treat current user as a member for demo purposes
+  const currentUserMember = {
+    id: user?.id ?? 'current-user',
+    username: user?.username ?? 'You',
+    role: team.leaderId === user?.id ? 'Team Leader' : 'Member',
+    isCurrentUser: true,
+  }
+
+  // Build member list: inject current user if not already present
+  const isAlreadyInList = team.members.some((m) => m.id === user?.id)
+  const memberList = isAlreadyInList
+    ? team.members.map((m) => ({ ...m, isCurrentUser: m.id === user?.id }))
+    : [currentUserMember, ...team.members]
 
   return (
     <main className="space-y-6">
@@ -34,23 +50,18 @@ export default function TeamDetailsPage() {
       <header className="space-y-2">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="landing-title text-2xl text-(--landing-text) sm:text-3xl">{team.name}</h1>
-          <span
-            className={[
-              'rounded-full border px-3 py-1.5 text-xs font-semibold uppercase',
-              team.status === 'recruiting'
-                ? 'border-green-500/30 bg-green-500/10 text-green-400'
-                : 'border-[rgba(77,70,50,0.3)] text-[rgba(226,226,232,0.45)]',
-            ].join(' ')}
-          >
+          <span className={[
+            'rounded-full border px-3 py-1.5 text-xs font-semibold uppercase',
+            team.status === 'recruiting'
+              ? 'border-green-500/30 bg-green-500/10 text-green-400'
+              : 'border-[rgba(77,70,50,0.3)] text-[rgba(226,226,232,0.45)]',
+          ].join(' ')}>
             {team.status}
           </span>
         </div>
         <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
           Competing in:{' '}
-          <Link
-            className="text-(--landing-gold) hover:text-(--landing-gold-soft)"
-            to={`/competitions/${team.competitionId}`}
-          >
+          <Link className="text-(--landing-gold) hover:text-(--landing-gold-soft)" to={`/competitions/${team.competitionId}`}>
             {team.competitionTitle}
           </Link>
         </p>
@@ -73,19 +84,36 @@ export default function TeamDetailsPage() {
       <section className="space-y-3 rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5">
         <div className="flex items-center justify-between">
           <h2 className="landing-ui-text text-[0.78rem] text-(--landing-gold)">Members</h2>
-          <span className="text-xs text-[rgba(226,226,232,0.5)]">{team.members.length}/{team.totalSlots}</span>
+          <span className="text-xs text-[rgba(226,226,232,0.5)]">{memberList.length}/{team.totalSlots}</span>
         </div>
         <div className="grid gap-2">
-          {team.members.map((member) => (
+          {memberList.map((member) => (
             <div
               key={member.id}
-              className="flex items-center justify-between rounded-2xl border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3"
+              className={[
+                'flex items-center justify-between rounded-2xl border px-4 py-3 transition-colors duration-200',
+                member.isCurrentUser
+                  ? 'border-(--landing-gold) bg-[rgba(250,204,21,0.08)]'
+                  : 'border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)]',
+              ].join(' ')}
             >
-              <span className="text-sm font-semibold text-(--landing-text)">{member.username}</span>
+              <div className="flex items-center gap-2">
+                <span className={[
+                  'text-sm font-semibold',
+                  member.isCurrentUser ? 'text-(--landing-gold-soft)' : 'text-(--landing-text)',
+                ].join(' ')}>
+                  {member.username}
+                </span>
+                {member.isCurrentUser && (
+                  <span className="rounded-full bg-[rgba(250,204,21,0.15)] px-2 py-0.5 text-[0.6rem] font-semibold text-(--landing-gold)">
+                    You
+                  </span>
+                )}
+              </div>
               <span className="text-xs text-[rgba(226,226,232,0.5)]">{member.role}</span>
             </div>
           ))}
-          {Array.from({ length: team.openSlots }).map((_, i) => (
+          {Array.from({ length: Math.max(0, team.totalSlots - memberList.length) }).map((_, i) => (
             <div
               key={`open-${i}`}
               className="flex items-center rounded-2xl border border-dashed border-[rgba(77,70,50,0.3)] px-4 py-3"
