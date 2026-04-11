@@ -9,4 +9,7 @@ export const routes = {
   profile: '/profile',
   profileEdit: '/profile/edit',
   admin: '/admin',
+  adminCompetitions: '/admin/competitions',
+  adminSuggestions: '/admin/suggestions',
+  adminModeration: '/admin/moderation',
 }

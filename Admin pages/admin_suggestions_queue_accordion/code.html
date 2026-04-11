@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ComptiHub Admin - Suggestions Queue</title>
+<script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775590739055&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzg2OTc0NDFhYTUzMTQwNTc4NDg1ODlhOGYzN2Q3ZWI4EgsSBxDgvpT-9BEYAZIBIwoKcHJvamVjdF9pZBIVQhMyNDEyOTkxODIwNDUxMzkwNzYw%26filename%3D%26opi%3D89354086&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775590739055&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#eec200",
+              "primary-fixed-dim": "#eec200",
+              "on-error-container": "#ffdad6",
+              "on-tertiary-container": "#58595a",
+              "on-background": "#e2e2e8",
+              "secondary-container": "#4a4949",
+              "on-primary-container": "#6c5700",
+              "primary-fixed": "#ffe083",
+              "on-surface-variant": "#d1c6ab",
+              "primary-container": "#facc15",
+              "outline-variant": "#4d4632",
+              "error": "#ffb4ab",
+              "secondary": "#c8c6c5",
+              "inverse-primary": "#735c00",
+              "on-primary-fixed": "#231b00",
+              "on-tertiary": "#2f3131",
+              "on-error": "#690005",
+              "background": "#111317",
+              "surface-container-high": "#282a2e",
+              "on-secondary": "#313030",
+              "error-container": "#93000a",
+              "surface-variant": "#333539",
+              "primary": "#ffecb9",
+              "on-tertiary-fixed-variant": "#454747",
+              "tertiary-fixed": "#e2e2e2",
+              "on-secondary-fixed": "#1c1b1b",
+              "on-primary": "#3c2f00",
+              "surface-dim": "#111317",
+              "surface-container-low": "#1a1c20",
+              "on-primary-fixed-variant": "#574500",
+              "on-secondary-fixed-variant": "#474646",
+              "on-tertiary-fixed": "#1a1c1c",
+              "inverse-surface": "#e2e2e8",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "surface-container": "#1e2024",
+              "inverse-on-surface": "#2f3035",
+              "surface-container-highest": "#333539",
+              "secondary-fixed": "#e5e2e1",
+              "tertiary-container": "#d0d1d1",
+              "surface-bright": "#37393e",
+              "tertiary": "#ededed",
+              "on-surface": "#e2e2e8",
+              "outline": "#9a9078",
+              "surface-container-lowest": "#0c0e12",
+              "surface": "#111317",
+              "secondary-fixed-dim": "#c8c6c5",
+              "on-secondary-container": "#bab8b7"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .grid-bg {
+            background-image: linear-gradient(to right, #4d4632 1px, transparent 1px),
+                              linear-gradient(to bottom, #4d4632 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#111317]/60 backdrop-blur-md border-b border-[#4d4632]/20 flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black tracking-tighter text-[#facc15] uppercase">ComptiHub</span>
+<div class="hidden md:flex items-center bg-surface-container-lowest px-4 py-1.5 border-b border-outline">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-xs focus:ring-0 text-on-surface placeholder:text-outline-variant tracking-widest uppercase" placeholder="SEARCH_SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-[#e2e2e8] hover:text-[#facc15] transition-colors duration-200 active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#e2e2e8] hover:text-[#facc15] transition-colors duration-200 active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/30">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-[#facc15] leading-none uppercase">Admin Profile</p>
+<p class="text-[10px] text-on-surface-variant tracking-tighter">SUPERUSER_LEVEL_01</p>
+</div>
+<div class="w-10 h-10 bg-surface-container-high flex items-center justify-center border border-outline-variant/20">
+<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="professional portrait of a tech administrator with dark features and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtXvADq3IrIflG5shZ9F5oYZDN2zOrNh21RDNdZUO1tTdnbKdScYpe-udcZs9wVfGRfULUA19eRAsz7H3pt-F2UBy6BeaP7TB8LAptXdkomb7Zb9w0LaPS66ZyayALM20Ea92LK4IdVumBMbBZJwEDAGsMpqiBIGMnp_BcL3RJyvS8ID65MBhYlLXM5NV6LK8BdDbpp0tgyeJMQikv3RqZexzsYwqDzFJIoPKT5yRsNWy3KYavLZ6-KLbEy11FdoA0aMvLBGUtvAc"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-[#111317] border-r border-[#4d4632]/20 flex flex-col h-full py-8 px-4 pt-20">
+<div class="mb-10 px-4">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">terminal</span>
+</div>
+<div>
+<h2 class="text-[#facc15] font-black text-sm tracking-tight">ComptiHub</h2>
+<p class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant">Admin Console</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#d1c6ab] hover:bg-[#1a1c20] hover:text-[#facc15] transition-all duration-200 active:translate-x-1 duration-150 group" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#d1c6ab] hover:bg-[#1a1c20] hover:text-[#facc15] transition-all duration-200 active:translate-x-1 duration-150 group" href="#">
+<span class="material-symbols-outlined text-xl">emoji_events</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Competitions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#facc15] text-[#3c2f00] font-bold rounded-none transition-all duration-200 active:translate-x-1 duration-150 group" href="#">
+<span class="material-symbols-outlined text-xl">queue</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Suggestions Queue</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#d1c6ab] hover:bg-[#1a1c20] hover:text-[#facc15] transition-all duration-200 active:translate-x-1 duration-150 group" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">User Management</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/10 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-[#d1c6ab] hover:bg-[#1a1c20] hover:text-[#facc15] transition-all duration-200 active:translate-x-1 duration-150 group" href="#">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 min-h-screen relative overflow-hidden bg-surface-dim">
+<div class="absolute inset-0 grid-bg pointer-events-none"></div>
+<div class="max-w-6xl mx-auto px-12 relative z-10 pb-20">
+<!-- Header Section -->
+<header class="mb-16">
+<div class="flex items-end gap-4 mb-2">
+<span class="h-[2px] w-12 bg-primary-container mb-6"></span>
+<h1 class="text-[3.5rem] font-black leading-[0.9] tracking-tighter uppercase text-on-surface">
+                        SUGGESTIONS_QUEUE <br/>
+<span class="text-primary-container">PENDING_APPROVAL</span>
+</h1>
+</div>
+<div class="flex gap-8 mt-6">
+<div class="flex flex-col">
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant">TOTAL_PENDING</span>
+<span class="text-2xl font-black text-[#facc15]">14</span>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/30"></div>
+<div class="flex flex-col">
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant">LAST_ENTRY</span>
+<span class="text-2xl font-black text-on-surface">22_MIN_AGO</span>
+</div>
+</div>
+</header>
+<!-- Proposals List -->
+<div class="space-y-4">
+<!-- Expanded Card (Interactive Focus) -->
+<article class="bg-surface-container-high border-l-4 border-primary-container">
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-black tracking-tight text-on-surface mb-1">NEURAL_NETWORK_OPTIMIZATION_V2</h2>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">person</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Student: Sarah Chen</span>
+</div>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[10px]">Date: SEP 12, 2024</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-primary-container text-on-primary px-3 py-1 text-[10px] font-black tracking-widest uppercase">PENDING_REVIEW</span>
+<span class="material-symbols-outlined text-primary-container">expand_less</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-10">
+<div class="md:col-span-2">
+<h3 class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant mb-3">EXECUTIVE_SUMMARY</h3>
+<p class="text-on-surface/90 leading-relaxed text-lg">
+                                    A multi-layered hackathon focusing on optimizing large language models for edge devices. Participants must reach 95% accuracy within strict latency constraints.
+                                </p>
+<div class="mt-6 p-4 bg-surface-container-lowest border-l-2 border-outline-variant/30">
+<h3 class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant mb-2">TECHNICAL_RESOURCES</h3>
+<a class="text-primary-container hover:underline font-bold text-sm break-all" href="#">https://comptihub.io/proposal/nn-v2-specs</a>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 border border-outline-variant/10">
+<h3 class="font-['Inter'] font-medium uppercase tracking-widest text-[10px] text-on-surface-variant mb-4">LOGISTICS_BLOCK</h3>
+<div class="space-y-4">
+<div>
+<span class="block text-[9px] text-outline uppercase tracking-tighter">Proposed Schedule</span>
+<span class="text-on-surface font-black text-sm uppercase">OCT 15 - OCT 18, 2024</span>
+</div>
+<div>
+<span class="block text-[9px] text-outline uppercase tracking-tighter">Hardware Tier</span>
+<span class="text-on-surface font-black text-sm uppercase">GPU_ACCEL_CLUSTER_4</span>
+</div>
+<div>
+<span class="block text-[9px] text-outline uppercase tracking-tighter">Budget Allocation</span>
+<span class="text-[#facc15] font-black text-sm uppercase">$2,500.00_USD</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-4 pt-6 border-t border-outline-variant/20">
+<button class="flex-1 bg-primary-container text-on-primary py-4 text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">check_circle</span>
+                                APPROVE_PROPOSAL
+                            </button>
+<button class="px-8 border border-error text-error py-4 text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-error/10 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">cancel</span>
+                                REJECT_PROPOSAL
+                            </button>
+</div>
+</div>
+</article>
+<!-- Collapsed Card 1 -->
+<article class="bg-surface-container-low border border-outline-variant/10 group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="w-2 h-2 bg-primary-container"></div>
+<div>
+<h2 class="text-lg font-black tracking-tight text-on-surface leading-none mb-1">CYBER_DEFENSE_SQUAD_GAUNTLET</h2>
+<div class="flex items-center gap-4">
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Student: Alex Rivera</span>
+<span class="w-[1px] h-2 bg-outline-variant"></span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Date: AUG 24, 2024</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="bg-primary-container/10 text-primary-container px-3 py-1 text-[9px] font-black tracking-widest uppercase border border-primary-container/20">PENDING</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-container transition-colors">expand_more</span>
+</div>
+</div>
+</article>
+<!-- Collapsed Card 2 -->
+<article class="bg-surface-container-low border border-outline-variant/10 group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="w-2 h-2 bg-primary-container"></div>
+<div>
+<h2 class="text-lg font-black tracking-tight text-on-surface leading-none mb-1">QUANTUM_CRYPTOGRAPHY_CHALLENGE</h2>
+<div class="flex items-center gap-4">
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Student: Jordan Lee</span>
+<span class="w-[1px] h-2 bg-outline-variant"></span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Date: AUG 22, 2024</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="bg-primary-container/10 text-primary-container px-3 py-1 text-[9px] font-black tracking-widest uppercase border border-primary-container/20">PENDING</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-container transition-colors">expand_more</span>
+</div>
+</div>
+</article>
+<!-- Collapsed Card 3 -->
+<article class="bg-surface-container-low border border-outline-variant/10 group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="w-2 h-2 bg-primary-container"></div>
+<div>
+<h2 class="text-lg font-black tracking-tight text-on-surface leading-none mb-1">DECENTRALIZED_GOVERNANCE_PROTOCOL</h2>
+<div class="flex items-center gap-4">
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Student: Marcus V.</span>
+<span class="w-[1px] h-2 bg-outline-variant"></span>
+<span class="font-['Inter'] font-medium uppercase tracking-widest text-[9px] text-on-surface-variant">Date: AUG 21, 2024</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="bg-primary-container/10 text-primary-container px-3 py-1 text-[9px] font-black tracking-widest uppercase border border-primary-container/20">PENDING</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-container transition-colors">expand_more</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Footer Pagination/Actions -->
+<footer class="mt-20 pt-10 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="bg-surface-container-high text-on-surface p-3 hover:bg-primary-container hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="flex gap-2">
+<span class="w-10 h-10 flex items-center justify-center font-black text-on-primary bg-primary-container">01</span>
+<span class="w-10 h-10 flex items-center justify-center font-black text-on-surface hover:bg-surface-container-high cursor-pointer">02</span>
+<span class="w-10 h-10 flex items-center justify-center font-black text-on-surface hover:bg-surface-container-high cursor-pointer">03</span>
+<span class="w-10 h-10 flex items-center justify-center font-black text-outline">...</span>
+<span class="w-10 h-10 flex items-center justify-center font-black text-on-surface hover:bg-surface-container-high cursor-pointer">12</span>
+</div>
+<button class="bg-surface-container-high text-on-surface p-3 hover:bg-primary-container hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="flex gap-4">
+<button class="text-on-surface-variant font-['Inter'] font-medium uppercase tracking-widest text-[10px] hover:text-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">history</span>
+                        View_Archive
+                    </button>
+<button class="text-on-surface-variant font-['Inter'] font-medium uppercase tracking-widest text-[10px] hover:text-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Export_JSON
+                    </button>
+</div>
+</footer>
+</div>
+<!-- Background Accent Graphic -->
+<div class="fixed bottom-0 right-0 p-12 opacity-10 pointer-events-none select-none">
+<h3 class="text-[12rem] font-black leading-none tracking-tighter uppercase text-outline-variant">SYSTEM</h3>
+</div>
+</main>
+</body></html>

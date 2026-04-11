@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775590739055&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2MyYWMwNGUxMWFmNzQ3YzViMWY5ZjFlMmQ5ODk4MTliEgsSBxDgvpT-9BEYAZIBIwoKcHJvamVjdF9pZBIVQhMyNDEyOTkxODIwNDUxMzkwNzYw%26filename%3D%26opi%3D89354086&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775590739055&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error": "#690005",
+                        "inverse-surface": "#e2e2e8",
+                        "primary-container": "#facc15",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-primary-container": "#6c5700",
+                        "on-surface": "#e2e2e8",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-secondary-fixed-variant": "#474646",
+                        "inverse-primary": "#735c00",
+                        "surface-dim": "#111317",
+                        "on-background": "#e2e2e8",
+                        "outline": "#9a9078",
+                        "tertiary-container": "#d0d1d1",
+                        "primary": "#ffecb9",
+                        "tertiary-fixed": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#0c0e12",
+                        "on-primary-fixed": "#231b00",
+                        "background": "#111317",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary": "#ededed",
+                        "surface-container-high": "#282a2e",
+                        "on-tertiary-container": "#58595a",
+                        "secondary": "#c8c6c5",
+                        "surface-container-low": "#1a1c20",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-container": "#bab8b7",
+                        "on-secondary": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#333539",
+                        "on-primary": "#3c2f00",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "inverse-on-surface": "#2f3035",
+                        "surface": "#111317",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#4a4949",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-fixed": "#ffe083",
+                        "surface-tint": "#eec200",
+                        "outline-variant": "#4d4632",
+                        "surface-bright": "#37393e",
+                        "on-tertiary": "#2f3131",
+                        "surface-container": "#1e2024",
+                        "primary-fixed-dim": "#eec200",
+                        "surface-container-highest": "#333539",
+                        "on-surface-variant": "#d1c6ab"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .grid-bg {
+            background-image: linear-gradient(to right, #4d4632 1px, transparent 1px),
+                              linear-gradient(to bottom, #4d4632 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+<!-- Persistent SideNavBar -->
+<aside class="flex flex-col h-full border-r border-[#4d4632]/20 h-screen w-64 fixed left-0 top-0 bg-[#111317] dark:bg-[#111317] z-40">
+<div class="p-8">
+<h1 class="text-xl font-black text-[#facc15] tracking-tighter">COMPTIHUB</h1>
+<p class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold text-[#d1c6ab] mt-1">ADMIN_PORTAL</p>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="flex items-center gap-3 px-6 py-4 text-[#d1c6ab] hover:bg-[#282a2e] transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-[#facc15]">dashboard</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-4 bg-[#facc15] text-[#3c2f00] font-black border-0 cursor-pointer">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">Competitions</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-4 text-[#d1c6ab] hover:bg-[#282a2e] transition-colors group cursor-pointer">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">Suggestions Queue</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-4 text-[#d1c6ab] hover:bg-[#282a2e] transition-colors group cursor-pointer">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">User Management</span>
+</div>
+</nav>
+<div class="mt-auto border-t border-[#4d4632]/20">
+<div class="flex items-center gap-3 px-6 py-4 text-[#d1c6ab] hover:bg-[#282a2e] transition-colors cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">Settings</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-4 text-[#d1c6ab] hover:bg-[#282a2e] transition-colors cursor-pointer">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold">Logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas (Blurred Background State) -->
+<main class="pl-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 z-30 flex justify-between items-center px-8 w-full bg-[#111317]/60 backdrop-blur-md border-b border-[#4d4632]/20">
+<div class="flex items-center gap-6">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant">search</span>
+<input class="bg-surface-container-lowest border-none pl-10 pr-4 py-2 text-sm font-label uppercase tracking-widest w-64 focus:ring-1 focus:ring-primary-container" placeholder="SEARCH COMPETITIONS..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-on-surface hover:text-primary-container cursor-pointer transition-colors">notifications</span>
+<span class="material-symbols-outlined text-on-surface hover:text-primary-container cursor-pointer transition-colors">help_outline</span>
+</div>
+<div class="h-8 w-8 bg-surface-container-highest border border-outline-variant/50">
+<img class="h-full w-full object-cover" data-alt="portrait of a professional male administrator in a modern office setting, sharp focus, technical lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWkvB2imdFyl5sW8XN4ITywbhufmHDT7h2ilzExqI81DLqSqBVwcUsm5aVB5sLGNi-8zQ9P-lBB4ROnQ8dAHBJviK6EZlRZSvw2OOD3WkH24b2T8PHqnkC298sIPIKuCH_pyt3gYXr8clp5MHIAxjjhLyVTyb2XTsA15nU3xZfgt4OlEfxfeJx0zRNwUlvEsRcVZcQ3IdKxhFCmOfyONSylRcR1iMUG40bXkh8RVIdJEeJskD_6P2d0uDQtCc4ZqYJZJ1NkvyuyZc"/>
+</div>
+</div>
+</header>
+<!-- Background Grid -->
+<div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+<!-- Fake Dashboard Content (Obscured) -->
+<div class="p-12 mt-16 space-y-12 blur-sm pointer-events-none">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-[3.5rem] font-black uppercase tracking-tighter leading-none text-white">ACTIVE<br/>COMPETITIONS</h2>
+<p class="font-label uppercase tracking-[0.2em] text-primary-container mt-4">System Overview / v2.4.0</p>
+</div>
+<button class="bg-primary-container text-on-primary font-black px-8 py-4 uppercase tracking-widest text-xs">Create New</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-low border-b-2 border-outline-variant p-6 h-64"></div>
+<div class="bg-surface-container-low border-b-2 border-outline-variant p-6 h-64"></div>
+<div class="bg-surface-container-low border-b-2 border-outline-variant p-6 h-64"></div>
+</div>
+</div>
+</main>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-[60] flex items-center justify-end bg-surface/80 backdrop-blur-sm">
+<!-- Drawer Container -->
+<section class="w-full max-w-2xl h-full bg-surface shadow-2xl border-l border-outline-variant/30 flex flex-col relative">
+<!-- Drawer Header -->
+<div class="p-8 border-b border-outline-variant/20 flex justify-between items-start">
+<div>
+<span class="font-label uppercase tracking-widest text-[0.7rem] text-primary-container font-bold">Action / Editor</span>
+<h3 class="text-3xl font-black uppercase tracking-tight text-white mt-1">Edit Competition</h3>
+</div>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined text-4xl">close</span>
+</button>
+</div>
+<!-- Drawer Form Content -->
+<form class="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar">
+<!-- Title Field (Required Validation Example) -->
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">Competition Title</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-error p-4 text-white font-body focus:ring-0 focus:border-primary-container transition-all placeholder:text-outline-variant/50" placeholder="E.G. GLOBAL CYBER-STRIKE 2024" type="text" value=""/>
+<span class="flex items-center gap-1 text-error text-[0.7rem] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">error</span>
+                        This field is required for publication
+                    </span>
+</div>
+<!-- URL Field -->
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">External Links</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">link</span>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline p-4 pl-12 text-white font-body focus:ring-0 focus:border-primary-container transition-all" placeholder="HTTPS://COMPTIHUB.IO/RESOURCES" type="url"/>
+</div>
+</div>
+<!-- Dates Grid -->
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">Start Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">calendar_today</span>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline p-4 pl-12 text-white font-body focus:ring-0 focus:border-primary-container transition-all appearance-none" type="date"/>
+</div>
+</div>
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">End Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">event</span>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline p-4 pl-12 text-white font-body focus:ring-0 focus:border-primary-container transition-all appearance-none" type="date"/>
+</div>
+</div>
+</div>
+<!-- Description Field -->
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">Competition Description</label>
+<textarea class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline p-4 text-white font-body focus:ring-0 focus:border-primary-container transition-all resize-none" placeholder="DETAILED TECHNICAL SPECIFICATIONS AND PARTICIPATION RULES..." rows="6"></textarea>
+<p class="text-[0.65rem] text-outline-variant uppercase tracking-widest text-right">0 / 2000 CHARACTERS</p>
+</div>
+<!-- Media Section (Visual Placeholder) -->
+<div class="space-y-3">
+<label class="font-label uppercase tracking-[0.15em] text-[0.75rem] font-bold text-on-surface-variant block">Cover Asset</label>
+<div class="border-2 border-dashed border-outline-variant/30 aspect-video flex flex-col items-center justify-center gap-4 hover:border-primary-container/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary-container">upload_file</span>
+<p class="font-label text-[0.7rem] uppercase tracking-widest text-outline-variant">Drop files here or click to browse</p>
+</div>
+</div>
+</form>
+<!-- Drawer Footer Actions -->
+<div class="p-8 bg-surface-container-low border-t border-outline-variant/20 flex gap-4">
+<button class="flex-1 py-4 border border-outline-variant text-on-surface font-bold uppercase tracking-[0.2em] text-xs hover:bg-surface-container-high transition-colors" type="button">
+                    Cancel
+                </button>
+<button class="flex-[2] py-4 bg-primary-container text-on-primary font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all" type="submit">
+<span>Publish Updates</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+<!-- Technical Spec Metadata Decorator -->
+<div class="absolute bottom-4 right-4 pointer-events-none opacity-20">
+<p class="font-label text-[10px] text-right">UUID: 8F2D-449A-BC91<br/>SYS_TIME: 1715429801</p>
+</div>
+</section>
+</div>
+</body></html>

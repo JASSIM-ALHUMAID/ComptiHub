@@ -2,6 +2,14 @@ import { storage } from '../../../lib/utils/storage'
 
 const USERS_KEY = 'compitihub.auth.users'
 const SESSION_KEY = 'compitihub.auth.session'
+const DEFAULT_ADMIN_USER = {
+  id: 'admin-1',
+  username: 'admin',
+  email: 'admin@admin.com',
+  password: '123456789',
+  accountType: 'admin',
+  defaultRole: 'admin',
+}
 
 function readJson(key, fallback) {
   const value = storage.get(key)
@@ -37,7 +45,14 @@ function sanitizeUser(user, activeRole = user.defaultRole) {
 }
 
 function getStoredUsers() {
-  return readJson(USERS_KEY, [])
+  const storedUsers = readJson(USERS_KEY, [])
+  const hasAdminAccount = storedUsers.some((user) => user.email === DEFAULT_ADMIN_USER.email)
+
+  if (hasAdminAccount) {
+    return storedUsers
+  }
+
+  return [DEFAULT_ADMIN_USER, ...storedUsers]
 }
 
 function setStoredUsers(users) {

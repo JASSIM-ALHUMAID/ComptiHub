@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>USER_PROFILE: DIGITAL RESUME | COMPTIHUB</title>
+<script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775588312240&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzcxNWM0ODFjODk0NjRkNTdhYjI1MDM2ODYwNjcyYmM1EgsSBxDgvpT-9BEYAZIBIwoKcHJvamVjdF9pZBIVQhMyNDEyOTkxODIwNDUxMzkwNzYw%26filename%3D%26opi%3D89354086&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="04c3dcfb558743fea8cc528cc4f" src="//local.adguard.org?ts=1775588312240&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#58595a",
+              "inverse-primary": "#735c00",
+              "tertiary": "#ededed",
+              "primary-fixed-dim": "#eec200",
+              "inverse-surface": "#e2e2e8",
+              "secondary-container": "#4a4949",
+              "on-tertiary-fixed": "#1a1c1c",
+              "error-container": "#93000a",
+              "surface-container-high": "#282a2e",
+              "on-surface-variant": "#d1c6ab",
+              "surface-variant": "#333539",
+              "error": "#ffb4ab",
+              "on-tertiary-fixed-variant": "#454747",
+              "on-secondary-fixed-variant": "#474646",
+              "on-primary-fixed": "#231b00",
+              "surface-container-lowest": "#0c0e12",
+              "secondary-fixed": "#e5e2e1",
+              "on-primary-fixed-variant": "#574500",
+              "on-secondary-fixed": "#1c1b1b",
+              "secondary": "#c8c6c5",
+              "on-secondary-container": "#bab8b7",
+              "inverse-on-surface": "#2f3035",
+              "primary-fixed": "#ffe083",
+              "on-secondary": "#313030",
+              "surface-container": "#1e2024",
+              "on-error-container": "#ffdad6",
+              "on-background": "#e2e2e8",
+              "surface": "#111317",
+              "on-primary-container": "#6c5700",
+              "on-error": "#690005",
+              "surface-tint": "#eec200",
+              "outline-variant": "#4d4632",
+              "on-primary": "#3c2f00",
+              "outline": "#9a9078",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "primary": "#ffecb9",
+              "surface-container-highest": "#333539",
+              "surface-bright": "#37393e",
+              "on-tertiary": "#2f3131",
+              "on-surface": "#e2e2e8",
+              "tertiary-container": "#d0d1d1",
+              "background": "#111317",
+              "secondary-fixed-dim": "#c8c6c5",
+              "surface-dim": "#111317",
+              "primary-container": "#facc15",
+              "tertiary-fixed": "#e2e2e2",
+              "surface-container-low": "#1a1c20"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .grid-bg {
+            background-image: radial-gradient(#4d4632 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+        }
+        input:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 w-full max-w-none bg-[#111317] border-b-0">
+<div class="text-2xl font-black tracking-tighter text-[#facc15] font-headline uppercase">COMPTIHUB</div>
+<div class="hidden md:flex items-center gap-12 h-full">
+<a class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold text-[#e2e2e8] hover:text-[#facc15] transition-colors flex items-center h-full" href="#">Competitions Feed</a>
+<a class="font-['Inter'] uppercase tracking-widest text-[0.75rem] font-bold text-[#e2e2e8] hover:text-[#facc15] transition-colors flex items-center h-full" href="#">Applications Dashboard</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-[#e2e2e8] hover:bg-[#282a2e] p-2 transition-all duration-200 active:scale-95">notifications</button>
+<button class="material-symbols-outlined text-[#e2e2e8] hover:bg-[#282a2e] p-2 transition-all duration-200 active:scale-95">settings</button>
+<div class="w-10 h-10 bg-surface-container-high border-2 border-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile dropdown" class="w-full h-full object-cover" data-alt="close-up portrait of a professional male developer with sharp studio lighting on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6b8m5cfIlI-1IZT5TFC4AgG9uCPzCrWwQp8MPAu7ml5t5Yausfxzry7L1vcA1czbqbHEwd6HTycaTiHCVcPTCMKlLfZGtM4WljPBQRkFkjueSV9KVh91t8jVcduztQleXU4_z_X0zPwMZI5UwDZvajQl34u9pZF5PG-shQlqXcvpw0TE36q7sAW5TxWqN_5AUnakXwUxK-jC_ydU4JTr5yLxO9ElwGa6e6-QbVqeRMrkYflc6US_544wD0NV3NB_Sdthnw6icaRo"/>
+</div>
+</div>
+</nav>
+<main class="relative pt-32 pb-24 px-8 min-h-screen max-w-7xl mx-auto">
+<!-- Background Grid Overlay -->
+<div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+<!-- Hero Section / Title Bar -->
+<header class="relative z-10 mb-20 border-l-4 border-primary-container pl-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div>
+<span class="font-label text-primary-container tracking-[0.2em] text-xs font-bold block mb-2">NODE_ID: 8829-ALPHA-RESUME</span>
+<h1 class="font-headline font-black text-5xl md:text-7xl tracking-tighter uppercase leading-none">USER_PROFILE: DIGITAL RESUME</h1>
+<p class="font-label text-on-surface-variant tracking-widest text-sm mt-4 uppercase">MANAGE YOUR TECHNICAL IDENTITY ACROSS THE NETWORK</p>
+</div>
+<div class="bg-surface-container-low p-6 flex flex-col gap-4 min-w-[280px]">
+<div class="flex justify-between items-center">
+<span class="font-label text-xs tracking-widest font-bold">PROFILE VISIBILITY</span>
+<span class="font-label text-[10px] bg-primary-container text-on-primary px-2 py-0.5 font-black">SEARCHABLE</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant">PRIVATE</span>
+<button class="relative w-14 h-7 bg-surface-container-highest flex items-center px-1">
+<div class="w-5 h-5 bg-primary-container translate-x-7"></div>
+</button>
+<span class="text-xs font-bold text-primary-container">PUBLIC</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Form Layout -->
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Left Column: Form Sections -->
+<div class="lg:col-span-8 flex flex-col gap-20">
+<!-- Section: ACADEMIC_DATA -->
+<section>
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline font-black text-2xl tracking-tight uppercase">01. ACADEMIC_DATA</h2>
+<div class="h-px flex-grow bg-outline-variant opacity-30"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="group">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">MAJOR_DEGREE</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold focus:border-primary-container transition-all" placeholder="B.S. COMPUTER SCIENCE" type="text"/>
+</div>
+<div class="group">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">CUMULATIVE_GPA</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold focus:border-primary-container transition-all" max="4.0" min="0.0" placeholder="4.0" step="0.1" type="number"/>
+</div>
+</div>
+</section>
+<!-- Section: EXTERNAL_CHANNELS -->
+<section>
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline font-black text-2xl tracking-tight uppercase">02. EXTERNAL_CHANNELS</h2>
+<div class="h-px flex-grow bg-outline-variant opacity-30"></div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="group">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">GITHUB_REPOSITORY</label>
+<div class="flex items-center gap-4 bg-surface-container-lowest border-b-2 border-outline focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-on-surface-variant pl-0">link</span>
+<input class="w-full bg-transparent border-none py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold" placeholder="https://github.com/username" type="url"/>
+</div>
+</div>
+<div class="group">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">PERSONAL_PORTFOLIO</label>
+<div class="flex items-center gap-4 bg-surface-container-lowest border-b-2 border-outline focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-on-surface-variant pl-0">captive_portal</span>
+<input class="w-full bg-transparent border-none py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold" placeholder="https://portfolio.dev" type="url"/>
+</div>
+</div>
+<div class="group">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">LINKEDIN_IDENTITY</label>
+<div class="flex items-center gap-4 bg-surface-container-lowest border-b-2 border-outline focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-on-surface-variant pl-0">person_add</span>
+<input class="w-full bg-transparent border-none py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold" placeholder="https://linkedin.com/in/user" type="url"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: TECHNICAL_STACK -->
+<section>
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline font-black text-2xl tracking-tight uppercase">03. TECHNICAL_STACK</h2>
+<div class="h-px flex-grow bg-outline-variant opacity-30"></div>
+</div>
+<div class="group mb-8">
+<label class="block font-label text-[10px] tracking-widest font-black text-on-surface-variant mb-2 uppercase">SEARCH_SKILLS</label>
+<div class="flex items-center gap-4 bg-surface-container-lowest border-b-2 border-outline focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-on-surface-variant pl-0">search</span>
+<input class="w-full bg-transparent border-none py-4 px-0 text-on-surface placeholder:text-surface-container-highest font-bold uppercase" placeholder="TYPE TO ADD SKILL (E.G. DOCKER, KUBERNETES...)" type="text"/>
+</div>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="bg-surface-container-high text-on-surface px-4 py-2 flex items-center gap-3 border-l-2 border-primary-container">
+<span class="font-bold text-xs tracking-widest uppercase">React</span>
+<button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<div class="bg-surface-container-high text-on-surface px-4 py-2 flex items-center gap-3 border-l-2 border-primary-container">
+<span class="font-bold text-xs tracking-widest uppercase">Rust</span>
+<button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<div class="bg-surface-container-high text-on-surface px-4 py-2 flex items-center gap-3 border-l-2 border-primary-container">
+<span class="font-bold text-xs tracking-widest uppercase">MongoDB</span>
+<button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<div class="bg-surface-container-high text-on-surface px-4 py-2 flex items-center gap-3 border-l-2 border-primary-container">
+<span class="font-bold text-xs tracking-widest uppercase">Tailwind CSS</span>
+<button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<div class="bg-surface-container-high text-on-surface px-4 py-2 flex items-center gap-3 border-l-2 border-primary-container">
+<span class="font-bold text-xs tracking-widest uppercase">Python</span>
+<button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Metadata & Summary -->
+<aside class="lg:col-span-4 space-y-8">
+<div class="bg-surface-container-low p-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">verified</span>
+</div>
+<h3 class="font-headline font-black text-xl mb-6 uppercase tracking-tight">PROFILE_STATUS</h3>
+<div class="space-y-6">
+<div class="flex justify-between items-end border-b border-outline-variant pb-2">
+<span class="font-label text-[10px] text-on-surface-variant font-bold uppercase">VERIFICATION</span>
+<span class="font-bold text-primary-container">ACTIVE</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant pb-2">
+<span class="font-label text-[10px] text-on-surface-variant font-bold uppercase">COMPLETION</span>
+<span class="font-bold">85%</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant pb-2">
+<span class="font-label text-[10px] text-on-surface-variant font-bold uppercase">LAST_UPDATE</span>
+<span class="font-bold">2024.05.22</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-8">
+<h3 class="font-headline font-black text-xl mb-6 uppercase tracking-tight">NETWORK_INSIGHTS</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-6 uppercase tracking-wider font-medium">Your resume is currently visible to 14 active competition sponsors in the technical cluster. Complete your 'TECHNICAL_STACK' to increase ranking.</p>
+<div class="h-32 bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all cursor-crosshair" data-alt="abstract data visualization chart with glowing yellow lines on a dark background depicting network growth" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf5ti36rAz6jrSqfD6gU5N5pvLhe_OYTIAi3hCqrhprIHlapmQtgf6D6J21AHXFthnQWL3Uwrco1Gd46mxAI_kQcSPPitJ1BMHjd-z49m61jdzUo4Ajzx9qMrREpR8A5sNG0atrT-J9_ipzGJtYdzXPQsbcWYJC4NVduce3dE0MQvSKKl_Pj9Bq42lohRtKMUgNweIZ_CWK4K8tMqTy3_s27UWXCCVLIinBnOLZ5LG-TRLzTz73UfhbFpr5qgdGaQIZqJZPyVqWUc"/>
+</div>
+</div>
+</aside>
+</div>
+<!-- Sticky Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-40 px-8 py-6 bg-surface/80 backdrop-blur-xl border-t border-outline-variant/20">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="hidden md:flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></div>
+<span class="font-label text-[10px] font-black tracking-widest">LIVE_SYNC: OK</span>
+</div>
+<span class="text-[10px] text-on-surface-variant font-medium tracking-widest uppercase">CHANGES ARE AUTOMATICALLY STAGED</span>
+</div>
+<button class="bg-primary-container text-on-primary font-headline font-black py-4 px-12 text-sm tracking-widest uppercase hover:bg-primary-fixed-dim active:scale-95 transition-all w-full md:w-auto">
+                    SAVE_CHANGES
+                </button>
+</div>
+</footer>
+</main>
+<!-- Global Footer -->
+<footer class="w-full py-12 px-8 border-t border-[#4d4632]/20 bg-[#0c0e12] mt-24">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 w-full max-w-7xl mx-auto">
+<div class="flex flex-col gap-2">
+<span class="text-[#facc15] font-bold tracking-tighter text-xl uppercase">COMPTIHUB</span>
+<span class="font-['Inter'] text-[0.75rem] uppercase tracking-widest text-[#d1c6ab]">© 2024 COMPTIHUB. ARCHITECTURAL PRECISION.</span>
+</div>
+<div class="flex gap-8 flex-wrap justify-center">
+<a class="font-['Inter'] text-[0.75rem] uppercase tracking-widest text-[#d1c6ab] hover:text-[#facc15] transition-colors" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-[0.75rem] uppercase tracking-widest text-[#d1c6ab] hover:text-[#facc15] transition-colors" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-[0.75rem] uppercase tracking-widest text-[#d1c6ab] hover:text-[#facc15] transition-colors" href="#">Technical Specs</a>
+<a class="font-['Inter'] text-[0.75rem] uppercase tracking-widest text-[#d1c6ab] hover:text-[#facc15] transition-colors" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

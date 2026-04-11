@@ -32,10 +32,12 @@ export default function LoginPage() {
     setError("");
     setIsSubmitting(true);
 
-    const redirectTo = location.state?.from?.pathname ?? routes.dashboard;
-
     try {
-      await login(form);
+      const sessionUser = await login(form);
+      const redirectTo =
+        location.state?.from?.pathname ??
+        (sessionUser.accountType === "admin" ? routes.admin : routes.dashboard);
+
       navigate(redirectTo, { replace: true });
     } catch (submissionError) {
       setError(submissionError.message);

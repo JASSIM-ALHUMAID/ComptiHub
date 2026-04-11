@@ -71,6 +71,119 @@ html {
     var(--landing-surface);
 }
 
+.admin-theme {
+  --admin-surface: #111317;
+  --admin-surface-low: #0c0e12;
+  --admin-surface-card: #1e2024;
+  --admin-text: #e2e2e8;
+  --admin-text-muted: #d1c6ab;
+  --admin-gold: #facc15;
+  --admin-gold-soft: #ffe083;
+  --admin-outline: #4d4632;
+  --admin-danger: #ffb4ab;
+  color: var(--admin-text);
+  background:
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.08) 0%, rgba(250, 204, 21, 0) 28%),
+    radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0) 24%),
+    radial-gradient(circle at center, transparent 0%, rgba(17, 19, 23, 0.32) 52%, var(--admin-surface) 82%),
+    var(--admin-surface);
+  background-attachment: fixed;
+  overflow-x: clip;
+}
+
+.admin-theme::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(77, 70, 50, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(77, 70, 50, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.72), transparent 82%);
+}
+
+.admin-wordmark,
+.admin-display,
+.admin-title,
+.admin-ui-text {
+  font-family: var(--landing-font-display);
+  text-transform: uppercase;
+}
+
+.admin-wordmark {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.admin-display {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.admin-title {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.admin-ui-text {
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.admin-sidebar {
+  min-height: 0;
+}
+
+.admin-main-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-shell,
+.admin-page {
+  width: 100%;
+}
+
+.admin-main-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(250, 204, 21, 0.04), transparent 24%);
+}
+
+.admin-nav-link.is-active .admin-ui-text {
+  color: inherit;
+}
+
+.admin-mobile-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 50;
+  display: grid;
+  width: calc(100% - 2rem);
+  max-width: 34rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  transform: translateX(-50%);
+  border: 1px solid rgba(77, 70, 50, 0.22);
+  border-radius: 999px;
+  background: rgba(12, 14, 18, 0.9);
+  backdrop-filter: blur(18px);
+  padding: 0.85rem 1rem;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+@media (min-width: 1024px) {
+  .admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 4.5rem - 3rem);
+  }
+}
+
 .landing-grid-overlay {
   background-image:
     linear-gradient(to right, rgba(77, 70, 50, 0.1) 1px, transparent 1px),
