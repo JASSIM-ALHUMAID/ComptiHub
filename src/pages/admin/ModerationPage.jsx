@@ -1,66 +1,55 @@
 import { useEffect, useState } from 'react'
 import Button from '../../components/ui/Button'
-import { storage } from '../../lib/utils/storage'
-
-const KEY = 'compitihub.admin.users'
-
-function read() {
-  const data = storage.get(KEY)
-  if (!data) return []
-  try {
-    return JSON.parse(data)
-  } catch {
-    return []
-  }
-}
-
-function write(data) {
-  storage.set(KEY, JSON.stringify(data))
-}
+import { users as mockUsers } from '../../data/mocks/user'
 
 export default function ModerationPage() {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    const existing = read()
-
-    if (existing.length === 0) {
-      const seed = [
-        { id: '1', username: 'user1', email: 'user1@test.com', status: 'active' },
-      ]
-      write(seed)
-      setUsers(seed)
-    } else {
-      setUsers(existing)
-    }
+    setUsers(mockUsers.filter((user) => user.accountType !== 'admin'))
   }, [])
 
   function updateStatus(id, status) {
-    const next = users.map((u) =>
-      u.id === id ? { ...u, status } : u
+    setUsers((currentUsers) =>
+      currentUsers.map((user) =>
+        user.id === id
+          ? {
+              ...user,
+              status,
+            }
+          : user,
+      ),
     )
-    write(next)
-    setUsers(next)
   }
 
   return (
     <main className="space-y-6">
-      <h1 className="landing-title text-2xl">Moderation</h1>
+      <header className="space-y-2">
+        <p className="landing-label text-[0.68rem] text-[rgba(250,204,21,0.82)]">Admin</p>
+        <h1 className="landing-title text-3xl text-(--landing-text)">Moderation</h1>
+      </header>
 
       <div className="space-y-4">
-        {users.map((u) => (
-          <div key={u.id} className="rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 flex justify-between">
+        {users.map((user) => (
+          <div
+            key={user.id}
+            className="rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 flex justify-between"
+          >
             <div>
-              <p className="font-semibold">{u.username}</p>
-              <p className="text-xs">{u.email}</p>
-              <p className="text-xs">{u.status}</p>
+              <p className="font-semibold">{user.username}</p>
+              <p className="text-xs text-[rgba(226,226,232,0.6)]">{user.email}</p>
+              <p className="text-xs">{user.accountType}</p>
+              <p className="text-xs">Status: {user.status || 'active'}</p>
             </div>
 
             <div className="flex gap-2">
-              <Button size="nav" onClick={() => updateStatus(u.id, 'suspended')}>
+              <Button size="nav" onClick={() => updateStatus(user.id, 'active')}>
+                Activate
+              </Button>
+              <Button size="nav" onClick={() => updateStatus(user.id, 'suspended')}>
                 Suspend
               </Button>
-              <Button size="nav" variant="secondary" onClick={() => updateStatus(u.id, 'banned')}>
+              <Button size="nav" variant="secondary" onClick={() => updateStatus(user.id, 'banned')}>
                 Ban
               </Button>
             </div>
