@@ -1,0 +1,58 @@
+export const adminCompetitions = [
+  {
+    id: 'COMP-8821',
+    title: 'Neural Network Challenge 2026',
+    organizer: 'KFUPM AI Club',
+    startDate: '2026-10-12',
+    endDate: '2026-11-30',
+    registrationDeadline: '2026-10-05',
+    teamCount: 4,
+    status: 'active',
+    prizePool: 'SAR 24,000',
+    description:
+      'A university-wide applied AI competition focused on practical model building, evaluation quality, and research communication.',
+    links: 'https://compitihub.local/neural-network-challenge',
+  },
+  {
+    id: 'COMP-9042',
+    title: 'Cyber Security Regional Finals',
+    organizer: 'Saudi Cyber Forum',
+    startDate: '2027-01-01',
+    endDate: '2027-01-15',
+    registrationDeadline: '2026-12-20',
+    teamCount: 2,
+    status: 'upcoming',
+    prizePool: 'SAR 40,000',
+    description:
+      'Regional finals for student security teams competing across incident response, reverse engineering, and attack simulation tracks.',
+    links: 'https://compitihub.local/cyber-finals',
+  },
+  {
+    id: 'COMP-7512',
+    title: 'Global Data Mining Hackathon',
+    organizer: 'DataLab MENA',
+    startDate: '2026-08-01',
+    endDate: '2026-08-15',
+    registrationDeadline: '2026-07-22',
+    teamCount: 5,
+    status: 'ended',
+    prizePool: 'SAR 18,000',
+    description:
+      'An intensive hackathon for student teams building data mining solutions for real-world academic and business datasets.',
+    links: 'https://compitihub.local/data-mining-hackathon',
+  },
+  {
+    id: 'COMP-9155',
+    title: 'Robotics Systems Sprint',
+    organizer: 'Engineering Deanship',
+    startDate: '2026-09-03',
+    endDate: '2026-09-18',
+    registrationDeadline: '2026-08-24',
+    teamCount: 6,
+    status: 'draft',
+    prizePool: 'SAR 12,500',
+    description:
+      'Prototype-focused robotics sprint for multidisciplinary teams designing autonomous systems under constrained timelines.',
+    links: '',
+  },
+]

@@ -1,7 +1,24 @@
-export default function Modal({ children, open = false }) {
+export default function Modal({ children, open = false, className = '', onBackdropClick = null }) {
   if (!open) {
     return null
   }
 
-  return <div>{children}</div>
+  function handleBackdropClick(event) {
+    if (event.target !== event.currentTarget) {
+      return
+    }
+
+    onBackdropClick?.()
+  }
+
+  return (
+    <div
+      aria-modal="true"
+      className={`fixed inset-0 z-[80] ${className}`}
+      role="dialog"
+      onClick={handleBackdropClick}
+    >
+      {children}
+    </div>
+  )
 }
