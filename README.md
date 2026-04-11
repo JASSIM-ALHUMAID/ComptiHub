@@ -211,7 +211,7 @@ Address any linting errors before committing changes.
 - ✅ Competitor dashboard and features
 - ✅ Team leader dashboard and features
 - ⏳ Backend API integration
-- ⏳ Admin panel implementation
+- ✅ Admin panel implementation
 - ⏳ Real-time notifications
 - ⏳ Production deployment
 
@@ -230,7 +230,7 @@ For questions or issues, please [open an issue](https://github.com/JASSIM-ALHUMA
 
 ## License
 
-This project is part of the SWE363 course at [Your University]. All rights reserved.
+This project is part of the SWE363 course. All rights reserved.
 
 ---
 
