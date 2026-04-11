@@ -37,7 +37,31 @@ function sanitizeUser(user, activeRole = user.defaultRole) {
 }
 
 function getStoredUsers() {
-  return readJson(USERS_KEY, [])
+  let users = readJson(USERS_KEY, [])
+
+  // ensure array
+  if (!Array.isArray(users)) {
+    users = []
+  }
+
+  // seed admin
+  const hasAdmin = users.some((user) => user.accountType === 'admin')
+
+  if (!hasAdmin) {
+    const adminUser = {
+      id: 'admin-1',
+      username: 'Admin',
+      email: 'admin@compitihub.com',
+      password: 'admin123',
+      accountType: 'admin',
+      defaultRole: 'admin',
+    }
+
+    users.push(adminUser)
+    writeJson(USERS_KEY, users)
+  }
+
+  return users
 }
 
 function setStoredUsers(users) {
@@ -71,8 +95,12 @@ export const authService = {
       throw new Error('Email and password are required.')
     }
 
-    const user = getStoredUsers().find(
-      (storedUser) => storedUser.email === normalizedEmail && storedUser.password === normalizedPassword,
+    const users = getStoredUsers()
+
+    const user = users.find(
+      (storedUser) =>
+        storedUser.email === normalizedEmail &&
+        storedUser.password === normalizedPassword
     )
 
     if (!user) {
