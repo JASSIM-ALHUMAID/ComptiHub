@@ -3,13 +3,15 @@ import {
   ChevronRight,
   Gavel,
   LayoutDashboard,
+  LogOut,
   Menu,
   ShieldAlert,
   Sparkles,
   Trophy,
+  UserCircle2,
 } from 'lucide-react'
-import { createElement } from 'react'
-import { NavLink } from 'react-router-dom'
+import { createElement, useEffect, useRef, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
 
@@ -40,8 +42,39 @@ function AdminNavLink({ label, to, icon }) {
 }
 
 export default function AdminNav() {
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
   const username = user?.username || 'SYS_ADMIN_01'
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
+  const accountMenuRef = useRef(null)
+
+  useEffect(() => {
+    function handlePointerDown(event) {
+      if (!accountMenuRef.current?.contains(event.target)) {
+        setIsAccountMenuOpen(false)
+      }
+    }
+
+    function handleEscape(event) {
+      if (event.key === 'Escape') {
+        setIsAccountMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [])
+
+  async function handleLogout() {
+    setIsAccountMenuOpen(false)
+    await logout()
+    navigate(routes.login, { replace: true })
+  }
 
   return (
     <>
@@ -68,15 +101,58 @@ export default function AdminNav() {
             >
               <Bell className="h-4 w-4" />
             </button>
-            <div className="hidden items-center gap-3 rounded-full border border-[rgba(77,70,50,0.24)] bg-[rgba(255,255,255,0.03)] px-4 py-2 text-[var(--admin-text)] sm:flex">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(250,204,21,0.12)] text-[var(--admin-gold)]">
-                <ShieldAlert className="h-4 w-4" />
-              </div>
-              <div className="min-w-0">
-                <p className="admin-ui-text truncate text-[0.72rem] tracking-[0.22em]">{username}</p>
-                <p className="text-xs text-[rgba(255,224,131,0.88)]">Root access</p>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[rgba(209,198,171,0.62)]" />
+            <div className="relative hidden sm:block" ref={accountMenuRef}>
+              <button
+                aria-expanded={isAccountMenuOpen}
+                aria-haspopup="menu"
+                className="flex items-center gap-3 rounded-full border border-[rgba(77,70,50,0.24)] bg-[rgba(255,255,255,0.03)] px-4 py-2 text-[var(--admin-text)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:bg-[rgba(255,255,255,0.05)]"
+                type="button"
+                onClick={() => setIsAccountMenuOpen((open) => !open)}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(250,204,21,0.12)] text-[var(--admin-gold)]">
+                  <ShieldAlert className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 text-left">
+                  <p className="admin-ui-text truncate text-[0.72rem] tracking-[0.22em]">{username}</p>
+                  <p className="text-xs text-[rgba(255,224,131,0.88)]">Root access</p>
+                </div>
+                <ChevronRight
+                  className={[
+                    'h-4 w-4 text-[rgba(209,198,171,0.62)] transition-transform duration-200',
+                    isAccountMenuOpen ? 'rotate-90' : '',
+                  ].join(' ')}
+                />
+              </button>
+
+              {isAccountMenuOpen ? (
+                <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-72 overflow-hidden rounded-[1.2rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(17,19,23,0.98)] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.34)]">
+                  <div className="rounded-[1rem] border border-[rgba(77,70,50,0.16)] bg-[rgba(255,255,255,0.02)] p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[rgba(250,204,21,0.12)] text-[var(--admin-gold)]">
+                        <UserCircle2 className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-[var(--admin-text)]">{username}</p>
+                        <p className="truncate text-xs text-[rgba(209,198,171,0.66)]">{user?.email}</p>
+                        <p className="mt-1 text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(255,224,131,0.84)]">
+                          Administrator account
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-2 grid gap-1">
+                    <button
+                      className="flex items-center gap-3 rounded-[1rem] px-4 py-3 text-left text-sm text-[rgba(226,226,232,0.82)] transition-colors duration-200 hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--admin-gold-soft)]"
+                      type="button"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
