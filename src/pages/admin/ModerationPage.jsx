@@ -35,7 +35,14 @@ function getStatusClasses(status) {
 
 function ModerationModal({ form, open, targetUser, onChange, onClose, onSubmit }) {
   return (
-    <Modal open={open} onBackdropClick={onClose} className="bg-[rgba(12,14,18,0.76)] backdrop-blur-sm">
+    <Modal
+      aria-describedby="moderation-modal-description"
+      aria-labelledby="moderation-modal-title"
+      open={open}
+      onClose={onClose}
+      onBackdropClick={onClose}
+      className="bg-[rgba(12,14,18,0.76)] backdrop-blur-sm"
+    >
       <div className="flex min-h-screen items-center justify-center p-4">
         <div className="w-full max-w-2xl overflow-hidden rounded-[1.6rem] border border-[rgba(77,70,50,0.24)] bg-[rgba(17,19,23,0.98)] shadow-[0_24px_80px_rgba(0,0,0,0.42)]">
           <div className="flex items-start justify-between gap-4 border-b border-[rgba(77,70,50,0.18)] p-6 sm:p-8">
@@ -44,7 +51,10 @@ function ModerationModal({ form, open, targetUser, onChange, onClose, onSubmit }
                 <AlertTriangle className="h-4 w-4" />
                 Disciplinary action
               </p>
-              <h2 className="admin-title text-2xl text-[var(--admin-text)] sm:text-3xl">Moderation protocol</h2>
+              <h2 className="admin-title text-2xl text-[var(--admin-text)] sm:text-3xl" id="moderation-modal-title">Moderation protocol</h2>
+              <p className="text-sm leading-6 text-[rgba(209,198,171,0.72)]" id="moderation-modal-description">
+                Review the evidence and confirm the action before applying any disciplinary change.
+              </p>
             </div>
             <button
               aria-label="Close moderation modal"
@@ -299,6 +309,7 @@ export default function ModerationPage() {
                       <td className="px-6 py-5">
                         <div className="flex items-center justify-end gap-2">
                           <button
+                            aria-label={`Open moderation for ${user.name}`}
                             className="rounded-full border border-[rgba(77,70,50,0.2)] p-2 text-[rgba(209,198,171,0.66)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
                             type="button"
                             onClick={() => openModerationModal(user)}
@@ -306,6 +317,7 @@ export default function ModerationPage() {
                             <Gavel className="h-4 w-4" />
                           </button>
                           <button
+                            aria-label={`Open settings for ${user.name}`}
                             className="rounded-full border border-[rgba(77,70,50,0.2)] p-2 text-[rgba(209,198,171,0.66)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
                             type="button"
                           >

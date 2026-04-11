@@ -1,39 +1,24 @@
 import { Outlet } from 'react-router-dom'
 import StudentRoleSwitcher from '../../features/account/components/StudentRoleSwitcher'
+import MobileNav from '../navigation/MobileNav'
 import Sidebar from '../navigation/Sidebar'
 import StudentNav from '../navigation/StudentNav'
-import MobileNav from '../navigation/MobileNav'
-import Card from '../ui/Card'
 
 export default function AppLayout() {
   return (
-    <div className="landing-theme flex min-h-screen flex-col pb-24 lg:pb-8">
+    <div className="admin-theme min-h-screen pb-24 lg:pb-8">
       <StudentNav />
 
-      {/* Desktop Layout - Sidebar visible */}
-      <div className="hidden w-full flex-1 lg:block lg:px-8 lg:py-6">
-        <div className="grid w-full grid-cols-[280px_minmax(0,1fr)] gap-6">
-          <Sidebar />
-          <div className="min-w-0 space-y-6">
+      <div className="admin-shell grid gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-8 lg:py-6">
+        <Sidebar />
+        <div className="admin-main-panel rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(17,19,23,0.88)] text-[var(--admin-text)] shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
+          <div className="grid gap-6 p-5 sm:p-6 xl:p-8">
             <StudentRoleSwitcher />
-            <Card variant="elevated" className="min-h-[calc(100vh-11.5rem)]">
-              <Outlet />
-            </Card>
+            <Outlet />
           </div>
         </div>
       </div>
 
-      {/* Tablet & Mobile Layout - Sidebar hidden, stacked content */}
-      <div className="w-full px-5 py-6 sm:px-8 lg:hidden">
-        <div className="space-y-6">
-          <StudentRoleSwitcher />
-          <Card variant="elevated" className="min-h-[calc(100vh-14rem)]">
-            <Outlet />
-          </Card>
-        </div>
-      </div>
-
-      {/* Mobile Bottom Navigation */}
       <MobileNav />
     </div>
   )

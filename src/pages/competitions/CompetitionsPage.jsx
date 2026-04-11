@@ -1,3 +1,4 @@
+import { CalendarDays, Trophy, Users } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Card from '../../components/ui/Card'
@@ -34,13 +35,17 @@ export default function CompetitionsPage() {
       </header>
 
       <Card className="space-y-3">
-        <Input
-          type="text"
-          placeholder="Search competitions or organizers…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <div className="flex flex-wrap gap-2">
+        <label className="space-y-2" htmlFor="competition-search">
+          <span className="landing-ui-text block text-[0.7rem] text-[rgba(226,226,232,0.55)]">Search competitions</span>
+          <Input
+            id="competition-search"
+            type="text"
+            placeholder="Search competitions or organizers…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
+        <div aria-label="Filter by category" className="flex flex-wrap gap-2" role="group">
           {categories.map((cat) => (
             <FilterButton
               key={cat}
@@ -51,7 +56,7 @@ export default function CompetitionsPage() {
             </FilterButton>
           ))}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div aria-label="Filter by competition status" className="flex flex-wrap gap-2" role="group">
           {['all', 'open', 'closed'].map((s) => (
             <FilterButton
               key={s}
@@ -101,9 +106,18 @@ export default function CompetitionsPage() {
                   ))}
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-xs text-[rgba(226,226,232,0.55)]">
-                  <span>🏆 {comp.prize}</span>
-                  <span>👥 {comp.teamSize} members</span>
-                  <span>📅 {comp.deadline}</span>
+                  <span className="inline-flex items-center gap-2">
+                    <Trophy aria-hidden="true" className="h-3.5 w-3.5 text-(--landing-gold)" />
+                    {comp.prize}
+                  </span>
+                  <span className="inline-flex items-center gap-2">
+                    <Users aria-hidden="true" className="h-3.5 w-3.5 text-[rgba(226,226,232,0.72)]" />
+                    {comp.teamSize} members
+                  </span>
+                  <span className="inline-flex items-center gap-2">
+                    <CalendarDays aria-hidden="true" className="h-3.5 w-3.5 text-[rgba(226,226,232,0.72)]" />
+                    {comp.deadline}
+                  </span>
                 </div>
               </Card>
             </Link>

@@ -1,3 +1,4 @@
+import { CalendarDays, Trophy, Users } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Card from '../../components/ui/Card'
@@ -15,6 +16,7 @@ function TeamCard({ team, competitionTitle }) {
   const alreadyApplied = hasApplied(team.id)
   const [showForm, setShowForm] = useState(false)
   const [message, setMessage] = useState('')
+  const messageFieldId = `${team.id}-application-message`
 
   function handleApply(e) {
     e.preventDefault()
@@ -44,21 +46,26 @@ function TeamCard({ team, competitionTitle }) {
         ))}
       </div>
 
-      <div className="text-xs text-[rgba(226,226,232,0.45)]">
-        👥 {team.members.length}/{team.totalSlots} members
+      <div className="inline-flex items-center gap-2 text-xs text-[rgba(226,226,232,0.45)]">
+        <Users aria-hidden="true" className="h-3.5 w-3.5" />
+        {team.members.length}/{team.totalSlots} members
       </div>
 
       {alreadyApplied ? (
         <Alert variant="success" title="✓ Application submitted!" showIcon={false} />
       ) : showForm ? (
         <form onSubmit={handleApply} className="space-y-3 pt-1">
+          <label className="space-y-2" htmlFor={messageFieldId}>
+            <span className="landing-ui-text block text-[0.68rem] text-[rgba(226,226,232,0.55)]">Application message</span>
           <Textarea
+            id={messageFieldId}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
             rows={3}
             placeholder="Tell the team why you'd be a great fit…"
           />
+          </label>
           <div className="flex gap-3">
             <Button type="submit" variant="outline-gold" size="md">
               Submit
@@ -74,13 +81,7 @@ function TeamCard({ team, competitionTitle }) {
           </div>
         </form>
       ) : (
-        <Button
-          type="button"
-          onClick={() => setShowForm(true)}
-          variant="outline-gold"
-          size="md"
-          fullWidth
-        >
+        <Button type="button" onClick={() => setShowForm(true)} variant="outline-gold" size="md" fullWidth>
           Apply to Join
         </Button>
       )}

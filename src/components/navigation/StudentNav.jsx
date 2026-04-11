@@ -1,38 +1,58 @@
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
-import Button from '../ui/Button'
+import { Bell, LogOut, ShieldCheck, Sparkles } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useStudentRole } from '../../features/account/hooks/useStudentRole'
+import { roleConfig } from '../../features/account/utils/roleConfig'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
-
-const navItems = [
-  { label: 'Dashboard', to: routes.dashboard },
-  { label: 'Competitions', to: routes.competitions },
-  { label: 'Teams', to: routes.teams },
-  { label: 'Applications', to: routes.applications },
-  { label: 'Profile', to: routes.profile },
-]
+import Button from '../ui/Button'
 
 export default function StudentNav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { user, logout } = useAuth()
+  const { activeRole } = useStudentRole()
+  const navigate = useNavigate()
+  const activeRoleLabel = roleConfig[activeRole]?.label ?? 'Competitor'
+
+  async function handleLogout() {
+    await logout()
+    navigate(routes.login, { replace: true })
+  }
 
   return (
-    <nav className="relative z-50 border-b border-[rgba(77,70,50,0.22)] bg-[rgba(17,19,23,0.9)] px-5 py-4 text-(--landing-text) backdrop-blur sm:px-8">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-        <Link
-          className="landing-wordmark text-lg text-(--landing-gold) transition-colors duration-200 hover:text-(--landing-gold-soft)"
-          to={routes.landing}
-        >
-          COMPTIHUB
-        </Link>
+    <header className="sticky top-0 z-40 border-b border-[rgba(77,70,50,0.24)] bg-[rgba(12,14,18,0.92)] backdrop-blur-xl">
+      <div className="flex h-[4.5rem] w-full items-center justify-between gap-4 px-4 sm:px-6 xl:px-8">
+        <div className="flex items-center gap-4">
+          <Link className="admin-wordmark text-xl text-[var(--admin-gold)] sm:text-2xl" to={routes.dashboard}>
+            ComptiHub
+          </Link>
+          <div className="hidden items-center gap-2 rounded-full border border-[rgba(77,70,50,0.2)] bg-[rgba(255,255,255,0.03)] px-3 py-2 text-[rgba(209,198,171,0.74)] lg:flex">
+            <Sparkles className="h-4 w-4 text-[var(--admin-gold-soft)]" />
+            <span className="admin-ui-text text-[0.62rem] tracking-[0.18em]">{activeRoleLabel} workspace</span>
+          </div>
+        </div>
 
         <div className="flex items-center gap-3">
+          <button
+            aria-label="Workspace notifications"
+            className="hidden h-11 w-11 items-center justify-center rounded-full border border-[rgba(77,70,50,0.24)] bg-[rgba(255,255,255,0.02)] text-[var(--admin-text)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.32)] hover:text-[var(--admin-gold-soft)] sm:flex"
+            type="button"
+          >
+            <Bell className="h-4 w-4" />
+          </button>
+
           <div className="hidden min-w-0 text-right sm:block">
-            <p className="truncate text-sm font-semibold">{user?.username}</p>
-            <p className="truncate text-xs text-[rgba(226,226,232,0.58)]">{user?.email}</p>
+            <p className="admin-ui-text truncate text-[0.68rem] tracking-[0.18em] text-[var(--admin-gold-soft)]">
+              {activeRoleLabel}
+            </p>
+            <p className="truncate text-xs text-[rgba(209,198,171,0.72)]">{user?.email}</p>
           </div>
-          <Button onClick={logout} variant="secondary" size="nav" className="hidden sm:inline-flex">
+
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(250,204,21,0.12)] text-[var(--admin-gold)]">
+            <ShieldCheck className="h-4 w-4" />
+          </div>
+
+          <Button className="min-w-0 px-4 sm:px-6" onClick={handleLogout} variant="secondary" size="nav">
+            <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>
           <button
@@ -47,49 +67,7 @@ export default function StudentNav() {
           </button>
         </div>
       </div>
-
-      {isMobileMenuOpen ? (
-        <div
-          id="student-mobile-menu"
-          className="student-mobile-menu absolute inset-x-0 top-full border-t border-[rgba(77,70,50,0.16)] bg-[rgba(12,14,18,0.98)] px-5 py-5 sm:hidden"
-        >
-          <div className="mx-auto flex w-full max-w-7xl flex-col gap-5">
-            <div className="min-w-0 rounded-[1.25rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(17,19,23,0.72)] px-4 py-3">
-              <p className="truncate text-sm font-semibold">{user?.username}</p>
-              <p className="truncate text-xs text-[rgba(226,226,232,0.58)]">{user?.email}</p>
-            </div>
-
-            <div className="grid gap-2">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    [
-                      'rounded-2xl border px-4 py-3 text-sm transition-colors duration-200',
-                      isActive
-                        ? 'border-[rgba(250,204,21,0.28)] bg-[rgba(250,204,21,0.12)] font-semibold text-(--landing-gold-soft)'
-                        : 'border-[rgba(77,70,50,0.22)] text-[rgba(226,226,232,0.72)] hover:border-(--landing-gold) hover:text-(--landing-gold-soft)',
-                    ].join(' ')
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-            </div>
-
-            <Button
-              onClick={logout}
-              variant="secondary"
-              size="nav"
-              className="w-full justify-center"
-            >
-              Logout
-            </Button>
-          </div>
-        </div>
-      ) : null}
-    </nav>
+    </header>
   )
 }
+

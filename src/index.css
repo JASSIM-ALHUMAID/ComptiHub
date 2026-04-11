@@ -81,6 +81,16 @@ html {
   --admin-gold-soft: #ffe083;
   --admin-outline: #4d4632;
   --admin-danger: #ffb4ab;
+  --landing-surface: var(--admin-surface);
+  --landing-surface-low: var(--admin-surface-low);
+  --landing-surface-card: var(--admin-surface-card);
+  --landing-surface-card-hover: #25282d;
+  --landing-text: var(--admin-text);
+  --landing-text-muted: var(--admin-text-muted);
+  --landing-gold: var(--admin-gold);
+  --landing-gold-soft: var(--admin-gold-soft);
+  --landing-outline: var(--admin-outline);
+  --landing-danger: var(--admin-danger);
   color: var(--admin-text);
   background:
     radial-gradient(circle at top right, rgba(250, 204, 21, 0.08) 0%, rgba(250, 204, 21, 0) 28%),
@@ -158,6 +168,7 @@ html {
 }
 
 .admin-mobile-nav {
+  --ui-mobile-nav-columns: 4;
   position: fixed;
   left: 50%;
   bottom: 1rem;
@@ -165,7 +176,7 @@ html {
   display: grid;
   width: calc(100% - 2rem);
   max-width: 34rem;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--ui-mobile-nav-columns), minmax(0, 1fr));
   gap: 0.5rem;
   transform: translateX(-50%);
   border: 1px solid rgba(77, 70, 50, 0.22);
@@ -377,6 +388,80 @@ html {
 .landing-link-accent:focus-visible::after {
   opacity: 1;
   transform: scaleX(1);
+}
+
+.admin-theme .landing-wordmark,
+.admin-theme .landing-display,
+.admin-theme .landing-title,
+.admin-theme .landing-section-title,
+.admin-theme .landing-label,
+.admin-theme .landing-ui-text {
+  font-family: var(--landing-font-display);
+  text-transform: uppercase;
+}
+
+.admin-theme .landing-wordmark {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.admin-theme .landing-display,
+.admin-theme .landing-title,
+.admin-theme .landing-section-title {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.admin-theme .landing-label,
+.admin-theme .landing-ui-text {
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.admin-theme .landing-copy {
+  color: rgba(209, 198, 171, 0.78);
+  letter-spacing: -0.01em;
+}
+
+.admin-theme .landing-link-accent::after {
+  background: linear-gradient(90deg, transparent, var(--admin-gold), transparent);
+}
+
+.admin-theme .landing-button {
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.admin-theme .landing-button-primary {
+  border-color: rgba(250, 204, 21, 0.22);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(255, 255, 255, 0.03));
+  color: var(--admin-gold-soft);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.admin-theme .landing-button-primary:hover,
+.admin-theme .landing-button-primary:focus-visible {
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.24), rgba(255, 255, 255, 0.05));
+  color: var(--admin-gold);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.admin-theme .landing-button-secondary {
+  border-color: rgba(77, 70, 50, 0.24);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(209, 198, 171, 0.76);
+  box-shadow: none;
+}
+
+.admin-theme .landing-button-secondary:hover,
+.admin-theme .landing-button-secondary:focus-visible {
+  border-color: rgba(250, 204, 21, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--admin-gold-soft);
 }
 
 .landing-nav-link {

@@ -5,7 +5,7 @@ import Button from '../ui/Button'
 import { routes } from '../../lib/constants/routes'
 
 const navItems = [
-  { label: 'PROBLEM', href: '#how-it-works' },
+  { label: 'HOME', href: '#hero' },
   { label: 'FEATURES', href: '#features' },
   { label: 'HOW IT WORKS', href: '#how-it-works' },
 ]

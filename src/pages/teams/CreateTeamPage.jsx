@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Alert from '../../components/ui/Alert'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
@@ -9,7 +10,7 @@ import { routes } from '../../lib/constants/routes'
 export default function CreateTeamPage() {
   const navigate = useNavigate()
   const [form, setForm] = useState({ name: '', competitionId: '', description: '', totalSlots: '3', requiredSkills: '' })
-  const [submitted, setSubmitted] = useState(false)
+  const [submissionState, setSubmissionState] = useState('idle')
 
   function updateField(e) {
     const { name, value } = e.target
@@ -18,11 +19,16 @@ export default function CreateTeamPage() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => navigate(routes.teams), 1500)
+    setSubmissionState('submitted')
+  }
+
+  function resetForm() {
+    setForm({ name: '', competitionId: '', description: '', totalSlots: '3', requiredSkills: '' })
+    setSubmissionState('idle')
   }
 
   const openComps = competitions.filter((c) => c.status === 'open')
+  const selectedCompetition = openComps.find((competition) => competition.id === form.competitionId)
 
   return (
     <main className="space-y-6">
@@ -32,9 +38,33 @@ export default function CreateTeamPage() {
         <p className="landing-copy text-sm text-[rgba(226,226,232,0.65)]">Set up a new team and start recruiting the right people.</p>
       </header>
 
-      {submitted ? (
-        <div className="rounded-[1.5rem] border border-green-500/30 bg-green-500/10 p-6 text-center">
-          <p className="text-sm font-semibold text-green-400">✓ Team created! Redirecting to teams…</p>
+      {submissionState === 'submitted' ? (
+        <div className="space-y-5 rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5 sm:p-6">
+          <Alert
+            variant="info"
+            title="Team draft reviewed"
+            message="This demo validates the form but does not persist a live team yet. Nothing has been added to My Teams until backend creation is connected."
+          />
+
+          <div className="grid gap-4 rounded-[1.5rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] p-4 sm:grid-cols-2">
+            <div>
+              <p className="landing-ui-text text-[0.68rem] text-[rgba(226,226,232,0.45)]">Team name</p>
+              <p className="mt-2 text-sm font-semibold text-(--landing-text)">{form.name}</p>
+            </div>
+            <div>
+              <p className="landing-ui-text text-[0.68rem] text-[rgba(226,226,232,0.45)]">Competition</p>
+              <p className="mt-2 text-sm font-semibold text-(--landing-text)">{selectedCompetition?.title ?? 'Not selected'}</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 pt-1 sm:flex-row">
+            <Button type="button" size="nav" onClick={() => navigate(routes.teams)}>
+              Back to My Teams
+            </Button>
+            <Button type="button" variant="secondary" size="nav" onClick={resetForm}>
+              Create Another Draft
+            </Button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5 rounded-[1.75rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-5">
@@ -65,7 +95,9 @@ export default function CreateTeamPage() {
           </div>
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <Button type="submit" size="nav">Create Team</Button>
-            <Link to={routes.teams} className="inline-flex items-center justify-center rounded-full border border-[rgba(77,70,50,0.28)] px-6 py-3 text-sm font-semibold text-[rgba(226,226,232,0.76)] transition-colors duration-200 hover:border-(--landing-gold) hover:text-(--landing-gold-soft)">Cancel</Link>
+            <Button as={Link} to={routes.teams} variant="secondary" size="nav">
+              Cancel
+            </Button>
           </div>
         </form>
       )}

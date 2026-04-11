@@ -20,19 +20,10 @@ export default function TeamDetailsPage() {
     )
   }
 
-  // Treat current user as a member for demo purposes
-  const currentUserMember = {
-    id: user?.id ?? 'current-user',
-    username: user?.username ?? 'You',
-    role: team.leaderId === user?.id ? 'Team Leader' : 'Member',
-    isCurrentUser: true,
-  }
-
-  // Build member list: inject current user if not already present
-  const isAlreadyInList = team.members.some((m) => m.id === user?.id)
-  const memberList = isAlreadyInList
-    ? team.members.map((m) => ({ ...m, isCurrentUser: m.id === user?.id }))
-    : [currentUserMember, ...team.members]
+  const memberList = team.members.map((member) => ({
+    ...member,
+    isCurrentUser: member.id === user?.id,
+  }))
 
   return (
     <main className="space-y-6">

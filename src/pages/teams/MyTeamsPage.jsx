@@ -1,5 +1,7 @@
+import { UserPlus, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
+import EmptyState from '../../components/feedback/EmptyState'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { useStudentRole } from '../../features/account/hooks/useStudentRole'
 import { teams } from '../../data/mocks/teams'
@@ -13,8 +15,6 @@ export default function MyTeamsPage() {
   const myTeams = teams.filter((team) =>
     team.members.some((m) => m.id === user?.id) || team.leaderId === user?.id
   )
-
-  const displayTeams = myTeams.length > 0 ? myTeams : teams.slice(0, 2)
 
   return (
     <main className="space-y-6">
@@ -35,7 +35,7 @@ export default function MyTeamsPage() {
         )}
       </header>
 
-      {isLeader && (
+      {isLeader && myTeams.length > 0 && (
         <div className="flex">
           <Link
             to={routes.teamRequests}
@@ -46,21 +46,30 @@ export default function MyTeamsPage() {
         </div>
       )}
 
-      {displayTeams.length === 0 ? (
-        <div className="rounded-[1.5rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.48)] p-8 text-center space-y-3">
-          <p className="landing-copy text-sm text-[rgba(226,226,232,0.55)]">
-            You are not in any teams yet.
-          </p>
-          <Link
-            className="inline-block text-sm text-(--landing-gold) hover:text-(--landing-gold-soft) transition-colors duration-200"
-            to={routes.competitions}
-          >
-            Browse competitions to find a team →
-          </Link>
-        </div>
+      {myTeams.length === 0 ? (
+        <EmptyState
+          title={isLeader ? 'No teams created yet' : 'No team memberships yet'}
+          message={
+            isLeader
+              ? 'Create your first team when you are ready to recruit. Until then, your workspace will stay empty instead of showing placeholder memberships.'
+              : 'You are not part of any teams yet. Browse competitions to find teams that are actively recruiting.'
+          }
+          action={(
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              {isLeader ? (
+                <Button as={Link} to={routes.teamCreate} size="nav">
+                  Create Team
+                </Button>
+              ) : null}
+              <Button as={Link} to={routes.competitions} variant="secondary" size="nav">
+                Browse Competitions
+              </Button>
+            </div>
+          )}
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
-          {displayTeams.map((team) => {
+          {myTeams.map((team) => {
             const isTeamLeader = team.leaderId === user?.id
             return (
               <Link
@@ -86,9 +95,15 @@ export default function MyTeamsPage() {
                 <p className="landing-copy mb-4 line-clamp-2 text-sm text-[rgba(226,226,232,0.7)]">{team.description}</p>
 
                 <div className="flex items-center justify-between text-xs text-[rgba(226,226,232,0.5)]">
-                  <span>👥 {team.members.length}/{team.totalSlots} members</span>
+                  <span className="inline-flex items-center gap-2">
+                    <Users aria-hidden="true" className="h-3.5 w-3.5" />
+                    {team.members.length}/{team.totalSlots} members
+                  </span>
                   {team.openSlots > 0 && (
-                    <span className="text-[rgba(226,226,232,0.4)]">{team.openSlots} slot{team.openSlots !== 1 ? 's' : ''} open</span>
+                    <span className="inline-flex items-center gap-2 text-[rgba(226,226,232,0.4)]">
+                      <UserPlus aria-hidden="true" className="h-3.5 w-3.5" />
+                      {team.openSlots} slot{team.openSlots !== 1 ? 's' : ''} open
+                    </span>
                   )}
                 </div>
               </Link>
@@ -103,7 +118,7 @@ export default function MyTeamsPage() {
           <Link className="text-(--landing-gold) hover:text-(--landing-gold-soft) transition-colors duration-200" to={routes.competitions}>
             Browse competitions
           </Link>
-          {' '}and find recruiting teams on each competition's page.
+          {' '}and find recruiting teams on each competition&apos;s page.
         </p>
       </div>
     </main>

@@ -1,8 +1,10 @@
+import { ArrowRight, MessageSquareText } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import EmptyState from '../../components/feedback/EmptyState'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
-import Alert from '../../components/ui/Alert'
 import { useAuth } from '../../features/auth/hooks/useAuth'
+import { routes } from '../../lib/constants/routes'
 
 const statusVariants = {
   pending: 'gold',
@@ -24,21 +26,12 @@ export default function MyApplicationsPage() {
       </header>
 
       {applications.length === 0 ? (
-        <Card className="text-center">
-          <Alert
-            variant="info"
-            title="No applications yet"
-            message={
-              <>
-                You haven't applied to any teams yet.{' '}
-                <Link className="text-(--landing-gold) hover:text-(--landing-gold-soft)" to="/competitions">
-                  Browse competitions
-                </Link>
-                .
-              </>
-            }
-          />
-        </Card>
+        <EmptyState
+          title="No applications yet"
+          message="You have not applied to any teams yet. Browse competitions to find recruiting teams and start sending requests."
+          actionLabel="Browse Competitions"
+          actionTo={routes.competitions}
+        />
       ) : (
         <div className="grid gap-4">
           {applications.map((app) => (
@@ -57,21 +50,25 @@ export default function MyApplicationsPage() {
                 </Badge>
               </div>
 
-              <div className="rounded-2xl border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
-                <p className="landing-ui-text mb-1 text-[0.65rem] text-[rgba(226,226,232,0.45)]">Your message</p>
-                <p className="landing-copy text-sm text-[rgba(226,226,232,0.7)]">{app.message}</p>
-              </div>
+                <div className="rounded-2xl border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
+                  <p className="landing-ui-text mb-1 inline-flex items-center gap-2 text-[0.65rem] text-[rgba(226,226,232,0.45)]">
+                    <MessageSquareText aria-hidden="true" className="h-3.5 w-3.5" />
+                    Your message
+                  </p>
+                  <p className="landing-copy text-sm text-[rgba(226,226,232,0.7)]">{app.message}</p>
+                </div>
 
-              <div className="flex items-center justify-between text-xs text-[rgba(226,226,232,0.45)]">
-                <span>Applied on {app.appliedAt}</span>
-                <Link
-                  to={`/teams/${app.teamId}`}
-                  className="text-(--landing-gold) transition-colors duration-200 hover:text-(--landing-gold-soft)"
-                >
-                  View team →
-                </Link>
-              </div>
-            </Card>
+                <div className="flex items-center justify-between text-xs text-[rgba(226,226,232,0.45)]">
+                  <span>Applied on {app.appliedAt}</span>
+                  <Link
+                    to={`/teams/${app.teamId}`}
+                    className="inline-flex items-center gap-2 text-(--landing-gold) transition-colors duration-200 hover:text-(--landing-gold-soft)"
+                  >
+                    View team
+                    <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </Card>
           ))}
         </div>
       )}

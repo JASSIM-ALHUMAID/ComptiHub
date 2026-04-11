@@ -20,6 +20,7 @@ export default function Button({
   as: Component = 'button',
   type = 'button',
   className,
+  fullWidth = false,
   variant = 'primary',
   size = 'hero',
   ...props
@@ -32,6 +33,7 @@ export default function Button({
         'landing-button inline-flex items-center justify-center whitespace-nowrap border transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold)',
         variantClasses[variant],
         sizeClasses[size],
+        fullWidth && 'w-full',
         className,
       )}
       {...componentProps}

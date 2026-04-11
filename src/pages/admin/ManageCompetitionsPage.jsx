@@ -88,7 +88,10 @@ function CompetitionEditorModal({
 }) {
   return (
     <Modal
+      aria-describedby="competition-editor-description"
+      aria-labelledby="competition-editor-title"
       open={open}
+      onClose={onClose}
       onBackdropClick={onClose}
       className="bg-[rgba(12,14,18,0.74)] backdrop-blur-sm"
     >
@@ -97,9 +100,12 @@ function CompetitionEditorModal({
           <div className="flex items-start justify-between gap-4 border-b border-[rgba(77,70,50,0.18)] p-6 sm:p-8">
             <div className="space-y-2">
               <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Action editor</p>
-              <h2 className="admin-title text-2xl text-[var(--admin-text)] sm:text-3xl">
+              <h2 className="admin-title text-2xl text-[var(--admin-text)] sm:text-3xl" id="competition-editor-title">
                 {isEditing ? 'Edit Competition' : 'Create Competition'}
               </h2>
+              <p className="text-sm leading-6 text-[rgba(209,198,171,0.72)]" id="competition-editor-description">
+                Review the required fields, then publish changes from the same admin workspace.
+              </p>
             </div>
             <button
               aria-label="Close competition editor"
@@ -500,6 +506,7 @@ export default function ManageCompetitionsPage() {
                       <td className="px-6 py-5">
                         <div className="flex items-center justify-end gap-2">
                           <button
+                            aria-label={`Edit ${competition.title}`}
                             className="rounded-full border border-[rgba(77,70,50,0.2)] p-2 text-[rgba(209,198,171,0.66)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
                             type="button"
                             onClick={() => openEditModal(competition)}
@@ -507,12 +514,14 @@ export default function ManageCompetitionsPage() {
                             <Pencil className="h-4 w-4" />
                           </button>
                           <button
+                            aria-label={`Configure ${competition.title}`}
                             className="rounded-full border border-[rgba(77,70,50,0.2)] p-2 text-[rgba(209,198,171,0.66)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
                             type="button"
                           >
                             <Settings2 className="h-4 w-4" />
                           </button>
                           <button
+                            aria-label={`Delete ${competition.title}`}
                             className="rounded-full border border-[rgba(77,70,50,0.2)] p-2 text-[rgba(209,198,171,0.66)] transition-colors duration-200 hover:border-[rgba(255,180,171,0.3)] hover:text-[var(--admin-danger)]"
                             type="button"
                             onClick={() => handleDeleteCompetition(competition.id)}

@@ -142,6 +142,8 @@ export default function SuggestionsPage() {
                 ].join(' ')}
               >
                 <button
+                  aria-controls={`suggestion-panel-${suggestion.id}`}
+                  aria-expanded={isExpanded}
                   className="flex w-full items-start justify-between gap-4 p-5 text-left sm:p-6"
                   type="button"
                   onClick={() => toggleExpandedSuggestion(suggestion.id)}
@@ -175,7 +177,7 @@ export default function SuggestionsPage() {
                 </button>
 
                 {isExpanded ? (
-                  <div className="space-y-6 border-t border-[rgba(77,70,50,0.18)] px-5 py-6 sm:px-6">
+                  <div className="space-y-6 border-t border-[rgba(77,70,50,0.18)] px-5 py-6 sm:px-6" id={`suggestion-panel-${suggestion.id}`}>
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_320px]">
                       <div className="space-y-4">
                         <div>
@@ -241,6 +243,7 @@ export default function SuggestionsPage() {
         <footer className="flex flex-col gap-6 border-t border-[rgba(77,70,50,0.18)] pt-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
             <button
+              aria-label="Previous page"
               className="rounded-full border border-[rgba(77,70,50,0.22)] p-3 text-[rgba(209,198,171,0.74)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
               type="button"
               onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
@@ -251,6 +254,7 @@ export default function SuggestionsPage() {
               {String(currentPage).padStart(2, '0')}
             </span>
             <button
+              aria-label="Next page"
               className="rounded-full border border-[rgba(77,70,50,0.22)] p-3 text-[rgba(209,198,171,0.74)] transition-colors duration-200 hover:border-[rgba(250,204,21,0.3)] hover:text-[var(--admin-gold-soft)]"
               type="button"
               onClick={() => setCurrentPage((page) => page + 1)}
