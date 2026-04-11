@@ -6,17 +6,9 @@ export default function AdminDashboardPage() {
         <h1 className="landing-title text-3xl text-(--landing-text)">Dashboard</h1>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-[1.75rem] border p-5">
-          Manage Competitions
-        </div>
-        <div className="rounded-[1.75rem] border p-5">
-          Review Suggestions
-        </div>
-        <div className="rounded-[1.75rem] border p-5">
-          Moderate Users
-        </div>
-      </section>
+      <p className="landing-copy text-sm text-[rgba(226,226,232,0.72)] sm:text-base">
+        Manage competitions, review student-submitted suggestions, and moderate user activity from a centralized admin control panel.
+      </p>
     </main>
   )
 }
