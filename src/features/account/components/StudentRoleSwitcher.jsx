@@ -1,10 +1,25 @@
+import { useNavigate } from 'react-router-dom'
 import { useStudentRole } from '../hooks/useStudentRole'
 import { roleConfig } from '../utils/roleConfig'
+import { routes } from '../../../lib/constants/routes'
 
 const switchableRoles = ['competitor', 'teamLeader']
 
 export default function StudentRoleSwitcher() {
+  const navigate = useNavigate()
   const { activeRole, setActiveRole } = useStudentRole()
+
+  async function handleRoleChange(nextRole) {
+    if (nextRole === activeRole) {
+      return
+    }
+
+    const updatedUser = await setActiveRole(nextRole)
+
+    if (updatedUser) {
+      navigate(routes.dashboard, { replace: true })
+    }
+  }
 
   function handleKeyDown(role, event) {
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
@@ -16,7 +31,7 @@ export default function StudentRoleSwitcher() {
     const currentIndex = switchableRoles.indexOf(role)
     const direction = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1
     const nextIndex = (currentIndex + direction + switchableRoles.length) % switchableRoles.length
-    setActiveRole(switchableRoles[nextIndex])
+    void handleRoleChange(switchableRoles[nextIndex])
   }
 
   return (
@@ -43,7 +58,9 @@ export default function StudentRoleSwitcher() {
                 key={role}
                 role="radio"
                 type="button"
-                onClick={() => setActiveRole(role)}
+                onClick={() => {
+                  void handleRoleChange(role)
+                }}
                 onKeyDown={(event) => handleKeyDown(role, event)}
                 className={[
                   'rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--landing-gold)',
