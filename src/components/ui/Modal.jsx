@@ -19,7 +19,12 @@ export default function Modal({
 }) {
   const modalRef = useRef(null)
   const restoreFocusRef = useRef(null)
+  const closeHandlerRef = useRef(null)
   const closeHandler = onClose ?? onBackdropClick
+
+  useEffect(() => {
+    closeHandlerRef.current = closeHandler
+  }, [closeHandler])
 
   useEffect(() => {
     if (!open) {
@@ -41,7 +46,7 @@ export default function Modal({
 
     function handleKeyDown(event) {
       if (event.key === 'Escape') {
-        closeHandler?.()
+        closeHandlerRef.current?.()
         return
       }
 
@@ -84,7 +89,7 @@ export default function Modal({
         restoreFocusRef.current.focus()
       }
     }
-  }, [closeHandler, open])
+  }, [open])
 
   if (!open) {
     return null
