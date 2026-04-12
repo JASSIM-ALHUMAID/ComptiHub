@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import { useAuth } from '../../features/auth/hooks/useAuth'
+import { getUserSkills } from '../../data/mocks/skills'
 import { teams } from '../../data/mocks/teams'
 import { routes } from '../../lib/constants/routes'
 
@@ -23,7 +24,9 @@ export default function TeamDetailsPage() {
   const memberList = team.members.map((member) => ({
     ...member,
     isCurrentUser: member.id === user?.id,
+    skills: getUserSkills(member.id),
   }))
+  const isLeaderView = team.leaderId === user?.id
 
   return (
     <main className="space-y-6">
@@ -82,26 +85,45 @@ export default function TeamDetailsPage() {
             <div
               key={member.id}
               className={[
-                'flex items-center justify-between rounded-2xl border px-4 py-3 transition-colors duration-200',
+                'rounded-2xl border px-4 py-3 transition-colors duration-200',
                 member.isCurrentUser
                   ? 'border-(--landing-gold) bg-[rgba(250,204,21,0.08)]'
                   : 'border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)]',
               ].join(' ')}
             >
-              <div className="flex items-center gap-2">
-                <span className={[
-                  'text-sm font-semibold',
-                  member.isCurrentUser ? 'text-(--landing-gold-soft)' : 'text-(--landing-text)',
-                ].join(' ')}>
-                  {member.username}
-                </span>
-                {member.isCurrentUser && (
-                  <span className="rounded-full bg-[rgba(250,204,21,0.15)] px-2 py-0.5 text-[0.6rem] font-semibold text-(--landing-gold)">
-                    You
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <span className={[
+                    'text-sm font-semibold',
+                    member.isCurrentUser ? 'text-(--landing-gold-soft)' : 'text-(--landing-text)',
+                  ].join(' ')}>
+                    {member.username}
                   </span>
-                )}
+                  {member.isCurrentUser && (
+                    <span className="rounded-full bg-[rgba(250,204,21,0.15)] px-2 py-0.5 text-[0.6rem] font-semibold text-(--landing-gold)">
+                      You
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs text-[rgba(226,226,232,0.5)]">{member.role}</span>
               </div>
-              <span className="text-xs text-[rgba(226,226,232,0.5)]">{member.role}</span>
+
+              {isLeaderView ? (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {member.skills.length > 0 ? (
+                    member.skills.map((skill) => (
+                      <span
+                        key={`${member.id}-${skill}`}
+                        className="rounded-full border border-[rgba(77,70,50,0.3)] bg-[rgba(12,14,18,0.6)] px-2 py-0.5 text-[0.65rem] text-[rgba(226,226,232,0.65)]"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-[rgba(226,226,232,0.42)]">No skills added</span>
+                  )}
+                </div>
+              ) : null}
             </div>
           ))}
           {Array.from({ length: Math.max(0, team.totalSlots - memberList.length) }).map((_, i) => (

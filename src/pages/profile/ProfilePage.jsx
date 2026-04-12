@@ -9,17 +9,34 @@ import Modal from '../../components/ui/Modal'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { roleConfig } from '../../features/account/utils/roleConfig'
 import { profiles } from '../../data/mocks/profile'
-import { getUserSkills, saveUserSkills } from '../../data/mocks/skills'
+import { formatSkillLabel, getUserSkills, saveUserSkills } from '../../data/mocks/skills'
 import { routes } from '../../lib/constants/routes'
 
 export default function ProfilePage() {
   const { user } = useAuth()
   const profile = profiles[user?.id]
   const skills = getUserSkills(user?.id)
+  const activeRole = user?.activeRole ?? user?.defaultRole ?? 'competitor'
+  const isLeaderProfile = activeRole === 'teamLeader'
+  const roleProfile = profile?.[activeRole] ?? null
   const [draftSkills, setDraftSkills] = useState(() => getUserSkills(user?.id))
   const [draftSkill, setDraftSkill] = useState('')
   const [skillsError, setSkillsError] = useState('')
   const [isSkillsDialogOpen, setIsSkillsDialogOpen] = useState(false)
+
+  const profileHighlights = isLeaderProfile
+    ? [
+        { label: 'Recruiting Focus', value: roleProfile?.focus },
+        { label: 'Preferred Team Setup', value: roleProfile?.preferredTeamSetup },
+        { label: 'Leadership Strengths', value: roleProfile?.strengths },
+        { label: 'Availability', value: roleProfile?.availability },
+      ]
+    : [
+        { label: 'Competition Focus', value: roleProfile?.focus },
+        { label: 'Preferred Role', value: roleProfile?.preferredRole },
+        { label: 'Core Strengths', value: roleProfile?.strengths },
+        { label: 'Availability', value: roleProfile?.availability },
+      ]
 
   function openSkillsDialog() {
     setDraftSkills(skills)
@@ -36,7 +53,7 @@ export default function ProfilePage() {
   }
 
   function handleAddSkill() {
-    const normalizedSkill = draftSkill.trim()
+    const normalizedSkill = formatSkillLabel(draftSkill)
 
     if (!normalizedSkill) {
       setSkillsError('Enter a skill before adding it.')
@@ -114,11 +131,13 @@ export default function ProfilePage() {
           </Link>
         </Card>
 
-        {profile ? (
+        {profile && roleProfile ? (
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
             <Card className="space-y-4">
               <div>
-                <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Academic Snapshot</p>
+                <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">
+                  {isLeaderProfile ? 'Leadership Snapshot' : 'Competitor Snapshot'}
+                </p>
                 <p className="mt-2 text-lg font-semibold text-(--landing-text)">{profile.university}</p>
               </div>
 
@@ -133,14 +152,18 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div>
-                <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Competition Focus</p>
-                <p className="mt-2 text-sm font-semibold text-(--landing-text)">{profile.focus}</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {profileHighlights.map((item) => (
+                  <div key={item.label}>
+                    <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-(--landing-text)">{item.value}</p>
+                  </div>
+                ))}
               </div>
 
               <div>
                 <p className="landing-ui-text text-[0.7rem] text-[rgba(226,226,232,0.55)]">Bio</p>
-                <p className="landing-copy mt-2 text-sm text-[rgba(226,226,232,0.72)]">{profile.bio}</p>
+                <p className="landing-copy mt-2 text-sm text-[rgba(226,226,232,0.72)]">{roleProfile.bio}</p>
               </div>
             </Card>
 
