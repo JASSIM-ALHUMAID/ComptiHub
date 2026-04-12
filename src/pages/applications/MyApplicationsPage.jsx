@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import EmptyState from '../../components/feedback/EmptyState'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import { useStudentRole } from '../../features/account/hooks/useStudentRole'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
+import TeamRequestsPage from '../teams/TeamRequestsPage'
 
 const statusVariants = {
   pending: 'gold',
@@ -13,7 +15,12 @@ const statusVariants = {
 }
 
 export default function MyApplicationsPage() {
+  const { activeRole } = useStudentRole()
   const { applications } = useAuth()
+
+  if (activeRole === 'teamLeader') {
+    return <TeamRequestsPage />
+  }
 
   return (
     <main className="space-y-6">

@@ -11,10 +11,15 @@ export default function MyTeamsPage() {
   const { user } = useAuth()
   const { activeRole } = useStudentRole()
   const isLeader = activeRole === 'teamLeader'
+  const userId = user?.id
 
-  const myTeams = teams.filter((team) =>
-    team.members.some((m) => m.id === user?.id) || team.leaderId === user?.id
-  )
+  const myTeams = teams.filter((team) => {
+    if (isLeader) {
+      return team.leaderId === userId
+    }
+
+    return team.leaderId !== userId && team.members.some((member) => member.id === userId)
+  })
 
   return (
     <main className="space-y-6">
