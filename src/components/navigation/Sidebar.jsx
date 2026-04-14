@@ -23,7 +23,7 @@ function WorkspaceNavLink({ end = false, icon, label, to }) {
         [
           "admin-nav-link flex items-center gap-3 rounded-[1.1rem] px-4 py-3 text-sm transition-all duration-200",
           isActive
-            ? "is-active bg-[rgba(250,204,21,0.98)] text-[var(--admin-surface-low)] shadow-[0_16px_30px_rgba(250,204,21,0.16)] text-black "
+            ? "is-active bg-[rgba(250,204,21,0.98)] text-black!  shadow-[0_16px_30px_rgba(250,204,21,0.16)] "
             : "text-[rgba(226,226,232,0.76)] hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--admin-gold-soft)]",
         ].join(" ")
       }

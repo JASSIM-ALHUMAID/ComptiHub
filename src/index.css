@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Sora:wght@400;500;600;700;800&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Sora:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
 
 :root {
   --landing-surface: #111317;
@@ -12,9 +12,9 @@
   --landing-gold-soft: #ffe083;
   --landing-outline: #4d4632;
   --landing-danger: #ffb4ab;
-  --landing-font-display: 'Rajdhani', sans-serif;
-  --landing-font-body: 'Sora', sans-serif;
-  --landing-font-ui: 'Rajdhani', sans-serif;
+  --landing-font-display: "Rajdhani", sans-serif;
+  --landing-font-body: "Sora", sans-serif;
+  --landing-font-ui: "Rajdhani", sans-serif;
   font-family: var(--landing-font-body);
   line-height: 1.5;
   font-weight: 400;
@@ -67,7 +67,12 @@ html {
   font-family: var(--landing-font-body);
   color: var(--landing-text);
   background:
-    radial-gradient(circle at center, transparent 0%, rgba(17, 19, 23, 0.28) 54%, var(--landing-surface) 80%),
+    radial-gradient(
+      circle at center,
+      transparent 0%,
+      rgba(17, 19, 23, 0.28) 54%,
+      var(--landing-surface) 80%
+    ),
     var(--landing-surface);
 }
 
@@ -93,16 +98,29 @@ html {
   --landing-danger: var(--admin-danger);
   color: var(--admin-text);
   background:
-    radial-gradient(circle at top right, rgba(250, 204, 21, 0.08) 0%, rgba(250, 204, 21, 0) 28%),
-    radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0) 24%),
-    radial-gradient(circle at center, transparent 0%, rgba(17, 19, 23, 0.32) 52%, var(--admin-surface) 82%),
+    radial-gradient(
+      circle at top right,
+      rgba(250, 204, 21, 0.08) 0%,
+      rgba(250, 204, 21, 0) 28%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(79, 70, 229, 0.08) 0%,
+      rgba(79, 70, 229, 0) 24%
+    ),
+    radial-gradient(
+      circle at center,
+      transparent 0%,
+      rgba(17, 19, 23, 0.32) 52%,
+      var(--admin-surface) 82%
+    ),
     var(--admin-surface);
   background-attachment: fixed;
   overflow-x: clip;
 }
 
 .admin-theme::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -110,7 +128,11 @@ html {
     linear-gradient(to right, rgba(77, 70, 50, 0.12) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(77, 70, 50, 0.12) 1px, transparent 1px);
   background-size: 28px 28px;
-  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.72), transparent 82%);
+  mask-image: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.72),
+    transparent 82%
+  );
 }
 
 .admin-wordmark,
@@ -156,11 +178,15 @@ html {
 }
 
 .admin-main-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(250, 204, 21, 0.04), transparent 24%);
+  background: linear-gradient(
+    180deg,
+    rgba(250, 204, 21, 0.04),
+    transparent 24%
+  );
 }
 
 .admin-nav-link.is-active .admin-ui-text {
@@ -212,11 +238,15 @@ html {
 }
 
 .landing-shell::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 204, 21, 0.04), transparent 20%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 204, 21, 0.04),
+    transparent 20%
+  );
 }
 
 .landing-nav-blur {
@@ -289,14 +319,21 @@ html {
 }
 
 .landing-button::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0.22) 100%);
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
   opacity: 0;
   transform: translateX(-18%);
-  transition: opacity 280ms ease, transform 420ms ease;
+  transition:
+    opacity 280ms ease,
+    transform 420ms ease;
 }
 
 .landing-button-primary {
@@ -316,7 +353,11 @@ html {
 
 .landing-button-secondary {
   border-color: rgba(250, 204, 21, 0.26);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(250, 204, 21, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(250, 204, 21, 0.08) 100%
+  );
   color: var(--landing-text);
   box-shadow:
     0 16px 32px rgba(0, 0, 0, 0.18),
@@ -341,7 +382,11 @@ html {
 .landing-button-secondary:hover,
 .landing-button-secondary:focus-visible {
   border-color: rgba(250, 204, 21, 0.62);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(250, 204, 21, 0.16) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(250, 204, 21, 0.16) 100%
+  );
   color: var(--landing-gold-soft);
 }
 
@@ -371,17 +416,24 @@ html {
 }
 
 .landing-link-accent::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: var(--link-underline-offset, -0.55rem);
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--landing-gold), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--landing-gold),
+    transparent
+  );
   opacity: 0;
   transform: scaleX(0.25);
   transform-origin: left;
-  transition: opacity 240ms ease, transform 240ms ease;
+  transition:
+    opacity 240ms ease,
+    transform 240ms ease;
 }
 
 .landing-link-accent:hover::after,
@@ -425,7 +477,12 @@ html {
 }
 
 .admin-theme .landing-link-accent::after {
-  background: linear-gradient(90deg, transparent, var(--admin-gold), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--admin-gold),
+    transparent
+  );
 }
 
 .admin-theme .landing-button {
@@ -434,7 +491,11 @@ html {
 
 .admin-theme .landing-button-primary {
   border-color: rgba(250, 204, 21, 0.22);
-  background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(255, 255, 255, 0.03));
+  background: linear-gradient(
+    135deg,
+    rgba(250, 204, 21, 0.16),
+    rgba(255, 255, 255, 0.03)
+  );
   color: var(--admin-gold-soft);
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.22),
@@ -443,7 +504,11 @@ html {
 
 .admin-theme .landing-button-primary:hover,
 .admin-theme .landing-button-primary:focus-visible {
-  background: linear-gradient(135deg, rgba(250, 204, 21, 0.24), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(250, 204, 21, 0.24),
+    rgba(255, 255, 255, 0.05)
+  );
   color: var(--admin-gold);
   box-shadow:
     0 24px 48px rgba(0, 0, 0, 0.28),
@@ -483,7 +548,7 @@ html {
 
 .landing-hero::before,
 .landing-hero::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: 999px;
   pointer-events: none;
@@ -495,7 +560,11 @@ html {
   left: -8%;
   width: 18rem;
   height: 18rem;
-  background: radial-gradient(circle, rgba(113, 191, 255, 0.16) 0%, rgba(113, 191, 255, 0) 72%);
+  background: radial-gradient(
+    circle,
+    rgba(113, 191, 255, 0.16) 0%,
+    rgba(113, 191, 255, 0) 72%
+  );
 }
 
 .landing-hero::after {
@@ -503,7 +572,11 @@ html {
   bottom: 14%;
   width: 24rem;
   height: 24rem;
-  background: radial-gradient(circle, rgba(250, 204, 21, 0.16) 0%, rgba(250, 204, 21, 0) 72%);
+  background: radial-gradient(
+    circle,
+    rgba(250, 204, 21, 0.16) 0%,
+    rgba(250, 204, 21, 0) 72%
+  );
 }
 
 .landing-reveal {
@@ -518,7 +591,8 @@ html {
   opacity: 0;
   transform: translate3d(0, 44px, 0) scale(0.98);
   filter: blur(14px);
-  animation: landing-reveal-display 1100ms cubic-bezier(0.16, 0.86, 0.24, 1) forwards;
+  animation: landing-reveal-display 1100ms cubic-bezier(0.16, 0.86, 0.24, 1)
+    forwards;
   animation-delay: calc(210ms + (var(--reveal-order, 0) * 160ms));
 }
 
@@ -542,7 +616,8 @@ html {
 }
 
 .landing-inview-display.is-visible {
-  animation: landing-reveal-display 1100ms cubic-bezier(0.16, 0.86, 0.24, 1) forwards;
+  animation: landing-reveal-display 1100ms cubic-bezier(0.16, 0.86, 0.24, 1)
+    forwards;
   animation-delay: calc(210ms + (var(--reveal-order, 0) * 160ms));
 }
 
