@@ -173,6 +173,47 @@ export const authService = {
     return nextSession
   },
 
+  async updateBasicInfo(userId, { username, email }) {
+    const users = getStoredUsers()
+    const normalizedEmail = normalizeEmail(email)
+    const normalizedUsername = username.trim()
+
+    if (!normalizedUsername || !normalizedEmail) {
+      throw new Error('Username and email are required.')
+    }
+
+    const userIndex = users.findIndex((user) => user.id === userId)
+    if (userIndex === -1) {
+      throw new Error('Unable to update the account information.')
+    }
+
+    // Check if email is already taken by another user
+    if (users.some((user) => user.email === normalizedEmail && user.id !== userId)) {
+      throw new Error('An account with that email already exists.')
+    }
+
+    users[userIndex] = {
+      ...users[userIndex],
+      username: normalizedUsername,
+      email: normalizedEmail,
+    }
+
+    setStoredUsers(users)
+
+    const sessionUser = getSession()
+    if (sessionUser && sessionUser.id === userId) {
+      const nextSession = {
+        ...sessionUser,
+        username: normalizedUsername,
+        email: normalizedEmail,
+      }
+      setSession(nextSession)
+      return nextSession
+    }
+
+    return sanitizeUser(users[userIndex])
+  },
+
   async logout() {
     storage.remove(SESSION_KEY)
   },

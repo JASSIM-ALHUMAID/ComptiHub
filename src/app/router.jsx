@@ -17,7 +17,6 @@ import SignupPage from '../pages/auth/SignupPage'
 import CompetitionDetailsPage from '../pages/competitions/CompetitionDetailsPage'
 import CompetitionsPage from '../pages/competitions/CompetitionsPage'
 import DashboardPage from '../pages/dashboard/DashboardPage'
-import EditProfilePage from '../pages/profile/EditProfilePage'
 import ProfilePage from '../pages/profile/ProfilePage'
 import LandingPage from '../pages/public/LandingPage'
 import CreateTeamPage from '../pages/teams/CreateTeamPage'
@@ -62,7 +61,6 @@ export const router = createBrowserRouter([
           },
           { path: '/applications', element: <MyApplicationsPage /> },
           { path: '/profile', element: <ProfilePage /> },
-          { path: '/profile/edit', element: <EditProfilePage /> },
         ],
       },
     ],

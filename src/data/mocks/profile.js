@@ -1,3 +1,7 @@
+import { storage } from '../../lib/utils/storage'
+
+const USER_PROFILE_KEY = 'compitihub.profile.info'
+
 export const profiles = {
   'user-2': {
     university: 'King Saud University',
@@ -37,4 +41,49 @@ export const profiles = {
       bio: 'I lead small technical teams, organize training plans, and focus on building reliable rosters for high-pressure university competitions.',
     },
   },
+}
+
+function readStoredProfiles() {
+  const stored = storage.get(USER_PROFILE_KEY)
+  if (!stored) return {}
+  try {
+    return JSON.parse(stored)
+  } catch {
+    return {}
+  }
+}
+
+function writeStoredProfiles(data) {
+  storage.set(USER_PROFILE_KEY, JSON.stringify(data))
+}
+
+const emptyRoleProfile = {
+  focus: '',
+  preferredRole: '',
+  preferredTeamSetup: '',
+  strengths: '',
+  availability: '',
+  bio: '',
+}
+
+const emptyProfile = {
+  university: '',
+  major: '',
+  year: '',
+  competitor: { ...emptyRoleProfile },
+  teamLeader: { ...emptyRoleProfile },
+}
+
+export function getUserProfile(userId) {
+  if (!userId) return { ...emptyProfile }
+  const stored = readStoredProfiles()
+  const seed = profiles[userId] ?? emptyProfile
+  return stored[userId] ?? seed
+}
+
+export function saveUserProfile(userId, profileData) {
+  if (!userId) return profileData
+  const stored = readStoredProfiles()
+  writeStoredProfiles({ ...stored, [userId]: profileData })
+  return profileData
 }

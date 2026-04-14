@@ -9,7 +9,6 @@ export const routes = {
   teamRequests: '/teams/requests',
   applications: '/applications',
   profile: '/profile',
-  profileEdit: '/profile/edit',
   admin: '/admin',
   adminCompetitions: '/admin/competitions',
   adminSuggestions: '/admin/suggestions',

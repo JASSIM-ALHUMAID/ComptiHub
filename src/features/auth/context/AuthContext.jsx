@@ -46,6 +46,16 @@ export function AuthProvider({ children }) {
     [user],
   )
 
+  const updateBasicInfo = useCallback(
+    async ({ username, email }) => {
+      if (!user) return null
+      const nextUser = await authService.updateBasicInfo(user.id, { username, email })
+      setUser(nextUser)
+      return nextUser
+    },
+    [user],
+  )
+
   const addApplication = useCallback((teamId, teamName, competitionTitle, message) => {
     if (!user) {
       return
@@ -83,11 +93,12 @@ export function AuthProvider({ children }) {
       logout,
       updateDefaultRole,
       updateActiveRole,
+      updateBasicInfo,
       applications,
       addApplication,
       hasApplied,
     }),
-    [login, logout, signup, updateActiveRole, updateDefaultRole, user, applications, addApplication, hasApplied],
+    [login, logout, signup, updateActiveRole, updateDefaultRole, updateBasicInfo, user, applications, addApplication, hasApplied],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
