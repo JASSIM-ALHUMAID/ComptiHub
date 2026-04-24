@@ -23,6 +23,20 @@ The backend should first support the flows that already exist in the UI:
 11. Admin suggestion review.
 12. Admin moderation actions.
 
+## Confirmed Product Rules
+
+The following rules are now part of the intended backend behavior for the current product scope:
+
+1. Student users choose a `defaultRole` during signup and are redirected to that view after each login.
+2. Student users can freely switch between `competitor` and `teamLeader` views after login.
+3. A student may act as both a competitor and a team leader across the platform, but not inside the same competition.
+4. In a given competition, a user can only hold one participation position at a time.
+5. A team leader is always the first member of the team they create.
+6. A competitor can have at most one active application per competition.
+7. Logged-in users can view full profiles of other logged-in users.
+8. Competitors leave teams through a leave request that must be reviewed by the team leader.
+9. Finished competition teams should remain as archived records, while each user may hide archived teams from their own view only.
+
 ## Recommended Backend Stack
 
 ## Core Technologies
@@ -108,6 +122,13 @@ Fields:
 9. `createdAt`
 10. `updatedAt`
 
+## Notes
+
+1. `admin` is a separate account type, not a student capability layered onto a normal user account.
+2. `defaultRole` controls where a student is redirected after login.
+3. `activeRole` supports in-session switching between the competitor and team leader experiences.
+4. The backend should allow free switching between student roles, but business rules must still enforce role exclusivity per competition.
+
 ## Endpoints
 
 1. `POST /auth/signup`
@@ -123,6 +144,7 @@ Fields:
 2. Reject duplicate username/email.
 3. Prevent suspended or banned users from authenticating normally.
 4. Enforce RBAC in middleware for student routes vs admin routes.
+5. On successful login, return enough session data for the frontend to redirect the user to their `defaultRole` view.
 
 ## Phase 3: Profiles and Skills
 
@@ -140,10 +162,18 @@ Fields:
 2. `university`
 3. `major`
 4. `year`
-5. `competitor.bio`
-6. `teamLeader.bio`
-7. `createdAt`
-8. `updatedAt`
+5. `competitor.focus`
+6. `competitor.preferredRole`
+7. `competitor.strengths`
+8. `competitor.availability`
+9. `competitor.bio`
+10. `teamLeader.focus`
+11. `teamLeader.preferredTeamSetup`
+12. `teamLeader.strengths`
+13. `teamLeader.availability`
+14. `teamLeader.bio`
+15. `createdAt`
+16. `updatedAt`
 
 ### `skills`
 
@@ -166,6 +196,11 @@ For the current frontend, embedding skill tags in the profile is the simpler cho
 1. Trim strings.
 2. Enforce reasonable max lengths on summary fields.
 3. De-duplicate skills case-insensitively.
+
+## Access
+
+1. Any logged-in user can view another user's full profile.
+2. Keep a single shared profile per account, with role-specific subfields for competitor and team leader presentation.
 
 ## Phase 4: Competitions Module
 
@@ -195,9 +230,10 @@ Fields:
 14. `startDate`
 15. `endDate`
 16. `registrationDeadline`
-17. `createdBy`
-18. `createdAt`
-19. `updatedAt`
+17. `participationType` (`team` or `solo`)
+18. `createdBy`
+19. `createdAt`
+20. `updatedAt`
 
 ## Endpoints
 
@@ -222,6 +258,11 @@ The list endpoint should support:
 3. Filter by status.
 4. Sorting by deadline or creation date.
 
+## Display Scope
+
+1. For now, student-facing competition lists only need to return competitions that are currently open.
+2. Both competitor and team leader views can browse the same open competitions.
+
 ## Phase 5: Teams Module
 
 ## Goals
@@ -242,9 +283,23 @@ Fields:
 6. `requiredSkills[]`
 7. `totalSlots`
 8. `memberIds[]`
-9. `status` (`recruiting`, `full`, `closed`)
+9. `status` (`recruiting`, `full`, `closed`, `archived`, `dissolved`)
 10. `createdAt`
 11. `updatedAt`
+
+### `leaveRequests`
+
+Fields:
+
+1. `_id`
+2. `teamId`
+3. `competitionId`
+4. `requesterId`
+5. `status` (`pending`, `approved`, `rejected`)
+6. `reviewedBy`
+7. `reviewedAt`
+8. `createdAt`
+9. `updatedAt`
 
 ## Endpoints
 
@@ -252,6 +307,9 @@ Fields:
 2. `GET /teams/me`
 3. `GET /teams/:id`
 4. `GET /competitions/:id/teams`
+5. `POST /teams/:id/leave-requests`
+6. `GET /teams/leave-requests/incoming`
+7. `PATCH /leave-requests/:id/status`
 
 ## Core Rules
 
@@ -260,6 +318,20 @@ Fields:
 3. Team must start with the creator as leader and first member.
 4. `totalSlots` must be positive and compatible with the competition setup.
 5. Team status should be derived from capacity where possible.
+6. A user cannot create or lead a team in a competition where they already belong to another team.
+7. A user cannot join or apply to another team in a competition where they already lead a team.
+8. If a competition uses solo participation, the system may still create a one-person team record behind the scenes for consistency.
+9. Dissolving an active team should free all of its members to join or create another team in that competition immediately.
+10. When a competition finishes, related teams should become `archived` and read-only.
+11. Archived teams should remain globally stored as history, but each user may hide them from their own personal team list.
+
+## Leave and Dissolve Flows
+
+1. Competitors leave a team by creating a leave request.
+2. Team leaders can approve or reject leave requests.
+3. Membership only ends after leader approval.
+4. Team dissolution is allowed while the competition is still active.
+5. Archived teams should not accept new leave requests or dissolve actions.
 
 ## Phase 6: Applications and Join Requests
 
@@ -303,6 +375,10 @@ Fields:
 3. Accepting an application should add the user to the team inside a transaction-like flow.
 4. Do not exceed team capacity.
 5. When accepted, update team membership and mark the application status atomically.
+6. A competitor may have only one active application per competition.
+7. A competitor who already belongs to a team in a competition cannot apply to other teams in that competition.
+8. A team leader cannot apply to teams in a competition where they already lead a team.
+9. If a competition uses solo participation, a direct registration flow can still create a one-person team and skip the normal external application flow.
 
 ## Recommended Response Enrichment
 
@@ -312,6 +388,7 @@ For frontend convenience, incoming applications should include:
 2. Applicant skills.
 3. Team summary.
 4. Competition summary.
+5. A profile identifier so the team leader can open the full applicant profile.
 
 ## Phase 7: Admin Suggestions Workflow
 
@@ -382,6 +459,11 @@ Fields:
 2. A moderation action should also update `users.accountStatus`.
 3. Suspended/banned users should be blocked by auth middleware.
 
+## Historical Data Notes
+
+1. Moderation and competition history should remain queryable even after competitions are finished.
+2. Team archives are historical records, not soft-deleted placeholders waiting for cleanup.
+
 ## Phase 9: API Integration and Frontend Migration
 
 ## Goals
@@ -449,6 +531,7 @@ If you want the first working backend milestone quickly, implement this slice fi
 3. Competitions list/details.
 4. Team creation and my teams.
 5. Application submission and review.
+6. Leave request submission and leader review.
 
 That will unlock the main student and team leader flows before admin tooling is fully completed.
 
@@ -461,7 +544,7 @@ These items appear in the SRS but are not fully represented in the current imple
 1. Edit existing team metadata after creation.
 2. Define open roles separately from generic `requiredSkills`.
 3. Assign skills to each open role instead of only storing a flat skill list.
-4. Remove members from a team roster.
+4. Remove members from a team roster outside the leave-request flow.
 5. View a richer applicant profile modal from the requests queue.
 
 ## Competitor Gaps
@@ -472,6 +555,7 @@ These items appear in the SRS but are not fully represented in the current imple
 4. Team filtering by required skills or vacant roles on the competition team board.
 5. Withdraw pending application.
 6. Predefined skill library and autocomplete behavior instead of free-text skill entry.
+7. Rich archived-team history management beyond simple per-user hiding.
 
 ## Admin Gaps
 
