@@ -59,12 +59,12 @@ function getMetricToneClasses(tone) {
 
 export default function AdminDashboardPage() {
   return (
-    <main className="admin-page space-y-8 xl:space-y-10">
+    <main className="app-page space-y-8 xl:space-y-10">
       <header className="grid gap-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[linear-gradient(135deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] p-6 lg:grid-cols-[minmax(0,1.4fr)_320px] xl:p-7">
         <div className="space-y-4">
-          <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.82)]">System overview</p>
+          <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.82)]">System overview</p>
           <div className="space-y-3">
-            <h1 className="admin-display max-w-4xl text-4xl leading-none text-[var(--admin-text)] sm:text-5xl xl:text-6xl">
+            <h1 className="app-display max-w-4xl text-4xl leading-none text-[var(--admin-text)] sm:text-5xl xl:text-6xl">
               Command center for competitions and platform health.
             </h1>
             <p className="max-w-3xl text-sm leading-7 text-[rgba(209,198,171,0.74)] sm:text-base">
@@ -76,17 +76,17 @@ export default function AdminDashboardPage() {
 
         <div className="grid gap-4 rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.62)] p-5">
           <div>
-            <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.78)]">Today</p>
+            <p className="app-ui-text text-[0.62rem] text-[rgba(250,204,21,0.78)]">Today</p>
             <p className="mt-2 text-3xl font-black tracking-tight text-[var(--admin-text)]">142</p>
             <p className="mt-1 text-sm text-[rgba(209,198,171,0.72)]">Items waiting in the review pipeline</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-[1.15rem] border border-[rgba(77,70,50,0.16)] bg-[rgba(255,255,255,0.02)] p-4">
-              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Competitions</p>
+              <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Competitions</p>
               <p className="mt-2 text-2xl font-bold text-[var(--admin-text)]">24</p>
             </div>
             <div className="rounded-[1.15rem] border border-[rgba(77,70,50,0.16)] bg-[rgba(255,255,255,0.02)] p-4">
-              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Alerts</p>
+              <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Alerts</p>
               <p className="mt-2 text-2xl font-bold text-[var(--admin-text)]">31</p>
             </div>
           </div>
@@ -108,12 +108,12 @@ export default function AdminDashboardPage() {
                   <Icon className="h-5 w-5" />
                 </div>
                 {metric.status ? (
-                  <span className={`admin-ui-text rounded-full border px-3 py-1 text-[0.62rem] ${tone.badge}`}>
+                  <span className={`app-ui-text rounded-full border px-3 py-1 text-[0.62rem] ${tone.badge}`}>
                     {metric.status}
                   </span>
                 ) : null}
               </div>
-              <p className="admin-ui-text text-[0.65rem] text-[rgba(209,198,171,0.68)]">{metric.label}</p>
+              <p className="app-ui-text text-[0.65rem] text-[rgba(209,198,171,0.68)]">{metric.label}</p>
               <h2 className={`mt-3 text-4xl font-black tracking-tight ${tone.value}`}>{metric.value}</h2>
               <p className={`mt-4 text-sm ${tone.note}`}>{metric.note}</p>
             </article>
@@ -125,11 +125,11 @@ export default function AdminDashboardPage() {
         <article className="rounded-[1.6rem] border border-[rgba(77,70,50,0.22)] bg-[rgba(12,14,18,0.7)] p-6 sm:p-7">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(77,70,50,0.2)] pb-4">
             <div>
-              <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Activity stream</p>
-              <h2 className="admin-title mt-2 text-2xl text-[var(--admin-text)]">Recent activity</h2>
+              <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Activity stream</p>
+              <h2 className="app-title mt-2 text-2xl text-[var(--admin-text)]">Recent activity</h2>
             </div>
             <button
-              className="admin-ui-text inline-flex items-center gap-2 text-[0.68rem] text-[var(--admin-gold-soft)] transition-colors duration-200 hover:text-[var(--admin-gold)]"
+              className="app-ui-text inline-flex items-center gap-2 text-[0.68rem] text-[var(--admin-gold-soft)] transition-colors duration-200 hover:text-[var(--admin-gold)]"
               type="button"
             >
               View all logs
@@ -143,7 +143,7 @@ export default function AdminDashboardPage() {
                 key={item.id}
                 className="grid gap-2 border-b border-[rgba(77,70,50,0.14)] pb-5 last:border-b-0 last:pb-0 sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-4"
               >
-                <div className="admin-ui-text pt-1 text-[0.62rem] text-[rgba(209,198,171,0.42)]">{item.time}</div>
+                <div className="app-ui-text pt-1 text-[0.62rem] text-[rgba(209,198,171,0.42)]">{item.time}</div>
                 <div className="space-y-2">
                   <p className="text-sm leading-7 text-[var(--admin-text)] sm:text-base">
                     <span className="font-semibold text-[var(--admin-gold-soft)]">{item.actor}</span> {item.action}
@@ -170,8 +170,8 @@ export default function AdminDashboardPage() {
             <div className="absolute right-[-48px] top-[-36px] h-40 w-40 rounded-full bg-[rgba(250,204,21,0.08)] blur-3xl" />
             <div className="relative space-y-6">
               <div>
-                <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Queue snapshot</p>
-                <h2 className="admin-title mt-2 text-2xl text-[var(--admin-text)]">Action required</h2>
+                <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Queue snapshot</p>
+                <h2 className="app-title mt-2 text-2xl text-[var(--admin-text)]">Action required</h2>
               </div>
 
               <div className="space-y-3">
@@ -187,7 +187,7 @@ export default function AdminDashboardPage() {
                     type="button"
                   >
                     <div>
-                      <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.82)]">
+                      <p className="app-ui-text text-[0.62rem] text-[rgba(250,204,21,0.82)]">
                         Suggestion #{item.id} • {item.priority}
                       </p>
                       <h3 className="mt-2 text-sm font-semibold text-[var(--admin-text)] sm:text-base">{item.title}</h3>
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
               </div>
 
               <button
-                className="admin-ui-text flex w-full items-center justify-center gap-2 rounded-full border border-[rgba(250,204,21,0.36)] bg-[linear-gradient(135deg,#facc15_0%,#ffd95f_100%)] px-5 py-3 text-[0.72rem] text-[var(--admin-surface-low)] shadow-[0_18px_34px_rgba(250,204,21,0.14)] transition-transform duration-200 hover:-translate-y-0.5"
+                className="app-ui-text flex w-full items-center justify-center gap-2 rounded-full border border-[rgba(250,204,21,0.36)] bg-[linear-gradient(135deg,#facc15_0%,#ffd95f_100%)] px-5 py-3 text-[0.72rem] text-[var(--admin-surface-low)] shadow-[0_18px_34px_rgba(250,204,21,0.14)] transition-transform duration-200 hover:-translate-y-0.5"
                 type="button"
               >
                 Process all pending
@@ -216,8 +216,8 @@ export default function AdminDashboardPage() {
                 <Gauge className="h-5 w-5" />
               </div>
               <div>
-                <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.74)]">Infrastructure</p>
-                <h2 className="admin-title mt-1 text-xl text-[var(--admin-text)]">System health</h2>
+                <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.74)]">Infrastructure</p>
+                <h2 className="app-title mt-1 text-xl text-[var(--admin-text)]">System health</h2>
               </div>
             </div>
 
@@ -245,8 +245,8 @@ export default function AdminDashboardPage() {
                 <Activity className="h-5 w-5" />
               </div>
               <div>
-                <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.74)]">Status</p>
-                <h2 className="admin-title mt-1 text-xl text-[var(--admin-text)]">Platform pulse</h2>
+                <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.74)]">Status</p>
+                <h2 className="app-title mt-1 text-xl text-[var(--admin-text)]">Platform pulse</h2>
               </div>
             </div>
             <p className="mt-4 text-sm leading-7 text-[rgba(209,198,171,0.72)]">

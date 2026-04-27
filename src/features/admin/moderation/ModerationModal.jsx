@@ -17,11 +17,11 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
         <div className="w-full max-w-2xl overflow-hidden rounded-[1.6rem] border border-[rgba(77,70,50,0.24)] bg-[rgba(17,19,23,0.98)] shadow-[0_24px_80px_rgba(0,0,0,0.42)]">
           <div className="flex items-start justify-between gap-4 border-b border-[rgba(77,70,50,0.18)] p-6 sm:p-8">
             <div className="space-y-2">
-              <p className="admin-ui-text inline-flex items-center gap-2 text-[0.66rem] text-[var(--admin-danger)]">
+              <p className="app-ui-text inline-flex items-center gap-2 text-[0.66rem] text-[var(--admin-danger)]">
                 <AlertTriangle className="h-4 w-4" />
                 Disciplinary action
               </p>
-              <h2 className="admin-title text-2xl text-[var(--admin-text)] sm:text-3xl" id="moderation-modal-title">Moderation protocol</h2>
+              <h2 className="app-title text-2xl text-[var(--admin-text)] sm:text-3xl" id="moderation-modal-title">Moderation protocol</h2>
               <p className="text-sm leading-6 text-[rgba(209,198,171,0.72)]" id="moderation-modal-description">
                 Review the evidence and confirm the action before applying any disciplinary change.
               </p>
@@ -43,7 +43,7 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
                   <ShieldAlert className="h-7 w-7" />
                 </div>
                 <div className="space-y-1">
-                  <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Target subject</p>
+                  <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Target subject</p>
                   <h3 className="text-xl font-bold text-[var(--admin-text)]">{targetUser.name}</h3>
                   <div className="flex flex-wrap gap-2 text-xs">
                     <span className="rounded-full bg-[rgba(250,204,21,0.12)] px-3 py-1 text-[var(--admin-gold-soft)]">
@@ -58,7 +58,7 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
 
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="space-y-2">
-                  <span className="admin-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Penalty classification</span>
+                  <span className="app-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Penalty classification</span>
                   <Select name="penalty" value={form.penalty} onChange={onChange}>
                     <option>Suspend</option>
                     <option>Ban</option>
@@ -66,7 +66,7 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
                   </Select>
                 </label>
                 <label className="space-y-2">
-                  <span className="admin-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Restriction duration</span>
+                  <span className="app-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Restriction duration</span>
                   <Select name="duration" value={form.duration} onChange={onChange}>
                     <option>1 Day</option>
                     <option>1 Week</option>
@@ -77,7 +77,7 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
               </div>
 
               <label className="space-y-2">
-                <span className="admin-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Justification / reason</span>
+                <span className="app-ui-text text-[0.66rem] text-[rgba(209,198,171,0.76)]">Justification / reason</span>
                 <textarea
                   className="min-h-36 w-full rounded-[1.3rem] border border-[rgba(77,70,50,0.35)] bg-[rgba(12,14,18,0.78)] px-4 py-3 text-[var(--admin-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-200 placeholder:text-[rgba(226,226,232,0.45)] focus:border-[var(--admin-gold)] focus:outline-none focus:ring-2 focus:ring-[rgba(250,204,21,0.2)]"
                   name="reason"

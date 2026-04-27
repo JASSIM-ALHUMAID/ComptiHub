@@ -21,12 +21,12 @@ export default function StudentNav() {
     <header className="sticky top-0 z-40 border-b border-[rgba(77,70,50,0.24)] bg-[rgba(12,14,18,0.92)] backdrop-blur-xl">
       <div className="flex h-[4.5rem] w-full items-center justify-between gap-4 px-4 sm:px-6 xl:px-8">
         <div className="flex items-center gap-4">
-          <Link className="admin-wordmark text-xl text-[var(--admin-gold)] sm:text-2xl" to={routes.dashboard}>
+          <Link className="app-wordmark text-xl text-[var(--admin-gold)] sm:text-2xl" to={routes.dashboard}>
             ComptiHub
           </Link>
           <div className="hidden items-center gap-2 rounded-full border border-[rgba(77,70,50,0.2)] bg-[rgba(255,255,255,0.03)] px-3 py-2 text-[rgba(209,198,171,0.74)] lg:flex">
             <Sparkles className="h-4 w-4 text-[var(--admin-gold-soft)]" />
-            <span className="admin-ui-text text-[0.62rem] tracking-[0.18em]">{activeRoleLabel} workspace</span>
+            <span className="app-ui-text text-[0.62rem] tracking-[0.18em]">{activeRoleLabel} workspace</span>
           </div>
         </div>
 
@@ -40,7 +40,7 @@ export default function StudentNav() {
           </button>
 
           <div className="hidden min-w-0 text-right sm:block">
-            <p className="admin-ui-text truncate text-[0.68rem] tracking-[0.18em] text-[var(--admin-gold-soft)]">
+            <p className="app-ui-text truncate text-[0.68rem] tracking-[0.18em] text-[var(--admin-gold-soft)]">
               {activeRoleLabel}
             </p>
             <p className="truncate text-xs text-[rgba(209,198,171,0.72)]">{user?.email}</p>

@@ -55,12 +55,12 @@ export default function SuggestionCard({ suggestion, isExpanded, onToggleExpande
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_320px]">
             <div className="space-y-4">
               <div>
-                <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Executive summary</p>
+                <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Executive summary</p>
                 <p className="mt-3 text-base leading-8 text-[rgba(226,226,232,0.9)]">{suggestion.summary}</p>
               </div>
 
               <div className="rounded-[1.2rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4">
-                <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Technical resources</p>
+                <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Technical resources</p>
                 <a
                   className="mt-3 inline-flex items-center gap-2 break-all text-sm font-semibold text-[var(--admin-gold-soft)] hover:text-[var(--admin-gold)]"
                   href={suggestion.resourceLink}
@@ -74,7 +74,7 @@ export default function SuggestionCard({ suggestion, isExpanded, onToggleExpande
             </div>
 
             <div className="rounded-[1.2rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-5">
-              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Logistics block</p>
+              <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Logistics block</p>
               <div className="mt-4 space-y-4 text-sm">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(209,198,171,0.58)]">

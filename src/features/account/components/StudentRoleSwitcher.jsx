@@ -38,7 +38,7 @@ export default function StudentRoleSwitcher() {
     <section className="rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="admin-ui-text text-[0.66rem] text-[rgba(250,204,21,0.82)]" id="workspace-mode-label">Workspace mode</p>
+          <p className="app-ui-text text-[0.66rem] text-[rgba(250,204,21,0.82)]" id="workspace-mode-label">Workspace mode</p>
           <p className="mt-2 text-sm leading-6 text-[rgba(209,198,171,0.74)]">
             Switch between the two student experiences without leaving the authenticated workspace.
           </p>

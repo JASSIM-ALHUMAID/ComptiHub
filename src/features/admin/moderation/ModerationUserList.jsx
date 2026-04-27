@@ -7,12 +7,12 @@ export default function ModerationUserList({ filteredUsers, flaggedCount, search
     <section className="space-y-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4 sm:p-6">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="space-y-2">
-          <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Directory</p>
-          <h2 className="admin-title text-2xl text-[var(--admin-text)]">User management</h2>
+          <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.78)]">Directory</p>
+          <h2 className="app-title text-2xl text-[var(--admin-text)]">User management</h2>
         </div>
 
         <label className="space-y-2 xl:w-[22rem]">
-          <span className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.7)]">Search system</span>
+          <span className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.7)]">Search system</span>
           <div className="relative">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[rgba(209,198,171,0.52)]" />
             <Input
@@ -130,8 +130,8 @@ export default function ModerationUserList({ filteredUsers, flaggedCount, search
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.74)]">Compliance</p>
-              <h3 className="admin-title mt-1 text-lg text-[var(--admin-text)]">Audit trail ready</h3>
+              <p className="app-ui-text text-[0.62rem] text-[rgba(250,204,21,0.74)]">Compliance</p>
+              <h3 className="app-title mt-1 text-lg text-[var(--admin-text)]">Audit trail ready</h3>
             </div>
           </div>
           <p className="mt-4 text-sm leading-7 text-[rgba(209,198,171,0.72)]">
@@ -141,7 +141,7 @@ export default function ModerationUserList({ filteredUsers, flaggedCount, search
         </article>
 
         <article className="rounded-[1.3rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-          <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Review queue</p>
+          <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Review queue</p>
           <div className="mt-4 grid gap-3 text-sm text-[rgba(209,198,171,0.76)]">
             <div className="flex items-center justify-between gap-4">
               <span>Flagged users</span>

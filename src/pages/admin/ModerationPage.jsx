@@ -53,7 +53,7 @@ export default function ModerationPage() {
 
   return (
     <>
-      <main className="admin-page space-y-8">
+      <main className="app-page space-y-8">
         <ModerationHeader flaggedCount={flaggedCount} />
 
         <ModerationUserList

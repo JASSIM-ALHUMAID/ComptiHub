@@ -105,12 +105,12 @@ export default function ManageCompetitionsPage() {
 
   return (
     <>
-      <main className="admin-page space-y-8">
+      <main className="app-page space-y-8">
         <header className="grid gap-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[linear-gradient(135deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] p-6 xl:grid-cols-[minmax(0,1.3fr)_340px] xl:p-7">
           <div className="space-y-4">
-            <p className="admin-ui-text text-[0.68rem] text-[rgba(250,204,21,0.82)]">System management</p>
+            <p className="app-ui-text text-[0.68rem] text-[rgba(250,204,21,0.82)]">System management</p>
             <div className="space-y-3">
-              <h1 className="admin-display text-4xl leading-none text-[var(--admin-text)] sm:text-5xl xl:text-6xl">
+              <h1 className="app-display text-4xl leading-none text-[var(--admin-text)] sm:text-5xl xl:text-6xl">
                 Competition dashboard
               </h1>
               <p className="max-w-3xl text-sm leading-7 text-[rgba(209,198,171,0.74)] sm:text-base">
@@ -123,7 +123,7 @@ export default function ManageCompetitionsPage() {
           <div className="grid gap-4 rounded-[1.4rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.62)] p-5">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.76)]">Registry</p>
+                <p className="app-ui-text text-[0.62rem] text-[rgba(250,204,21,0.76)]">Registry</p>
                 <p className="mt-2 text-3xl font-black tracking-tight text-[var(--admin-text)]">
                   {competitions.length}
                 </p>
@@ -165,8 +165,8 @@ export default function ManageCompetitionsPage() {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="admin-ui-text text-[0.62rem] text-[rgba(250,204,21,0.74)]">DB sync</p>
-                  <h3 className="admin-title mt-1 text-lg text-[var(--admin-text)]">Locked and verified</h3>
+                  <p className="app-ui-text text-[0.62rem] text-[rgba(250,204,21,0.74)]">DB sync</p>
+                  <h3 className="app-title mt-1 text-lg text-[var(--admin-text)]">Locked and verified</h3>
                 </div>
               </div>
               <p className="mt-4 text-sm leading-7 text-[rgba(209,198,171,0.72)]">
@@ -176,7 +176,7 @@ export default function ManageCompetitionsPage() {
             </article>
 
             <article className="rounded-[1.3rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] p-5">
-              <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Operational snapshot</p>
+              <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.66)]">Operational snapshot</p>
               <div className="mt-4 grid gap-3 text-sm text-[rgba(209,198,171,0.76)]">
                 <div className="flex items-center justify-between gap-4">
                   <span className="inline-flex items-center gap-2">

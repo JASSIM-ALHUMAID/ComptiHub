@@ -112,13 +112,13 @@ export default function CompetitionList({ competitions, formatDisplayDate, getSt
 
             <div className="grid gap-3 text-sm text-[rgba(209,198,171,0.76)] sm:grid-cols-2">
               <div className="rounded-[1rem] bg-[rgba(255,255,255,0.02)] p-3">
-                <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Duration</p>
+                <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Duration</p>
 
                 <p className="mt-2">{formatDisplayDate(competition.startDate)}</p>
                 <p>{formatDisplayDate(competition.endDate)}</p>
               </div>
               <div className="rounded-[1rem] bg-[rgba(255,255,255,0.02)] p-3">
-                <p className="admin-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Registration</p>
+                <p className="app-ui-text text-[0.62rem] text-[rgba(209,198,171,0.64)]">Registration</p>
                 <p className="mt-2">{formatDisplayDate(competition.registrationDeadline)}</p>
                 <p>{competition.teamCount} teams</p>
               </div>

@@ -23,7 +23,7 @@ const navItems = [
 export default function MobileNav() {
   return (
     <nav
-      className="admin-mobile-nav lg:hidden"
+      className="app-mobile-nav lg:hidden"
       style={{ "--ui-mobile-nav-columns": navItems.length }}
     >
       <div className="contents">

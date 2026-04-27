@@ -76,7 +76,7 @@ html {
     var(--landing-surface);
 }
 
-.admin-theme {
+.app-theme {
   --admin-surface: #111317;
   --admin-surface-low: #0c0e12;
   --admin-surface-card: #1e2024;
@@ -119,7 +119,7 @@ html {
   overflow-x: clip;
 }
 
-.admin-theme::before {
+.app-theme::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -135,49 +135,49 @@ html {
   );
 }
 
-.admin-wordmark,
-.admin-display,
-.admin-title,
-.admin-ui-text {
+.app-wordmark,
+.app-display,
+.app-title,
+.app-ui-text {
   font-family: var(--landing-font-display);
   text-transform: uppercase;
 }
 
-.admin-wordmark {
+.app-wordmark {
   font-weight: 700;
   letter-spacing: 0.18em;
 }
 
-.admin-display {
+.app-display {
   font-weight: 700;
   letter-spacing: 0.08em;
 }
 
-.admin-title {
+.app-title {
   font-weight: 700;
   letter-spacing: 0.08em;
 }
 
-.admin-ui-text {
+.app-ui-text {
   font-weight: 700;
   letter-spacing: 0.24em;
 }
 
-.admin-sidebar {
+.app-sidebar {
   min-height: 0;
 }
 
-.admin-main-panel {
+.app-main-panel {
   position: relative;
   overflow: visible;
 }
 
-.admin-shell,
-.admin-page {
+.app-shell,
+.app-page {
   width: 100%;
 }
 
-.admin-main-panel::before {
+.app-main-panel::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -189,11 +189,11 @@ html {
   );
 }
 
-.admin-nav-link.is-active .admin-ui-text {
+.app-nav-link.is-active .app-ui-text {
   color: inherit;
 }
 
-.admin-mobile-nav {
+.app-mobile-nav {
   --ui-mobile-nav-columns: 4;
   position: fixed;
   left: 50%;
@@ -214,7 +214,7 @@ html {
 }
 
 @media (min-width: 1024px) {
-  .admin-sidebar {
+  .app-sidebar {
     position: sticky;
     top: 6rem;
     align-self: start;
@@ -442,41 +442,41 @@ html {
   transform: scaleX(1);
 }
 
-.admin-theme .landing-wordmark,
-.admin-theme .landing-display,
-.admin-theme .landing-title,
-.admin-theme .landing-section-title,
-.admin-theme .landing-label,
-.admin-theme .landing-ui-text {
+.app-theme .landing-wordmark,
+.app-theme .landing-display,
+.app-theme .landing-title,
+.app-theme .landing-section-title,
+.app-theme .landing-label,
+.app-theme .landing-ui-text {
   font-family: var(--landing-font-display);
   text-transform: uppercase;
 }
 
-.admin-theme .landing-wordmark {
+.app-theme .landing-wordmark {
   font-weight: 700;
   letter-spacing: 0.18em;
 }
 
-.admin-theme .landing-display,
-.admin-theme .landing-title,
-.admin-theme .landing-section-title {
+.app-theme .landing-display,
+.app-theme .landing-title,
+.app-theme .landing-section-title {
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1;
 }
 
-.admin-theme .landing-label,
-.admin-theme .landing-ui-text {
+.app-theme .landing-label,
+.app-theme .landing-ui-text {
   font-weight: 700;
   letter-spacing: 0.24em;
 }
 
-.admin-theme .landing-copy {
+.app-theme .landing-copy {
   color: rgba(209, 198, 171, 0.78);
   letter-spacing: -0.01em;
 }
 
-.admin-theme .landing-link-accent::after {
+.app-theme .landing-link-accent::after {
   background: linear-gradient(
     90deg,
     transparent,
@@ -485,11 +485,11 @@ html {
   );
 }
 
-.admin-theme .landing-button {
+.app-theme .landing-button {
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
 }
 
-.admin-theme .landing-button-primary {
+.app-theme .landing-button-primary {
   border-color: rgba(250, 204, 21, 0.22);
   background: linear-gradient(
     135deg,
@@ -502,8 +502,8 @@ html {
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.admin-theme .landing-button-primary:hover,
-.admin-theme .landing-button-primary:focus-visible {
+.app-theme .landing-button-primary:hover,
+.app-theme .landing-button-primary:focus-visible {
   background: linear-gradient(
     135deg,
     rgba(250, 204, 21, 0.24),
@@ -515,15 +515,15 @@ html {
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.admin-theme .landing-button-secondary {
+.app-theme .landing-button-secondary {
   border-color: rgba(77, 70, 50, 0.24);
   background: rgba(255, 255, 255, 0.03);
   color: rgba(209, 198, 171, 0.76);
   box-shadow: none;
 }
 
-.admin-theme .landing-button-secondary:hover,
-.admin-theme .landing-button-secondary:focus-visible {
+.app-theme .landing-button-secondary:hover,
+.app-theme .landing-button-secondary:focus-visible {
   border-color: rgba(250, 204, 21, 0.3);
   background: rgba(255, 255, 255, 0.05);
   color: var(--admin-gold-soft);

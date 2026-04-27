@@ -46,7 +46,7 @@ export default function SuggestionsPage() {
   }
 
   return (
-    <main className="admin-page space-y-8">
+    <main className="app-page space-y-8">
       <SuggestionsHeader totalPending={totalPending} lastEntry={lastEntry} />
 
       <section className="space-y-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4 sm:p-6">
