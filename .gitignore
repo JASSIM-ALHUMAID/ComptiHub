@@ -32,4 +32,5 @@ competetor pages/
 # local
 local/
 devfiles/
+.worktrees/
 
