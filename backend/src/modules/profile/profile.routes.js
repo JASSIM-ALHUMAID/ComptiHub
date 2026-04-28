@@ -1,7 +1,10 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import { authenticate } from '../../middlewares/auth.js'
+import { notFound } from '../../utils/apiError.js'
 import { sendSuccess } from '../../utils/responses.js'
 import {
+  getExistingProfileByUserId,
   getProfileByUserId,
   getProfileSkillsByUserId,
   replaceProfileSkillsByUserId,
@@ -14,6 +17,26 @@ export const profileRouter = express.Router()
 profileRouter.get('/me', authenticate, async (req, res, next) => {
   try {
     const profile = await getProfileByUserId(req.user._id)
+    sendSuccess(res, { profile })
+  } catch (error) {
+    next(error)
+  }
+})
+
+profileRouter.get('/:userId', authenticate, async (req, res, next) => {
+  try {
+    const { userId } = req.params
+
+    if (!mongoose.isValidObjectId(userId)) {
+      throw notFound('Profile not found.')
+    }
+
+    const profile = await getExistingProfileByUserId(userId)
+
+    if (!profile) {
+      throw notFound('Profile not found.')
+    }
+
     sendSuccess(res, { profile })
   } catch (error) {
     next(error)

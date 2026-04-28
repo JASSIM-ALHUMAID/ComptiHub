@@ -54,6 +54,10 @@ async function ensureProfile(userId) {
   return Profile.findOneAndUpdate({ userId }, { $setOnInsert: { userId } }, { new: true, upsert: true })
 }
 
+async function findProfile(userId) {
+  return Profile.findOne({ userId })
+}
+
 export async function createProfileForUser(userId) {
   const profile = await ensureProfile(userId)
   return toProfileDto(profile)
@@ -61,6 +65,16 @@ export async function createProfileForUser(userId) {
 
 export async function getProfileByUserId(userId) {
   const profile = await ensureProfile(userId)
+  return toProfileDto(profile)
+}
+
+export async function getExistingProfileByUserId(userId) {
+  const profile = await findProfile(userId)
+
+  if (!profile) {
+    return null
+  }
+
   return toProfileDto(profile)
 }
 

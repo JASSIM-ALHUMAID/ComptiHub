@@ -112,4 +112,48 @@ describe('profile routes', () => {
     assert.equal(getSkills.status, 200)
     assert.deepEqual(getSkills.body.data.skills, ['React', 'Node.js', 'UI/UX'])
   })
+
+  it('allows any logged-in user to view another user profile', async () => {
+    const firstUser = await signup()
+    const firstToken = firstUser.body.data.token
+    const firstUserId = firstUser.body.data.user.id
+
+    await request(app)
+      .patch('/api/v1/profile/me')
+      .set('Authorization', `Bearer ${firstToken}`)
+      .send({
+        university: 'KFUPM',
+        competitor: {
+          focus: 'Algorithms',
+          preferredRole: 'Problem Solver',
+          strengths: 'Debugging under pressure',
+          availability: 'Weeknights',
+          bio: 'Enjoys contest teams.',
+        },
+      })
+
+    const secondUser = await signup({
+      username: 'student2',
+      email: 'student2@example.com',
+    })
+    const secondToken = secondUser.body.data.token
+
+    const response = await request(app)
+      .get(`/api/v1/profile/${firstUserId}`)
+      .set('Authorization', `Bearer ${secondToken}`)
+
+    assert.equal(response.status, 200)
+    assert.equal(response.body.data.profile.userId, firstUserId)
+    assert.equal(response.body.data.profile.university, 'KFUPM')
+    assert.equal(response.body.data.profile.competitor.preferredRole, 'Problem Solver')
+  })
+
+  it('rejects unauthenticated attempts to view another user profile', async () => {
+    const signupResponse = await signup()
+    const userId = signupResponse.body.data.user.id
+
+    const response = await request(app).get(`/api/v1/profile/${userId}`)
+
+    assert.equal(response.status, 401)
+  })
 })
