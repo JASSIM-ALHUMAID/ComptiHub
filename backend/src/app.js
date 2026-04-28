@@ -8,6 +8,7 @@ import { sendSuccess } from './utils/responses.js'
 import { authRouter } from './modules/auth/auth.routes.js'
 import { adminCompetitionRouter, competitionRouter } from './modules/competitions/competition.routes.js'
 import { profileRouter } from './modules/profile/profile.routes.js'
+import { competitionTeamRouter, leaveRequestRouter, teamRouter } from './modules/teams/team.routes.js'
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js'
 
 export function createApp() {
@@ -28,7 +29,10 @@ export function createApp() {
   api.use('/auth', authRouter)
   api.use('/profile', profileRouter)
   api.use('/competitions', competitionRouter)
+  api.use('/competitions', competitionTeamRouter)
   api.use('/admin/competitions', adminCompetitionRouter)
+  api.use('/teams', teamRouter)
+  api.use('/leave-requests', leaveRequestRouter)
 
   app.use('/api/v1', api)
   app.use(notFoundHandler)

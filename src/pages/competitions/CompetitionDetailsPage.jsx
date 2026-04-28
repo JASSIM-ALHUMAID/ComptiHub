@@ -1,4 +1,4 @@
-import { CalendarDays, Trophy, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Card from '../../components/ui/Card'
@@ -6,9 +6,9 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Textarea from '../../components/ui/Textarea'
 import Alert from '../../components/ui/Alert'
-import { teams } from '../../data/mocks/teams'
 import { competitionService } from '../../features/competitions/services/competitionService'
 import { useAuth } from '../../features/auth/hooks/useAuth'
+import { teamService } from '../../features/teams/services/teamService'
 import { routes } from '../../lib/constants/routes'
 
 function TeamCard({ team, competitionTitle }) {
@@ -18,8 +18,8 @@ function TeamCard({ team, competitionTitle }) {
   const [message, setMessage] = useState('')
   const messageFieldId = `${team.id}-application-message`
 
-  function handleApply(e) {
-    e.preventDefault()
+  function handleApply(event) {
+    event.preventDefault()
     addApplication(team.id, team.name, competitionTitle, message)
     setShowForm(false)
   }
@@ -29,7 +29,7 @@ function TeamCard({ team, competitionTitle }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="landing-title text-base text-(--landing-text)">{team.name}</h3>
-          <p className="text-xs text-[rgba(226,226,232,0.45)] mt-0.5">Led by {team.leaderName}</p>
+          <p className="mt-0.5 text-xs text-[rgba(226,226,232,0.45)]">Led by {team.leaderName}</p>
         </div>
         <span className="shrink-0 text-xs text-green-400">
           {team.openSlots} slot{team.openSlots !== 1 ? 's' : ''} open
@@ -52,19 +52,19 @@ function TeamCard({ team, competitionTitle }) {
       </div>
 
       {alreadyApplied ? (
-        <Alert variant="success" title="✓ Application submitted!" showIcon={false} />
+        <Alert variant="success" title="Application submitted!" showIcon={false} />
       ) : showForm ? (
         <form onSubmit={handleApply} className="space-y-3 pt-1">
           <label className="space-y-2" htmlFor={messageFieldId}>
             <span className="landing-ui-text block text-[0.68rem] text-[rgba(226,226,232,0.55)]">Application message</span>
-          <Textarea
-            id={messageFieldId}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            rows={3}
-            placeholder="Tell the team why you'd be a great fit…"
-          />
+            <Textarea
+              id={messageFieldId}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              required
+              rows={3}
+              placeholder="Tell the team why you'd be a great fit..."
+            />
           </label>
           <div className="flex gap-3">
             <Button type="submit" variant="outline-gold" size="md">
@@ -92,11 +92,9 @@ function TeamCard({ team, competitionTitle }) {
 export default function CompetitionDetailsPage() {
   const { competitionId } = useParams()
   const [competition, setCompetition] = useState(null)
+  const [recruitingTeams, setRecruitingTeams] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const recruitingTeams = teams.filter(
-    (t) => t.competitionId === competitionId && t.status === 'recruiting'
-  )
 
   useEffect(() => {
     let isCancelled = false
@@ -106,10 +104,14 @@ export default function CompetitionDetailsPage() {
       setError('')
 
       try {
-        const nextCompetition = await competitionService.getCompetitionById(competitionId)
+        const [nextCompetition, nextRecruitingTeams] = await Promise.all([
+          competitionService.getCompetitionById(competitionId),
+          teamService.listCompetitionTeams(competitionId),
+        ])
 
         if (!isCancelled) {
           setCompetition(nextCompetition)
+          setRecruitingTeams(nextRecruitingTeams)
         }
       } catch (loadError) {
         if (!isCancelled) {
@@ -150,7 +152,7 @@ export default function CompetitionDetailsPage() {
           message={error || 'Competition not found.'}
         />
         <Link className="text-sm text-(--landing-gold) hover:text-(--landing-gold-soft)" to={routes.competitions}>
-          ← Back to competitions
+          Back to competitions
         </Link>
       </main>
     )
@@ -170,8 +172,8 @@ export default function CompetitionDetailsPage() {
       </div>
 
       <header className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-          <h1 className="landing-title text-2xl sm:text-3xl text-(--landing-text)">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <h1 className="landing-title text-2xl text-(--landing-text) sm:text-3xl">
             {competition.title}
           </h1>
           <Badge
@@ -197,7 +199,7 @@ export default function CompetitionDetailsPage() {
       <Card className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {[
           { label: 'Prize', value: competition.prize },
-          { label: 'Team Size', value: competition.teamSize + ' members' },
+          { label: 'Team Size', value: `${competition.teamSize} members` },
           { label: 'Mode', value: competition.mode },
           { label: 'Deadline', value: competition.deadline },
         ].map((item) => (
@@ -218,16 +220,16 @@ export default function CompetitionDetailsPage() {
       <Card className="space-y-3">
         <h2 className="landing-ui-text text-[0.78rem] text-(--landing-gold)">Requirements</h2>
         <ul className="space-y-2">
-          {competition.requirements.map((req) => (
-            <li key={req} className="flex items-center gap-2 text-sm text-[rgba(226,226,232,0.72)]">
+          {competition.requirements.map((requirement) => (
+            <li key={requirement} className="flex items-center gap-2 text-sm text-[rgba(226,226,232,0.72)]">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-(--landing-gold)" />
-              {req}
+              {requirement}
             </li>
           ))}
         </ul>
       </Card>
 
-      {competition.status === 'open' && (
+      {competition.status === 'open' ? (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="landing-ui-text text-[0.78rem] text-(--landing-gold)">Teams Recruiting</h2>
@@ -243,14 +245,14 @@ export default function CompetitionDetailsPage() {
               message="No teams are recruiting for this competition yet."
             />
           ) : (
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
               {recruitingTeams.map((team) => (
                 <TeamCard key={team.id} team={team} competitionTitle={competition.title} />
               ))}
             </div>
           )}
         </section>
-      )}
+      ) : null}
     </main>
   )
 }

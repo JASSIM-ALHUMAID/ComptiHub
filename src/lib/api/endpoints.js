@@ -15,9 +15,20 @@ export const endpoints = {
   competitions: {
     list: '/competitions',
     byId: (id) => `/competitions/${id}`,
+    teamsById: (id) => `/competitions/${id}/teams`,
   },
   adminCompetitions: {
     list: '/admin/competitions',
     byId: (id) => `/admin/competitions/${id}`,
+  },
+  teams: {
+    listMine: '/teams/me',
+    create: '/teams',
+    byId: (id) => `/teams/${id}`,
+    leaveRequests: (id) => `/teams/${id}/leave-requests`,
+    incomingLeaveRequests: '/teams/leave-requests/incoming',
+  },
+  leaveRequests: {
+    review: (id) => `/leave-requests/${id}/status`,
   },
 }
