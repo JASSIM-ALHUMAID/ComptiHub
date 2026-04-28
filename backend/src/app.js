@@ -9,6 +9,9 @@ import { authRouter } from './modules/auth/auth.routes.js'
 import { adminCompetitionRouter, competitionRouter } from './modules/competitions/competition.routes.js'
 import { profileRouter } from './modules/profile/profile.routes.js'
 import { competitionTeamRouter, leaveRequestRouter, teamRouter } from './modules/teams/team.routes.js'
+import { applicationRouter } from './modules/applications/application.routes.js'
+import { adminSuggestionsRouter } from './modules/suggestions/suggestion.routes.js'
+import { adminUsersRouter } from './modules/moderation/moderation.routes.js'
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js'
 
 export function createApp() {
@@ -33,6 +36,9 @@ export function createApp() {
   api.use('/admin/competitions', adminCompetitionRouter)
   api.use('/teams', teamRouter)
   api.use('/leave-requests', leaveRequestRouter)
+  api.use(applicationRouter)
+  api.use('/admin/suggestions', adminSuggestionsRouter)
+  api.use('/admin/users', adminUsersRouter)
 
   app.use('/api/v1', api)
   app.use(notFoundHandler)
