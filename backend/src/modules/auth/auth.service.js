@@ -85,3 +85,23 @@ export async function updateActiveRole(user, activeRole) {
   await user.save()
   return user.toSessionUser()
 }
+
+export async function updateBasicInfo(user, { username, email }) {
+  const existing = await User.findOne({
+    _id: { $ne: user._id },
+    $or: [{ email }, { username }],
+  }).lean()
+
+  if (existing?.email === email) {
+    throw new ApiError(409, 'An account with that email already exists.')
+  }
+
+  if (existing?.username === username) {
+    throw new ApiError(409, 'An account with that username already exists.')
+  }
+
+  user.username = username
+  user.email = email
+  await user.save()
+  return user.toSessionUser()
+}

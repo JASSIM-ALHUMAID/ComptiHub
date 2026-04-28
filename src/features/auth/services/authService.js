@@ -1,8 +1,11 @@
 import { storage } from '../../../lib/utils/storage'
 import { demoUsers } from '../../../data/mocks/user'
+import { apiClient } from '../../../lib/api/client'
+import { endpoints } from '../../../lib/api/endpoints'
 
 const USERS_KEY = 'compitihub.auth.users'
 const SESSION_KEY = 'compitihub.auth.session'
+const TOKEN_KEY = 'compitihub.auth.token'
 
 function readJson(key, fallback) {
   const value = storage.get(key)
@@ -26,14 +29,15 @@ function normalizeEmail(email) {
   return email.trim().toLowerCase()
 }
 
-function sanitizeUser(user, activeRole = user.defaultRole) {
+function normalizeSessionUser(user, source = 'api') {
   return {
     id: user.id,
     username: user.username,
     email: user.email,
-    accountType: user.accountType,
+    accountType: user.accountType ?? user.systemRole,
     defaultRole: user.defaultRole,
-    activeRole,
+    activeRole: user.activeRole,
+    source,
   }
 }
 
@@ -60,8 +64,21 @@ function setSession(user) {
   writeJson(SESSION_KEY, user)
 }
 
+function clearSession() {
+  storage.remove(SESSION_KEY)
+  storage.remove(TOKEN_KEY)
+}
+
 function getSession() {
   return readJson(SESSION_KEY, null)
+}
+
+function setToken(token) {
+  storage.set(TOKEN_KEY, token)
+}
+
+function getToken() {
+  return storage.get(TOKEN_KEY)
 }
 
 function createId() {
@@ -72,87 +89,115 @@ function createId() {
   return String(Date.now())
 }
 
+function loginMockUser({ email, password }) {
+  const normalizedEmail = normalizeEmail(email)
+  const normalizedPassword = password.trim()
+
+  if (!normalizedEmail || !normalizedPassword) {
+    throw new Error('Email and password are required.')
+  }
+
+  const user = getStoredUsers().find(
+    (storedUser) => storedUser.email === normalizedEmail && storedUser.password === normalizedPassword,
+  )
+
+  if (!user) {
+    return null
+  }
+
+  const sessionUser = normalizeSessionUser(
+    {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      accountType: user.accountType,
+      defaultRole: user.defaultRole,
+      activeRole: user.defaultRole,
+    },
+    'mock',
+  )
+
+  setSession(sessionUser)
+  storage.remove(TOKEN_KEY)
+  return sessionUser
+}
+
 export const authService = {
   getSession,
+  getToken,
 
   async login({ email, password }) {
-    const normalizedEmail = normalizeEmail(email)
-    const normalizedPassword = password.trim()
-
-    if (!normalizedEmail || !normalizedPassword) {
-      throw new Error('Email and password are required.')
+    const mockSession = loginMockUser({ email, password })
+    if (mockSession) {
+      return mockSession
     }
 
-    const user = getStoredUsers().find(
-      (storedUser) => storedUser.email === normalizedEmail && storedUser.password === normalizedPassword,
-    )
+    const data = await apiClient(endpoints.auth.login, {
+      method: 'POST',
+      body: { email: normalizeEmail(email), password: password.trim() },
+    })
 
-    if (!user) {
-      throw new Error('Invalid email or password.')
-    }
-
-    const sessionUser = sanitizeUser(user, user.defaultRole)
+    const sessionUser = normalizeSessionUser(data.user, 'api')
     setSession(sessionUser)
+    setToken(data.token)
     return sessionUser
   },
 
   async signup({ username, email, password, defaultRole }) {
-    const users = getStoredUsers()
-    const normalizedEmail = normalizeEmail(email)
-    const normalizedUsername = username.trim()
-    const normalizedPassword = password.trim()
+    const data = await apiClient(endpoints.auth.signup, {
+      method: 'POST',
+      body: {
+        username: username.trim(),
+        email: normalizeEmail(email),
+        password: password.trim(),
+        defaultRole,
+      },
+    })
 
-    if (!normalizedUsername || !normalizedEmail || !normalizedPassword) {
-      throw new Error('Username, email, and password are required.')
-    }
-
-    if (users.some((user) => user.email === normalizedEmail)) {
-      throw new Error('An account with that email already exists.')
-    }
-
-    const newUser = {
-      id: createId(),
-      username: normalizedUsername,
-      email: normalizedEmail,
-      password: normalizedPassword,
-      accountType: 'student',
-      defaultRole,
-    }
-
-    users.push(newUser)
-    setStoredUsers(users)
-
-    const sessionUser = sanitizeUser(newUser)
+    const sessionUser = normalizeSessionUser(data.user, 'api')
     setSession(sessionUser)
+    setToken(data.token)
     return sessionUser
   },
 
   async updateDefaultRole(userId, defaultRole) {
-    const users = getStoredUsers()
-    const userIndex = users.findIndex((user) => user.id === userId)
-
-    if (userIndex === -1) {
-      throw new Error('Unable to update the account preference.')
-    }
-
-    users[userIndex] = {
-      ...users[userIndex],
-      defaultRole,
-    }
-
-    setStoredUsers(users)
-
     const sessionUser = getSession()
 
     if (!sessionUser || sessionUser.id !== userId) {
-      return sanitizeUser(users[userIndex])
+      throw new Error('Unable to update the account preference.')
     }
 
-    const nextSession = {
-      ...sessionUser,
-      defaultRole,
+    if (sessionUser.source === 'mock') {
+      const users = getStoredUsers()
+      const userIndex = users.findIndex((user) => user.id === userId)
+
+      if (userIndex === -1) {
+        throw new Error('Unable to update the account preference.')
+      }
+
+      users[userIndex] = {
+        ...users[userIndex],
+        defaultRole,
+      }
+
+      setStoredUsers(users)
+
+      const nextSession = {
+        ...sessionUser,
+        defaultRole,
+      }
+
+      setSession(nextSession)
+      return nextSession
     }
 
+    const data = await apiClient(endpoints.auth.defaultRole, {
+      method: 'PATCH',
+      body: { defaultRole },
+      token: getToken(),
+    })
+
+    const nextSession = normalizeSessionUser(data.user, 'api')
     setSession(nextSession)
     return nextSession
   },
@@ -164,57 +209,103 @@ export const authService = {
       throw new Error('Unable to update the active role.')
     }
 
-    const nextSession = {
-      ...sessionUser,
-      activeRole,
-    }
-
-    setSession(nextSession)
-    return nextSession
-  },
-
-  async updateBasicInfo(userId, { username, email }) {
-    const users = getStoredUsers()
-    const normalizedEmail = normalizeEmail(email)
-    const normalizedUsername = username.trim()
-
-    if (!normalizedUsername || !normalizedEmail) {
-      throw new Error('Username and email are required.')
-    }
-
-    const userIndex = users.findIndex((user) => user.id === userId)
-    if (userIndex === -1) {
-      throw new Error('Unable to update the account information.')
-    }
-
-    // Check if email is already taken by another user
-    if (users.some((user) => user.email === normalizedEmail && user.id !== userId)) {
-      throw new Error('An account with that email already exists.')
-    }
-
-    users[userIndex] = {
-      ...users[userIndex],
-      username: normalizedUsername,
-      email: normalizedEmail,
-    }
-
-    setStoredUsers(users)
-
-    const sessionUser = getSession()
-    if (sessionUser && sessionUser.id === userId) {
+    if (sessionUser.source === 'mock') {
       const nextSession = {
         ...sessionUser,
-        username: normalizedUsername,
-        email: normalizedEmail,
+        activeRole,
       }
       setSession(nextSession)
       return nextSession
     }
 
-    return sanitizeUser(users[userIndex])
+    const data = await apiClient(endpoints.auth.activeRole, {
+      method: 'PATCH',
+      body: { activeRole },
+      token: getToken(),
+    })
+
+    const nextSession = normalizeSessionUser(data.user, 'api')
+    setSession(nextSession)
+    return nextSession
+  },
+
+  async updateBasicInfo(userId, { username, email }) {
+    const sessionUser = getSession()
+
+    if (!sessionUser || sessionUser.id !== userId) {
+      throw new Error('Unable to update the account information.')
+    }
+
+    const normalizedEmail = normalizeEmail(email)
+    const normalizedUsername = username.trim()
+
+    if (sessionUser.source === 'mock') {
+      const users = getStoredUsers()
+      const userIndex = users.findIndex((user) => user.id === userId)
+
+      if (userIndex === -1) {
+        throw new Error('Unable to update the account information.')
+      }
+
+      if (users.some((user) => user.email === normalizedEmail && user.id !== userId)) {
+        throw new Error('An account with that email already exists.')
+      }
+
+      users[userIndex] = {
+        ...users[userIndex],
+        username: normalizedUsername,
+        email: normalizedEmail,
+      }
+
+      setStoredUsers(users)
+
+      const nextSession = {
+        ...sessionUser,
+        username: normalizedUsername,
+        email: normalizedEmail,
+      }
+
+      setSession(nextSession)
+      return nextSession
+    }
+
+    const data = await apiClient(endpoints.auth.basicInfo, {
+      method: 'PATCH',
+      body: {
+        username: normalizedUsername,
+        email: normalizedEmail,
+      },
+      token: getToken(),
+    })
+
+    const nextSession = normalizeSessionUser(data.user, 'api')
+    setSession(nextSession)
+    return nextSession
   },
 
   async logout() {
-    storage.remove(SESSION_KEY)
+    const sessionUser = getSession()
+
+    if (sessionUser?.source === 'api' && getToken()) {
+      try {
+        await apiClient(endpoints.auth.logout, {
+          method: 'POST',
+          token: getToken(),
+        })
+      } catch {
+        // Best-effort logout; always clear local session state.
+      }
+    }
+
+    clearSession()
+  },
+
+  async createLocalDemoUser(user) {
+    const users = getStoredUsers()
+    users.push({
+      id: createId(),
+      ...user,
+    })
+    setStoredUsers(users)
   },
 }

@@ -1,8 +1,8 @@
 import express from 'express'
 import { authenticate } from '../../middlewares/auth.js'
 import { sendMessage, sendSuccess } from '../../utils/responses.js'
-import { activeRoleSchema, defaultRoleSchema, loginSchema, signupSchema } from './auth.validation.js'
-import { loginUser, signupStudent, updateActiveRole, updateDefaultRole } from './auth.service.js'
+import { activeRoleSchema, basicInfoSchema, defaultRoleSchema, loginSchema, signupSchema } from './auth.validation.js'
+import { loginUser, signupStudent, updateActiveRole, updateBasicInfo, updateDefaultRole } from './auth.service.js'
 
 export const authRouter = express.Router()
 
@@ -32,6 +32,16 @@ authRouter.post('/logout', authenticate, (_req, res) => {
 
 authRouter.get('/me', authenticate, (req, res) => {
   sendSuccess(res, { user: req.user.toSessionUser() })
+})
+
+authRouter.patch('/me', authenticate, async (req, res, next) => {
+  try {
+    const input = basicInfoSchema.parse(req.body)
+    const user = await updateBasicInfo(req.user, input)
+    sendSuccess(res, { user })
+  } catch (error) {
+    next(error)
+  }
 })
 
 authRouter.patch('/default-role', authenticate, async (req, res, next) => {

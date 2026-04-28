@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import Button from '../../components/ui/Button'
 import { useAuth } from '../../features/auth/hooks/useAuth'
@@ -25,19 +25,86 @@ function renderProfileValue(value, { emptyLabel = 'Not added yet', filledClassNa
 
 export default function ProfilePage() {
   const { user, updateDefaultRole, updateBasicInfo } = useAuth()
-  const profile = profileService.getProfile(user?.id)
-  const skills = profileService.getSkills(user?.id)
   const activeRole = user?.activeRole ?? user?.defaultRole ?? 'competitor'
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [profile, setProfile] = useState({
+    university: '',
+    major: '',
+    year: '',
+    competitor: {
+      focus: '',
+      preferredRole: '',
+      strengths: '',
+      availability: '',
+      bio: '',
+    },
+    teamLeader: {
+      focus: '',
+      preferredTeamSetup: '',
+      strengths: '',
+      availability: '',
+      bio: '',
+    },
+  })
+  const [skills, setSkills] = useState([])
+  const [form, setForm] = useState(() => createProfileForm({ user, profile: {}, roleProfile: null, skills: [] }))
+  const [draftSkill, setDraftSkill] = useState('')
+  const [skillsError, setSkillsError] = useState('')
   const isStudentProfileView = activeRole === 'competitor' || activeRole === 'teamLeader'
   const isLeaderProfile = activeRole === 'teamLeader'
   const roleProfile = isStudentProfileView ? profile[activeRole] : null
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [form, setForm] = useState(() => createProfileForm({ user, profile, roleProfile, skills }))
-  const [draftSkill, setDraftSkill] = useState('')
-  const [skillsError, setSkillsError] = useState('')
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadProfile() {
+      if (!user?.id) {
+        setIsLoading(false)
+        return
+      }
+
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const [nextProfile, nextSkills] = await Promise.all([
+          profileService.getProfile(user.id),
+          profileService.getSkills(user.id),
+        ])
+
+        if (isCancelled) {
+          return
+        }
+
+        setProfile(nextProfile)
+        setSkills(nextSkills)
+        setForm(createProfileForm({
+          user,
+          profile: nextProfile,
+          roleProfile: nextProfile[activeRole] ?? null,
+          skills: nextSkills,
+        }))
+      } catch (err) {
+        if (!isCancelled) {
+          setError(err.message || 'Unable to load your profile.')
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadProfile()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [activeRole, user])
 
   function openEditModal() {
     setForm(createProfileForm({ user, profile, roleProfile, skills }))
@@ -79,7 +146,7 @@ export default function ProfilePage() {
       await updateBasicInfo({ username: form.username, email: form.email })
       await updateDefaultRole(form.defaultRole)
 
-      profileService.saveProfile(user?.id, {
+      const nextProfile = await profileService.saveProfile(user?.id, {
         ...profile,
         university: form.university,
         major: form.major,
@@ -90,7 +157,9 @@ export default function ProfilePage() {
         },
       })
 
-      profileService.saveSkills(user?.id, form.skills)
+      const nextSkills = await profileService.saveSkills(user?.id, form.skills)
+      setProfile(nextProfile)
+      setSkills(nextSkills)
       setIsEditModalOpen(false)
     } catch (err) {
       setError(err.message || 'Unable to save profile changes.')
@@ -114,6 +183,12 @@ export default function ProfilePage() {
         </header>
 
         <section className="grid gap-6">
+          {error && !isEditModalOpen ? (
+            <p className="rounded-xl border border-[rgba(255,180,171,0.25)] bg-[rgba(255,180,171,0.08)] px-4 py-3 text-sm text-(--landing-danger)">
+              {error}
+            </p>
+          ) : null}
+
           <ProfileSummaryCard
             user={user}
             profile={profile}
@@ -127,7 +202,7 @@ export default function ProfilePage() {
               roleProfile={roleProfile}
               renderProfileValue={renderProfileValue}
             />
-            <ProfileSkillsCard skills={skills} />
+            <ProfileSkillsCard skills={isLoading ? [] : skills} />
           </div>
         </section>
       </main>

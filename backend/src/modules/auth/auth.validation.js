@@ -21,3 +21,8 @@ export const defaultRoleSchema = z.object({
 export const activeRoleSchema = z.object({
   activeRole: studentRoleSchema,
 })
+
+export const basicInfoSchema = z.object({
+  username: z.string().trim().min(3).max(50),
+  email: z.string().trim().email().toLowerCase(),
+})

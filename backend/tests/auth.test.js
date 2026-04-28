@@ -136,6 +136,23 @@ describe('auth routes', () => {
     assert.equal(activeRole.body.data.user.activeRole, 'competitor')
   })
 
+  it('updates username and email for the authenticated user', async () => {
+    const signupResponse = await signup()
+    const token = signupResponse.body.data.token
+
+    const response = await request(app)
+      .patch('/api/v1/auth/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        username: 'student-updated',
+        email: 'updated@example.com',
+      })
+
+    assert.equal(response.status, 200)
+    assert.equal(response.body.data.user.username, 'student-updated')
+    assert.equal(response.body.data.user.email, 'updated@example.com')
+  })
+
   it('prevents admins from switching to student roles', async () => {
     const admin = await User.create({
       username: 'admin1',
