@@ -1,12 +1,11 @@
 import { CalendarDays, CirclePlus, ExternalLink, ShieldCheck, Trophy } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Button from '../../components/ui/Button'
 import CompetitionEditorModal from '../../features/admin/competitions/CompetitionEditorModal'
 import CompetitionFilters from '../../features/admin/competitions/CompetitionFilters'
 import CompetitionList from '../../features/admin/competitions/CompetitionList'
 import CompetitionStatsPanel from '../../features/admin/competitions/CompetitionStatsPanel'
 import {
-  buildCompetitionFromForm,
   filterCompetitions,
   formatDisplayDate,
   getCompetitionStats,
@@ -17,17 +16,53 @@ import {
 import { adminCompetitionsService } from '../../features/admin/services/adminCompetitionsService'
 
 export default function ManageCompetitionsPage() {
-  const [competitions, setCompetitions] = useState(adminCompetitionsService.listCompetitions())
+  const [competitions, setCompetitions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const [editingCompetitionId, setEditingCompetitionId] = useState(null)
   const [form, setForm] = useState(initialForm)
   const [formError, setFormError] = useState('')
 
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadCompetitions() {
+      setIsLoading(true)
+
+      try {
+        const nextCompetitions = await adminCompetitionsService.listCompetitions({
+          search,
+          statusFilter,
+          categoryFilter,
+        })
+
+        if (!isCancelled) {
+          setCompetitions(nextCompetitions)
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setFormError(error.message || 'Unable to load competitions.')
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadCompetitions()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [search, statusFilter, categoryFilter])
+
   const filteredCompetitions = useMemo(
-    () => filterCompetitions(competitions, search, statusFilter),
-    [competitions, search, statusFilter],
+    () => filterCompetitions(competitions, search, statusFilter, categoryFilter),
+    [competitions, search, statusFilter, categoryFilter],
   )
 
   const stats = useMemo(() => getCompetitionStats(competitions), [competitions])
@@ -45,12 +80,18 @@ export default function ManageCompetitionsPage() {
       id: competition.id,
       title: competition.title,
       organizer: competition.organizer,
+      category: competition.category,
+      mode: competition.mode,
+      teamSize: competition.teamSize,
       links: competition.links,
       startDate: competition.startDate,
       endDate: competition.endDate,
       registrationDeadline: competition.registrationDeadline,
       status: competition.status,
       prizePool: competition.prizePool,
+      participationType: competition.participationType,
+      requirements: competition.requirements.join('\n'),
+      tags: competition.tags.join(', '),
       description: competition.description,
     })
     setFormError('')
@@ -67,17 +108,23 @@ export default function ManageCompetitionsPage() {
     setFormError('')
   }
 
-  function handleDeleteCompetition(competitionId) {
-    setCompetitions((currentCompetitions) =>
-      currentCompetitions.filter((competition) => competition.id !== competitionId),
-    )
+  async function handleDeleteCompetition(competitionId) {
+    try {
+      await adminCompetitionsService.deleteCompetition(competitionId)
+      setCompetitions((currentCompetitions) =>
+        currentCompetitions.filter((competition) => competition.id !== competitionId),
+      )
+      setFormError('')
+    } catch (error) {
+      setFormError(error.message || 'Unable to delete competition.')
+    }
 
     if (editingCompetitionId === competitionId) {
       closeEditor()
     }
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
     const validationError = validateCompetitionForm(form)
@@ -87,20 +134,26 @@ export default function ManageCompetitionsPage() {
       return
     }
 
-    const existingCompetition = competitions.find((competition) => competition.id === editingCompetitionId) || null
-    const nextCompetition = buildCompetitionFromForm(form, existingCompetition)
+    try {
+      const existingCompetition = competitions.find((competition) => competition.id === editingCompetitionId) || null
+      const nextCompetition = existingCompetition
+        ? await adminCompetitionsService.updateCompetition(existingCompetition.id, form)
+        : await adminCompetitionsService.createCompetition(form)
 
-    setCompetitions((currentCompetitions) => {
-      if (!existingCompetition) {
-        return [nextCompetition, ...currentCompetitions]
-      }
+      setCompetitions((currentCompetitions) => {
+        if (!existingCompetition) {
+          return [nextCompetition, ...currentCompetitions]
+        }
 
-      return currentCompetitions.map((competition) =>
-        competition.id === existingCompetition.id ? { ...competition, ...nextCompetition } : competition,
-      )
-    })
+        return currentCompetitions.map((competition) =>
+          competition.id === existingCompetition.id ? nextCompetition : competition,
+        )
+      })
 
-    closeEditor()
+      closeEditor()
+    } catch (error) {
+      setFormError(error.message || 'Unable to save competition.')
+    }
   }
 
   return (
@@ -144,11 +197,25 @@ export default function ManageCompetitionsPage() {
 
         <section className="space-y-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4 sm:p-6">
           <CompetitionFilters
+            categoryFilter={categoryFilter}
             search={search}
             statusFilter={statusFilter}
+            onCategoryFilterChange={(event) => setCategoryFilter(event.target.value)}
             onSearchChange={(event) => setSearch(event.target.value)}
             onStatusFilterChange={(event) => setStatusFilter(event.target.value)}
           />
+
+          {formError && !isEditorOpen ? (
+            <p className="rounded-2xl border border-[rgba(255,180,171,0.2)] bg-[rgba(255,180,171,0.08)] px-4 py-3 text-sm text-[var(--admin-danger)]">
+              {formError}
+            </p>
+          ) : null}
+
+          {isLoading ? (
+            <p className="rounded-2xl border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.9)] px-4 py-3 text-sm text-[rgba(209,198,171,0.72)]">
+              Loading competitions...
+            </p>
+          ) : null}
 
           <CompetitionList
             competitions={filteredCompetitions}

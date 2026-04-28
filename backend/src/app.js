@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { env } from './config/env.js'
 import { sendSuccess } from './utils/responses.js'
 import { authRouter } from './modules/auth/auth.routes.js'
+import { adminCompetitionRouter, competitionRouter } from './modules/competitions/competition.routes.js'
 import { profileRouter } from './modules/profile/profile.routes.js'
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js'
 
@@ -26,6 +27,8 @@ export function createApp() {
   api.get('/health', (_req, res) => sendSuccess(res, { status: 'ok' }))
   api.use('/auth', authRouter)
   api.use('/profile', profileRouter)
+  api.use('/competitions', competitionRouter)
+  api.use('/admin/competitions', adminCompetitionRouter)
 
   app.use('/api/v1', api)
   app.use(notFoundHandler)

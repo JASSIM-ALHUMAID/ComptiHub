@@ -73,7 +73,51 @@ export default function CompetitionEditorModal({
                     <option value="draft">Draft</option>
                     <option value="upcoming">Upcoming</option>
                     <option value="active">Active</option>
+                    <option value="open">Open</option>
                     <option value="ended">Ended</option>
+                    <option value="closed">Closed</option>
+                  </Select>
+                </label>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Category</span>
+                  <Input
+                    name="category"
+                    placeholder="Hackathon, Robotics, Business..."
+                    value={form.category}
+                    onChange={onChange}
+                  />
+                </label>
+
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Mode</span>
+                  <Input
+                    name="mode"
+                    placeholder="Onsite, Hybrid, Online..."
+                    value={form.mode}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Team size</span>
+                  <Input
+                    name="teamSize"
+                    placeholder="e.g. 2-4"
+                    value={form.teamSize}
+                    onChange={onChange}
+                  />
+                </label>
+
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Participation type</span>
+                  <Select name="participationType" value={form.participationType} onChange={onChange}>
+                    <option value="team">Team</option>
+                    <option value="solo">Solo</option>
                   </Select>
                 </label>
               </div>
@@ -120,6 +164,30 @@ export default function CompetitionEditorModal({
                   onChange={onChange}
                 />
               </label>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Requirements</span>
+                  <textarea
+                    className="min-h-36 w-full rounded-[1.4rem] border border-[rgba(77,70,50,0.35)] bg-[rgba(12,14,18,0.78)] px-4 py-3 text-[var(--admin-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-200 placeholder:text-[rgba(226,226,232,0.45)] focus:border-[var(--admin-gold)] focus:outline-none focus:ring-2 focus:ring-[rgba(250,204,21,0.2)]"
+                    name="requirements"
+                    placeholder="One requirement per line"
+                    value={form.requirements}
+                    onChange={onChange}
+                  />
+                </label>
+
+                <label className="space-y-2">
+                  <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Tags</span>
+                  <textarea
+                    className="min-h-36 w-full rounded-[1.4rem] border border-[rgba(77,70,50,0.35)] bg-[rgba(12,14,18,0.78)] px-4 py-3 text-[var(--admin-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-200 placeholder:text-[rgba(226,226,232,0.45)] focus:border-[var(--admin-gold)] focus:outline-none focus:ring-2 focus:ring-[rgba(250,204,21,0.2)]"
+                    name="tags"
+                    placeholder="Comma-separated tags"
+                    value={form.tags}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
 
               <label className="space-y-2">
                 <span className="app-ui-text text-[0.68rem] text-[rgba(209,198,171,0.76)]">Description</span>

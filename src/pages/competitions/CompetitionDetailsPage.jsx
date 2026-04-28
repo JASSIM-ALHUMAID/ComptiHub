@@ -1,13 +1,13 @@
 import { CalendarDays, Trophy, Users } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Textarea from '../../components/ui/Textarea'
 import Alert from '../../components/ui/Alert'
-import { competitions } from '../../data/mocks/competitions'
 import { teams } from '../../data/mocks/teams'
+import { competitionService } from '../../features/competitions/services/competitionService'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
 
@@ -91,10 +91,55 @@ function TeamCard({ team, competitionTitle }) {
 
 export default function CompetitionDetailsPage() {
   const { competitionId } = useParams()
-  const competition = competitions.find((c) => c.id === competitionId)
+  const [competition, setCompetition] = useState(null)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const recruitingTeams = teams.filter(
     (t) => t.competitionId === competitionId && t.status === 'recruiting'
   )
+
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadCompetition() {
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const nextCompetition = await competitionService.getCompetitionById(competitionId)
+
+        if (!isCancelled) {
+          setCompetition(nextCompetition)
+        }
+      } catch (loadError) {
+        if (!isCancelled) {
+          setError(loadError.message || 'Competition not found.')
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadCompetition()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [competitionId])
+
+  if (isLoading) {
+    return (
+      <main className="space-y-4">
+        <Alert
+          variant="info"
+          title="Loading"
+          message="Fetching competition details."
+        />
+      </main>
+    )
+  }
 
   if (!competition) {
     return (
@@ -102,7 +147,7 @@ export default function CompetitionDetailsPage() {
         <Alert
           variant="error"
           title="Not found"
-          message="Competition not found."
+          message={error || 'Competition not found.'}
         />
         <Link className="text-sm text-(--landing-gold) hover:text-(--landing-gold-soft)" to={routes.competitions}>
           ← Back to competitions

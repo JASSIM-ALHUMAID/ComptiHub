@@ -1,28 +1,61 @@
 import { CalendarDays, Trophy, Users } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import FilterButton from '../../components/ui/FilterButton'
 import Alert from '../../components/ui/Alert'
 import Input from '../../components/ui/Input'
-import { competitions } from '../../data/mocks/competitions'
+import { competitionService } from '../../features/competitions/services/competitionService'
 
 const categories = ['All', 'Business', 'Competitive Programming', 'Hackathon', 'Robotics', 'Design', 'AI / ML']
 
 export default function CompetitionsPage() {
+  const [competitions, setCompetitions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const filtered = competitions.filter((c) => {
-    const matchesSearch =
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.organizer.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = selectedCategory === 'All' || c.category === selectedCategory
-    const matchesStatus = statusFilter === 'all' || c.status === statusFilter
-    return matchesSearch && matchesCategory && matchesStatus
-  })
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadCompetitions() {
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const nextCompetitions = await competitionService.listCompetitions({
+          search,
+          category: selectedCategory,
+          status: statusFilter,
+          sortBy: 'deadline',
+          sortOrder: 'asc',
+        })
+
+        if (!isCancelled) {
+          setCompetitions(nextCompetitions)
+        }
+      } catch (loadError) {
+        if (!isCancelled) {
+          setError(loadError.message || 'Unable to load competitions.')
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadCompetitions()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [search, selectedCategory, statusFilter])
+
+  const filtered = useMemo(() => competitions, [competitions])
 
   return (
     <main className="space-y-6">
@@ -57,7 +90,7 @@ export default function CompetitionsPage() {
           ))}
         </div>
         <div aria-label="Filter by competition status" className="flex flex-wrap gap-2" role="group">
-          {['all', 'open', 'closed'].map((s) => (
+          {['all', 'open'].map((s) => (
             <FilterButton
               key={s}
               isActive={statusFilter === s}
@@ -69,13 +102,29 @@ export default function CompetitionsPage() {
         </div>
       </Card>
 
-      {filtered.length === 0 ? (
+      {error ? (
+        <Alert
+          variant="error"
+          title="Unable to load competitions"
+          message={error}
+        />
+      ) : null}
+
+      {isLoading ? (
+        <Alert
+          variant="info"
+          title="Loading competitions"
+          message="Fetching the latest open competitions for you."
+        />
+      ) : null}
+
+      {!isLoading && filtered.length === 0 ? (
         <Alert
           variant="info"
           title="No results"
           message="No competitions match your filters. Try adjusting your search."
         />
-      ) : (
+      ) : !isLoading ? (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((comp) => (
             <Link
@@ -123,7 +172,7 @@ export default function CompetitionsPage() {
             </Link>
           ))}
         </div>
-      )}
+      ) : null}
     </main>
   )
 }

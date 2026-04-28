@@ -12,4 +12,12 @@ export const endpoints = {
     me: '/profile/me',
     skills: '/profile/me/skills',
   },
+  competitions: {
+    list: '/competitions',
+    byId: (id) => `/competitions/${id}`,
+  },
+  adminCompetitions: {
+    list: '/admin/competitions',
+    byId: (id) => `/admin/competitions/${id}`,
+  },
 }

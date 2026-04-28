@@ -2,12 +2,18 @@ export const initialForm = {
   id: '',
   title: '',
   organizer: '',
+  category: '',
+  mode: '',
+  teamSize: '',
   links: '',
   startDate: '',
   endDate: '',
   registrationDeadline: '',
   status: 'draft',
+  participationType: 'team',
   prizePool: '',
+  requirements: '',
+  tags: '',
   description: '',
 }
 
@@ -46,29 +52,44 @@ export function buildCompetitionFromForm(form, existingCompetition = null) {
     id: existingCompetition?.id || `COMP-${Math.floor(1000 + Math.random() * 9000)}`,
     title: form.title.trim(),
     organizer: form.organizer.trim(),
+    category: form.category.trim(),
+    mode: form.mode.trim(),
+    teamSize: form.teamSize.trim(),
+    deadline: form.registrationDeadline,
     links: form.links.trim(),
     startDate: form.startDate,
     endDate: form.endDate,
     registrationDeadline: form.registrationDeadline,
     status: form.status,
     prizePool: form.prizePool.trim() || 'TBD',
+    prize: form.prizePool.trim() || 'TBD',
+    participationType: form.participationType,
+    requirements: form.requirements
+      .split('\n')
+      .map((item) => item.trim())
+      .filter(Boolean),
+    tags: form.tags
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean),
     description: form.description.trim(),
     teamCount: existingCompetition?.teamCount ?? 0,
   }
 }
 
-export function filterCompetitions(competitions, search, statusFilter) {
+export function filterCompetitions(competitions, search, statusFilter, categoryFilter = 'all') {
   const normalizedSearch = search.trim().toLowerCase()
 
   return competitions.filter((competition) => {
     const matchesStatus = statusFilter === 'all' || competition.status === statusFilter
+    const matchesCategory = categoryFilter === 'all' || competition.category === categoryFilter
     const matchesSearch =
       !normalizedSearch ||
       competition.title.toLowerCase().includes(normalizedSearch) ||
       competition.id.toLowerCase().includes(normalizedSearch) ||
       competition.organizer.toLowerCase().includes(normalizedSearch)
 
-    return matchesStatus && matchesSearch
+    return matchesStatus && matchesCategory && matchesSearch
   })
 }
 
@@ -90,8 +111,16 @@ export function getCompetitionStats(competitions) {
 }
 
 export function validateCompetitionForm(form) {
-  if (!form.title.trim() || !form.organizer.trim() || !form.startDate || !form.endDate) {
-    return 'Title, organizer, start date, and end date are required.'
+  if (
+    !form.title.trim() ||
+    !form.organizer.trim() ||
+    !form.category.trim() ||
+    !form.mode.trim() ||
+    !form.teamSize.trim() ||
+    !form.startDate ||
+    !form.endDate
+  ) {
+    return 'Title, organizer, category, mode, team size, start date, and end date are required.'
   }
 
   if (form.registrationDeadline && form.startDate && form.registrationDeadline > form.startDate) {
@@ -100,6 +129,10 @@ export function validateCompetitionForm(form) {
 
   if (form.endDate < form.startDate) {
     return 'End date must be on or after the start date.'
+  }
+
+  if (!form.description.trim()) {
+    return 'Description is required.'
   }
 
   return ''
