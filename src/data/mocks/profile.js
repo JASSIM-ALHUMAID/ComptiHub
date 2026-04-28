@@ -7,6 +7,7 @@ export const profiles = {
     university: 'King Saud University',
     major: 'Computer Science',
     year: '3rd Year',
+    skills: ['Competitive Programming', 'Figma', 'React', 'Team Collaboration'],
     competitor: {
       focus: 'Competitive programming and product design collaboration',
       preferredRole: 'Frontend builder and design systems contributor',
@@ -26,6 +27,7 @@ export const profiles = {
     university: 'KFUPM',
     major: 'Software Engineering',
     year: '4th Year',
+    skills: ['Algorithms', 'C++', 'Team Leadership', 'Contest Strategy'],
     competitor: {
       focus: 'Algorithm contests, systems challenges, and teams that value disciplined preparation',
       preferredRole: 'Problem setter, debugging partner, and contest operations contributor',
@@ -70,6 +72,7 @@ const emptyProfile = {
   university: '',
   major: '',
   year: '',
+  skills: [],
   competitor: { ...emptyRoleProfile },
   teamLeader: { ...emptyRoleProfile },
 }

@@ -1,6 +1,4 @@
-import { storage } from '../../lib/utils/storage'
-
-const USER_SKILLS_KEY = 'compitihub.profile.skills'
+import { getUserProfile, saveUserProfile } from './profile'
 
 const skillLabelOverrides = {
   ai: 'AI',
@@ -24,11 +22,6 @@ const skillLabelOverrides = {
   'ui/ux': 'UI/UX',
   ui: 'UI',
   ux: 'UX',
-}
-
-export const userSkills = {
-  'user-2': ['Competitive Programming', 'Figma', 'React', 'Team Collaboration'],
-  'user-leader-1': ['Algorithms', 'C++', 'Team Leadership', 'Contest Strategy'],
 }
 
 function formatSkillToken(token) {
@@ -101,31 +94,12 @@ function sanitizeSkills(skills) {
   return sanitizedSkills
 }
 
-function readStoredSkills() {
-  const storedSkills = storage.get(USER_SKILLS_KEY)
-
-  if (!storedSkills) {
-    return {}
-  }
-
-  try {
-    return JSON.parse(storedSkills)
-  } catch {
-    return {}
-  }
-}
-
-function writeStoredSkills(skills) {
-  storage.set(USER_SKILLS_KEY, JSON.stringify(skills))
-}
-
 export function getUserSkills(userId) {
   if (!userId) {
     return []
   }
 
-  const storedSkills = readStoredSkills()
-  return sanitizeSkills(storedSkills[userId] ?? userSkills[userId] ?? [])
+  return sanitizeSkills(getUserProfile(userId).skills ?? [])
 }
 
 export function saveUserSkills(userId, skills) {
@@ -134,11 +108,10 @@ export function saveUserSkills(userId, skills) {
   }
 
   const nextSkills = sanitizeSkills(skills)
-  const storedSkills = readStoredSkills()
-
-  writeStoredSkills({
-    ...storedSkills,
-    [userId]: nextSkills,
+  const profile = getUserProfile(userId)
+  saveUserProfile(userId, {
+    ...profile,
+    skills: nextSkills,
   })
 
   return nextSkills

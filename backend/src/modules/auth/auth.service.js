@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import { ApiError } from '../../utils/apiError.js'
 import { User } from './user.model.js'
+import { createProfileForUser } from '../profile/profile.service.js'
 
 const saltRounds = 12
 
@@ -34,6 +35,8 @@ export async function signupStudent(input) {
     activeRole: input.defaultRole,
     accountStatus: 'active',
   })
+
+  await createProfileForUser(user._id)
 
   return authPayload(user)
 }

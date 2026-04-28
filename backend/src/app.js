@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { env } from './config/env.js'
 import { sendSuccess } from './utils/responses.js'
 import { authRouter } from './modules/auth/auth.routes.js'
+import { profileRouter } from './modules/profile/profile.routes.js'
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js'
 
 export function createApp() {
@@ -24,6 +25,7 @@ export function createApp() {
   const api = express.Router()
   api.get('/health', (_req, res) => sendSuccess(res, { status: 'ok' }))
   api.use('/auth', authRouter)
+  api.use('/profile', profileRouter)
 
   app.use('/api/v1', api)
   app.use(notFoundHandler)
