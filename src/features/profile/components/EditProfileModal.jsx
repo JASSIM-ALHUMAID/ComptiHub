@@ -6,6 +6,7 @@ import Select from '../../../components/ui/Select'
 import Textarea from '../../../components/ui/Textarea'
 
 export default function EditProfileModal({
+  activeRole,
   draftSkill,
   editableRoles,
   error,
@@ -21,6 +22,8 @@ export default function EditProfileModal({
   roleConfig,
   skillsError,
 }) {
+  const isLeaderProfile = activeRole === 'teamLeader'
+
   return (
     <Modal
       aria-describedby="edit-profile-description"
@@ -113,6 +116,52 @@ export default function EditProfileModal({
 
             <div className="space-y-4">
               <h3 className="landing-ui-text text-[0.7rem] font-bold uppercase tracking-wider text-(--landing-gold-soft)">Professional Snapshot</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="landing-ui-text text-[0.74rem] text-(--landing-text)">
+                    {isLeaderProfile ? 'Recruiting Focus' : 'Competition Focus'}
+                  </span>
+                  <Input
+                    value={form.focus}
+                    onChange={(e) => onChange('focus', e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder={isLeaderProfile ? 'What kind of team or challenge are you building for?' : 'What kinds of competitions fit you best?'}
+                  />
+                </label>
+                <label className="space-y-2">
+                  <span className="landing-ui-text text-[0.74rem] text-(--landing-text)">
+                    {isLeaderProfile ? 'Preferred Team Setup' : 'Preferred Role'}
+                  </span>
+                  <Input
+                    value={isLeaderProfile ? form.preferredTeamSetup : form.preferredRole}
+                    onChange={(e) => onChange(isLeaderProfile ? 'preferredTeamSetup' : 'preferredRole', e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder={isLeaderProfile ? 'e.g. cross-functional sprint squad' : 'e.g. frontend, algorithms, UI/UX'}
+                  />
+                </label>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="landing-ui-text text-[0.74rem] text-(--landing-text)">Strengths</span>
+                  <Textarea
+                    rows={3}
+                    value={form.strengths}
+                    onChange={(e) => onChange('strengths', e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder="Highlight the strengths you bring to a team."
+                  />
+                </label>
+                <label className="space-y-2">
+                  <span className="landing-ui-text text-[0.74rem] text-(--landing-text)">Availability</span>
+                  <Textarea
+                    rows={3}
+                    value={form.availability}
+                    onChange={(e) => onChange('availability', e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder="Share when you are usually available."
+                  />
+                </label>
+              </div>
               <label className="block space-y-2">
                 <span className="landing-ui-text text-[0.74rem] text-(--landing-text)">Summary / Objective</span>
                 <Textarea

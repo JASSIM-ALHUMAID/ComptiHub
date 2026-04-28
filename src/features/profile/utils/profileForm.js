@@ -8,6 +8,11 @@ export function createProfileForm({ user, profile, roleProfile, skills }) {
     university: profile.university ?? '',
     major: profile.major ?? '',
     year: profile.year ?? '',
+    focus: roleProfile?.focus ?? '',
+    preferredRole: roleProfile?.preferredRole ?? '',
+    preferredTeamSetup: roleProfile?.preferredTeamSetup ?? '',
+    strengths: roleProfile?.strengths ?? '',
+    availability: roleProfile?.availability ?? '',
     bio: roleProfile?.bio ?? '',
     skills: [...skills],
   }

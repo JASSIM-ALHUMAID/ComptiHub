@@ -153,6 +153,11 @@ export default function ProfilePage() {
         year: form.year,
         [activeRole]: {
           ...profile[activeRole],
+          focus: form.focus,
+          preferredRole: form.preferredRole,
+          preferredTeamSetup: form.preferredTeamSetup,
+          strengths: form.strengths,
+          availability: form.availability,
           bio: form.bio,
         },
       })
@@ -208,6 +213,7 @@ export default function ProfilePage() {
       </main>
 
       <EditProfileModal
+        activeRole={activeRole}
         draftSkill={draftSkill}
         editableRoles={editableRoles}
         error={error}
