@@ -13,7 +13,7 @@ export default function ProfileBioCard({ isLeaderProfile, roleProfile, renderPro
         </div>
       </div>
 
-      <div className="grid gap-4 border-t border-[rgba(226,226,232,0.1)] pt-6 sm:grid-cols-2">
+      <div className="grid gap-4 border-t border-[rgba(226,226,232,0.1)] pt-5 sm:grid-cols-2">
         <div>
           <p className="landing-ui-text text-[0.65rem] text-[rgba(226,226,232,0.55)]">
             {isLeaderProfile ? 'Recruiting Focus' : 'Competition Focus'}
@@ -27,6 +27,23 @@ export default function ProfileBioCard({ isLeaderProfile, roleProfile, renderPro
             {isLeaderProfile ? 'Team Setup' : 'Preferred Role'}
           </p>
           {renderProfileValue(isLeaderProfile ? roleProfile?.preferredTeamSetup : roleProfile?.preferredRole, {
+            filledClassName: 'mt-1 text-sm font-medium text-(--landing-text)',
+          })}
+        </div>
+      </div>
+
+      <div className="grid gap-4 border-t border-[rgba(226,226,232,0.1)] pt-5 sm:grid-cols-2">
+        <div>
+          <p className="landing-ui-text text-[0.65rem] text-[rgba(226,226,232,0.55)]">Strengths</p>
+          {renderProfileValue(roleProfile?.strengths, {
+            emptyLabel: 'Not added yet',
+            filledClassName: 'mt-1 text-sm font-medium text-(--landing-text)',
+          })}
+        </div>
+        <div>
+          <p className="landing-ui-text text-[0.65rem] text-[rgba(226,226,232,0.55)]">Availability</p>
+          {renderProfileValue(roleProfile?.availability, {
+            emptyLabel: 'Not added yet',
             filledClassName: 'mt-1 text-sm font-medium text-(--landing-text)',
           })}
         </div>
