@@ -1,12 +1,16 @@
 import express from 'express'
+import jwt from 'jsonwebtoken'
 import { authenticate } from '../../middlewares/auth.js'
+import { authLimiter } from '../../middlewares/rateLimit.js'
+import { env } from '../../config/env.js'
 import { sendMessage, sendSuccess } from '../../utils/responses.js'
+import { ApiError } from '../../utils/apiError.js'
 import { activeRoleSchema, basicInfoSchema, defaultRoleSchema, loginSchema, signupSchema } from './auth.validation.js'
 import { loginUser, signupStudent, updateActiveRole, updateBasicInfo, updateDefaultRole } from './auth.service.js'
 
 export const authRouter = express.Router()
 
-authRouter.post('/signup', async (req, res, next) => {
+authRouter.post('/signup', authLimiter, async (req, res, next) => {
   try {
     const input = signupSchema.parse(req.body)
     const data = await signupStudent(input)
@@ -16,7 +20,7 @@ authRouter.post('/signup', async (req, res, next) => {
   }
 })
 
-authRouter.post('/login', async (req, res, next) => {
+authRouter.post('/login', authLimiter, async (req, res, next) => {
   try {
     const input = loginSchema.parse(req.body)
     const data = await loginUser(input)
@@ -26,8 +30,56 @@ authRouter.post('/login', async (req, res, next) => {
   }
 })
 
-authRouter.post('/logout', authenticate, (_req, res) => {
-  sendMessage(res, 'Logged out.')
+authRouter.post('/refresh', async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body
+
+    if (!refreshToken || typeof refreshToken !== 'string') {
+      throw new ApiError(400, 'Refresh token is required.')
+    }
+
+    const payload = jwt.verify(refreshToken, env.jwtSecret)
+
+    if (payload.type !== 'refresh') {
+      throw new ApiError(400, 'Invalid token type.')
+    }
+
+    const { User } = await import('./user.model.js')
+    const user = await User.findById(payload.sub)
+
+    if (!user || !user.verifyRefreshToken(refreshToken)) {
+      throw new ApiError(401, 'Invalid or expired refresh token.')
+    }
+
+    if (user.accountStatus !== 'active') {
+      throw new ApiError(403, `Account is ${user.accountStatus}.`)
+    }
+
+    const accessToken = user.issueAccessToken()
+    sendSuccess(res, { accessToken })
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      next(new ApiError(401, 'Invalid or expired refresh token.'))
+      return
+    }
+
+    next(error)
+  }
+})
+
+authRouter.post('/logout', authenticate, async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body
+
+    if (refreshToken) {
+      req.user.revokeRefreshToken(refreshToken)
+      await req.user.save()
+    }
+
+    sendMessage(res, 'Logged out.')
+  } catch (error) {
+    next(error)
+  }
 })
 
 authRouter.get('/me', authenticate, (req, res) => {

@@ -51,12 +51,40 @@ const userSchema = new mongoose.Schema(
       default: 'active',
       required: true,
     },
+    refreshTokens: {
+      type: [{ token: String, expiresAt: Date }],
+      default: [],
+      select: false,
+    },
   },
   { timestamps: true },
 )
 
 userSchema.methods.issueAccessToken = function issueAccessToken() {
   return jwt.sign({ sub: this._id.toString(), systemRole: this.systemRole }, env.jwtSecret, { expiresIn: '1h' })
+}
+
+userSchema.methods.issueRefreshToken = function issueRefreshToken() {
+  const expiresIn = 7 * 24 * 60 * 60 // 7 days in seconds
+  const token = jwt.sign({ sub: this._id.toString(), type: 'refresh' }, env.jwtSecret, { expiresIn })
+  return { token, expiresIn }
+}
+
+userSchema.methods.addRefreshToken = function addRefreshToken(token, expiresInSeconds) {
+  this.refreshTokens = (this.refreshTokens || []).filter((rt) => new Date(rt.expiresAt) > new Date())
+  this.refreshTokens.push({
+    token,
+    expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
+  })
+}
+
+userSchema.methods.verifyRefreshToken = function verifyRefreshToken(token) {
+  const stored = (this.refreshTokens || []).find((rt) => rt.token === token && new Date(rt.expiresAt) > new Date())
+  return !!stored
+}
+
+userSchema.methods.revokeRefreshToken = function revokeRefreshToken(token) {
+  this.refreshTokens = (this.refreshTokens || []).filter((rt) => rt.token !== token)
 }
 
 userSchema.methods.toSessionUser = function toSessionUser() {

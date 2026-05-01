@@ -40,4 +40,11 @@ const competitionSchema = new mongoose.Schema(
   { timestamps: true },
 )
 
+// Indexes for common queries
+competitionSchema.index({ status: 1 })
+competitionSchema.index({ category: 1 })
+competitionSchema.index({ status: 1, category: 1 })
+competitionSchema.index({ createdAt: -1 })
+competitionSchema.index({ startDate: 1, status: 1 })
+
 export const Competition = mongoose.models.Competition || mongoose.model('Competition', competitionSchema)

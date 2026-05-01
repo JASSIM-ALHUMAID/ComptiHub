@@ -6,9 +6,13 @@ import { createProfileForUser } from '../profile/profile.service.js'
 const saltRounds = 12
 
 function authPayload(user) {
+  const { token: refreshToken, expiresIn } = user.issueRefreshToken()
+  user.addRefreshToken(refreshToken, expiresIn)
+
   return {
     user: user.toSessionUser(),
     token: user.issueAccessToken(),
+    refreshToken,
   }
 }
 
@@ -60,9 +64,9 @@ export async function loginUser({ email, password }) {
 
   if (user.systemRole === 'student') {
     user.activeRole = user.defaultRole
-    await user.save()
   }
 
+  await user.save()
   return authPayload(user)
 }
 

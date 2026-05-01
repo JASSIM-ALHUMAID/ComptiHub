@@ -19,9 +19,15 @@ const teamSchema = new mongoose.Schema(
       enum: ['recruiting', 'full', 'closed', 'archived', 'dissolved'],
       required: true,
       default: 'recruiting',
+      index: true,
     },
   },
   { timestamps: true },
 )
+
+// Composite indexes for common queries
+teamSchema.index({ competitionId: 1, status: 1 })
+teamSchema.index({ leaderId: 1, status: 1 })
+teamSchema.index({ createdAt: -1 })
 
 export const Team = mongoose.models.Team || mongoose.model('Team', teamSchema)
