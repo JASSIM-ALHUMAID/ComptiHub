@@ -1,8 +1,10 @@
 import { ArrowRight, MessageSquareText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import EmptyState from '../../components/feedback/EmptyState'
+import LoadingState from '../../components/feedback/LoadingState'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import Alert from '../../components/ui/Alert'
 import { useStudentRole } from '../../features/account/hooks/useStudentRole'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { routes } from '../../lib/constants/routes'
@@ -16,7 +18,31 @@ const statusVariants = {
 
 export default function MyApplicationsPage() {
   const { activeRole } = useStudentRole()
-  const { applications } = useAuth()
+  const { applications, applicationsLoading, applicationsError, user } = useAuth()
+
+  if (activeRole === 'teamLeader') {
+    return <TeamRequestsPage />
+  }
+
+  // Only show loading for API users
+  if (applicationsLoading && user?.source === 'api') {
+    return <LoadingState title="Loading your applications..." />
+  }
+
+  if (applicationsError) {
+    return (
+      <main className="space-y-4">
+        <Alert
+          variant="error"
+          title="Failed to load applications"
+          message={applicationsError}
+        />
+        <Link className="text-sm text-(--landing-gold) hover:text-(--landing-gold-soft)" to={routes.competitions}>
+          Back to competitions
+        </Link>
+      </main>
+    )
+  }
 
   if (activeRole === 'teamLeader') {
     return <TeamRequestsPage />

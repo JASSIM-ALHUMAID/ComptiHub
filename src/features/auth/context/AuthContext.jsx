@@ -1,13 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useMemo, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import { authService } from '../services/authService'
-import { applications as mockApplications } from '../../../data/mocks/applications'
+import { applicationService } from '../../applications/services/applicationService'
 
 export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => authService.getSession())
-  const [allApplications, setAllApplications] = useState(mockApplications)
+  const [applications, setApplications] = useState([])
+  const [applicationsLoading, setApplicationsLoading] = useState(false)
+  const [applicationsError, setApplicationsError] = useState(null)
 
   const login = useCallback(async (credentials) => {
     const sessionUser = await authService.login(credentials)
@@ -24,7 +26,40 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     await authService.logout()
     setUser(null)
+    setApplications([])
   }, [])
+
+  // Load applications when user authenticates via API
+  useEffect(() => {
+    if (!user) {
+      setApplications([])
+      setApplicationsError(null)
+      return
+    }
+
+    if (user.source !== 'api') {
+      // Mock users don't have API-backed applications
+      setApplications([])
+      setApplicationsError(null)
+      return
+    }
+
+    async function loadApplications() {
+      try {
+        setApplicationsLoading(true)
+        setApplicationsError(null)
+        const nextApplications = await applicationService.listMyApplications()
+        setApplications(nextApplications)
+      } catch (error) {
+        setApplicationsError(error.message || 'Failed to load applications')
+        setApplications([])
+      } finally {
+        setApplicationsLoading(false)
+      }
+    }
+
+    loadApplications()
+  }, [user])
 
   const updateDefaultRole = useCallback(
     async (defaultRole) => {
@@ -56,32 +91,35 @@ export function AuthProvider({ children }) {
     [user],
   )
 
-  const addApplication = useCallback((teamId, teamName, competitionTitle, message) => {
-    if (!user) {
-      return
-    }
+  const addApplication = useCallback(
+    async (teamId, teamName, competitionTitle, message) => {
+      if (!user || user.source !== 'api') {
+        throw new Error('Must be authenticated to submit an application')
+      }
 
-    const newApp = {
-      id: `app-${Date.now()}`,
-      ownerId: user.id,
-      teamId,
-      teamName,
-      competitionTitle,
-      appliedAt: new Date().toISOString().slice(0, 10),
-      status: 'pending',
-      message,
-    }
-    setAllApplications((prev) => [...prev, newApp])
-  }, [user])
-
-  const applications = useMemo(
-    () => allApplications.filter((application) => application.ownerId === user?.id),
-    [allApplications, user?.id],
+      try {
+        const newApp = await applicationService.submitApplication(teamId, message)
+        // Add metadata that might not come from API
+        const enrichedApp = {
+          ...newApp,
+          teamName: teamName || newApp.teamName,
+          competitionTitle: competitionTitle || newApp.competitionTitle,
+        }
+        setApplications((prev) => [enrichedApp, ...prev])
+        return enrichedApp
+      } catch (error) {
+        setApplications((prev) =>
+          prev.filter((app) => app.teamId !== teamId)
+        )
+        throw error
+      }
+    },
+    [user]
   )
 
   const hasApplied = useCallback(
     (teamId) => applications.some((a) => a.teamId === teamId),
-    [applications],
+    [applications]
   )
 
   const value = useMemo(
@@ -95,10 +133,12 @@ export function AuthProvider({ children }) {
       updateActiveRole,
       updateBasicInfo,
       applications,
+      applicationsLoading,
+      applicationsError,
       addApplication,
       hasApplied,
     }),
-    [login, logout, signup, updateActiveRole, updateDefaultRole, updateBasicInfo, user, applications, addApplication, hasApplied],
+    [login, logout, signup, updateActiveRole, updateDefaultRole, updateBasicInfo, user, applications, applicationsLoading, applicationsError, addApplication, hasApplied],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

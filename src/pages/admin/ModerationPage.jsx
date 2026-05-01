@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import Alert from '../../components/ui/Alert'
+import LoadingState from '../../components/feedback/LoadingState'
 import ModerationHeader from '../../features/admin/moderation/ModerationHeader'
 import ModerationModal from '../../features/admin/moderation/ModerationModal'
 import ModerationUserList from '../../features/admin/moderation/ModerationUserList'
@@ -10,11 +12,42 @@ import {
 import { adminModerationService } from '../../features/admin/services/adminModerationService'
 
 export default function ModerationPage() {
-  const [users, setUsers] = useState(adminModerationService.listUsers())
+  const [users, setUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
   const [selectedUserId, setSelectedUserId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [actionForm, setActionForm] = useState(initialActionForm)
+
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadUsers() {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const nextUsers = await adminModerationService.listUsers()
+        if (!isCancelled) {
+          setUsers(nextUsers)
+        }
+      } catch (loadError) {
+        if (!isCancelled) {
+          setError(loadError.message || 'Failed to load moderation users.')
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadUsers()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [])
 
   const filteredUsers = useMemo(() => filterModerationUsers(users, search), [search, users])
 
@@ -54,15 +87,29 @@ export default function ModerationPage() {
   return (
     <>
       <main className="app-page space-y-8">
-        <ModerationHeader flaggedCount={flaggedCount} />
+        {isLoading && <LoadingState title="Loading moderation users..." />}
 
-        <ModerationUserList
-          filteredUsers={filteredUsers}
-          flaggedCount={flaggedCount}
-          search={search}
-          onOpenModerationModal={openModerationModal}
-          onSearchChange={(event) => setSearch(event.target.value)}
-        />
+        {error && (
+          <Alert
+            variant="error"
+            title="Failed to load users"
+            message={error}
+          />
+        )}
+
+        {!isLoading && !error && (
+          <>
+            <ModerationHeader flaggedCount={flaggedCount} />
+
+            <ModerationUserList
+              filteredUsers={filteredUsers}
+              flaggedCount={flaggedCount}
+              search={search}
+              onOpenModerationModal={openModerationModal}
+              onSearchChange={(event) => setSearch(event.target.value)}
+            />
+          </>
+        )}
       </main>
 
       <ModerationModal

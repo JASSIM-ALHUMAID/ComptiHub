@@ -31,4 +31,16 @@ export const endpoints = {
   leaveRequests: {
     review: (id) => `/leave-requests/${id}/status`,
   },
+  applications: {
+    listMine: '/applications/me',
+    create: (teamId) => `/teams/${teamId}/apply`,
+  },
+  adminModeration: {
+    listUsers: '/admin/moderation/users',
+    updateUserStatus: (userId) => `/admin/moderation/users/${userId}/status`,
+  },
+  adminSuggestions: {
+    list: '/admin/suggestions',
+    decide: (suggestionId) => `/admin/suggestions/${suggestionId}/decide`,
+  },
 }

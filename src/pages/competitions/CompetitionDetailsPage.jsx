@@ -16,12 +16,24 @@ function TeamCard({ team, competitionTitle }) {
   const alreadyApplied = hasApplied(team.id)
   const [showForm, setShowForm] = useState(false)
   const [message, setMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const messageFieldId = `${team.id}-application-message`
 
-  function handleApply(event) {
+  async function handleApply(event) {
     event.preventDefault()
-    addApplication(team.id, team.name, competitionTitle, message)
-    setShowForm(false)
+    setIsSubmitting(true)
+    setError('')
+
+    try {
+      await addApplication(team.id, team.name, competitionTitle, message)
+      setShowForm(false)
+      setMessage('')
+    } catch (submitError) {
+      setError(submitError.message || 'Failed to submit application. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -55,26 +67,39 @@ function TeamCard({ team, competitionTitle }) {
         <Alert variant="success" title="Application submitted!" showIcon={false} />
       ) : showForm ? (
         <form onSubmit={handleApply} className="space-y-3 pt-1">
+          {error && (
+            <Alert variant="error" title="Error" message={error} showIcon={false} />
+          )}
           <label className="space-y-2" htmlFor={messageFieldId}>
             <span className="landing-ui-text block text-[0.68rem] text-[rgba(226,226,232,0.55)]">Application message</span>
             <Textarea
               id={messageFieldId}
               value={message}
               onChange={(event) => setMessage(event.target.value)}
+              disabled={isSubmitting}
               required
               rows={3}
               placeholder="Tell the team why you'd be a great fit..."
             />
           </label>
           <div className="flex gap-3">
-            <Button type="submit" variant="outline-gold" size="md">
-              Submit
+            <Button
+              type="submit"
+              variant="outline-gold"
+              size="md"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
             <Button
               type="button"
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false)
+                setError('')
+              }}
               variant="outline"
               size="md"
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
