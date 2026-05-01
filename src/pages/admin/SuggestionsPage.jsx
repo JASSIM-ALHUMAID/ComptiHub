@@ -69,6 +69,15 @@ export default function SuggestionsPage() {
     }
   }
 
+  async function decideSuggestion(suggestionId, decision) {
+    try {
+      await adminSuggestionsService.decideSuggestion(suggestionId, decision, '')
+      handleDecision(suggestionId)
+    } catch (error) {
+      console.error('Failed to decide on suggestion:', error)
+    }
+  }
+
   function handlePreviousPage() {
     setCurrentPage((page) => Math.max(1, page - 1))
   }

@@ -1,13 +1,73 @@
+import { useEffect, useState } from 'react'
 import { ArrowRight, FolderOpen, Rocket, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../../../components/ui/Card'
+import LoadingState from '../../../components/feedback/LoadingState'
 import { useAuth } from '../../../features/auth/hooks/useAuth'
-import { competitorDashboard } from '../../../data/mocks/dashboard'
+import { applicationService } from '../../../features/applications/services/applicationService'
+import { teamService } from '../../../features/teams/services/teamService'
+import { competitionService } from '../../../features/competitions/services/competitionService'
 import { routes } from '../../../lib/constants/routes'
 
 export default function CompetitorOverview() {
-  const { user, applications } = useAuth()
-  const dashboard = competitorDashboard[user?.id] ?? competitorDashboard.default
+  const { user } = useAuth()
+  const [teams, setTeams] = useState([])
+  const [applications, setApplications] = useState([])
+  const [competitions, setCompetitions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadData() {
+      try {
+        setIsLoading(true)
+        const [myTeams, myApplications, allCompetitions] = await Promise.all([
+          teamService.listMyTeams(),
+          applicationService.listMyApplications(),
+          competitionService.listCompetitions({ status: 'active' }),
+        ])
+
+        if (!isCancelled) {
+          setTeams(myTeams)
+          setApplications(myApplications)
+          setCompetitions(allCompetitions)
+        }
+      } catch (error) {
+        console.error('Failed to load competitor dashboard:', error)
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadData()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [])
+
+  if (isLoading) {
+    return <LoadingState title="Loading competitor dashboard..." />
+  }
+
+  const openCompetitions = competitions.length
+  const activeTeams = teams.length
+  const pendingApplications = applications.filter((app) => app.status === 'pending').length
+
+  const stats = [
+    { id: 'open-competitions', label: 'Open Competitions', value: openCompetitions.toString(), note: 'Active competitions available' },
+    { id: 'team-memberships', label: 'Active Teams', value: activeTeams.toString(), note: 'Teams you are part of' },
+    { id: 'applications', label: 'Applications', value: pendingApplications.toString(), note: 'Requests awaiting response' },
+  ]
+
+  const recentApplications = applications.slice(0, 2).map((app) => ({
+    id: app.id,
+    title: `Application to team ${app.teamId}`,
+    meta: `Status: ${app.status}`,
+  }))
 
   return (
     <section className="space-y-6">
@@ -19,7 +79,7 @@ export default function CompetitorOverview() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        {dashboard.stats.map((stat) => (
+        {stats.map((stat) => (
           <Card key={stat.id} className="space-y-3">
             <p className="landing-ui-text text-[0.68rem] text-[rgba(226,226,232,0.5)]">{stat.label}</p>
             <p className="text-3xl font-black tracking-tight text-(--landing-text)">{stat.value}</p>
@@ -41,9 +101,9 @@ export default function CompetitorOverview() {
             </span>
           </div>
 
-          {dashboard.recentActivity.length > 0 ? (
+          {recentApplications.length > 0 ? (
             <div className="grid gap-3">
-              {dashboard.recentActivity.map((item) => (
+              {recentApplications.map((item) => (
                 <div key={item.id} className="rounded-[1.2rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
                   <p className="text-sm font-semibold text-(--landing-text)">{item.title}</p>
                   <p className="landing-copy mt-1 text-sm text-[rgba(226,226,232,0.58)]">{item.meta}</p>
@@ -64,11 +124,11 @@ export default function CompetitorOverview() {
           </div>
 
           <div className="grid gap-3">
-            {dashboard.highlights.map((item) => (
-              <div key={item.id} className="rounded-[1.2rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
-                <p className="landing-ui-text text-[0.62rem] text-[rgba(226,226,232,0.48)]">{item.label}</p>
-                <p className="mt-2 text-sm font-semibold text-(--landing-text)">{item.value}</p>
-                <p className="landing-copy mt-1 text-sm text-[rgba(226,226,232,0.55)]">{item.note}</p>
+            {competitions.slice(0, 2).map((competition) => (
+              <div key={competition.id} className="rounded-[1.2rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(17,19,23,0.5)] px-4 py-3">
+                <p className="landing-ui-text text-[0.62rem] text-[rgba(226,226,232,0.48)]">{competition.category}</p>
+                <p className="mt-2 text-sm font-semibold text-(--landing-text)">{competition.title}</p>
+                <p className="landing-copy mt-1 text-sm text-[rgba(226,226,232,0.55)]">Registration available</p>
               </div>
             ))}
           </div>

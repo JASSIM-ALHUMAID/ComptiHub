@@ -17,7 +17,7 @@ export const adminUsersRouter = express.Router()
 adminUsersRouter.use(authenticate)
 adminUsersRouter.use(requireSystemRole('admin'))
 
-adminUsersRouter.get('/', async (req, res, next) => {
+adminUsersRouter.get('/users', async (req, res, next) => {
   try {
     const filters = listAdminUsersQuerySchema.parse(req.query)
     const users = await listAdminUsers(filters)
@@ -27,22 +27,12 @@ adminUsersRouter.get('/', async (req, res, next) => {
   }
 })
 
-adminUsersRouter.post('/:id/moderation-actions', async (req, res, next) => {
+adminUsersRouter.patch('/users/:userId/status', async (req, res, next) => {
   try {
-    const { id } = adminUserParamsSchema.parse(req.params)
+    const { userId } = adminUserParamsSchema.parse({ id: req.params.userId })
     const input = createModerationActionSchema.parse(req.body)
-    const data = await createModerationAction(req.user, id, input)
-    sendSuccess(res, data, 201)
-  } catch (error) {
-    next(error)
-  }
-})
-
-adminUsersRouter.get('/:id/moderation-actions', async (req, res, next) => {
-  try {
-    const { id } = adminUserParamsSchema.parse(req.params)
-    const actions = await listModerationActions(id)
-    sendSuccess(res, { actions })
+    const data = await createModerationAction(req.user, userId, input)
+    sendSuccess(res, data)
   } catch (error) {
     next(error)
   }

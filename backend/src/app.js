@@ -38,7 +38,7 @@ export function createApp() {
   api.use('/leave-requests', leaveRequestRouter)
   api.use(applicationRouter)
   api.use('/admin/suggestions', adminSuggestionsRouter)
-  api.use('/admin/users', adminUsersRouter)
+  api.use('/admin/moderation', adminUsersRouter)
 
   app.use('/api/v1', api)
   app.use(notFoundHandler)

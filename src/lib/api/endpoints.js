@@ -33,7 +33,7 @@ export const endpoints = {
   },
   applications: {
     listMine: '/applications/me',
-    create: (teamId) => `/teams/${teamId}/apply`,
+    create: (teamId) => `/teams/${teamId}/applications`,
   },
   adminModeration: {
     listUsers: '/admin/moderation/users',
