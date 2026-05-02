@@ -92,7 +92,7 @@ export const adminCompetitionsService = {
   async listCompetitions({ search = '', statusFilter = 'all', categoryFilter = 'all' } = {}) {
     const session = getSession()
 
-    if (session?.source !== 'api' || session.accountType !== 'admin') {
+    if (session?.source !== 'api') {
       return mockCollection.filter((competition) =>
         matchesCompetitionFilter(competition, search, statusFilter, categoryFilter),
       )
@@ -114,7 +114,7 @@ export const adminCompetitionsService = {
   async createCompetition(form) {
     const session = getSession()
 
-    if (session?.source !== 'api' || session.accountType !== 'admin') {
+    if (session?.source !== 'api') {
       const nextCompetition = normalizeCompetition({
         ...buildPayload(form),
         id: `COMP-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -136,7 +136,7 @@ export const adminCompetitionsService = {
   async updateCompetition(id, form) {
     const session = getSession()
 
-    if (session?.source !== 'api' || session.accountType !== 'admin') {
+    if (session?.source !== 'api') {
       const nextCompetition = normalizeCompetition({
         ...buildPayload(form),
         id,
@@ -158,7 +158,7 @@ export const adminCompetitionsService = {
   async deleteCompetition(id) {
     const session = getSession()
 
-    if (session?.source !== 'api' || session.accountType !== 'admin') {
+    if (session?.source !== 'api') {
       mockCollection = mockCollection.filter((competition) => competition.id !== id)
       return
     }

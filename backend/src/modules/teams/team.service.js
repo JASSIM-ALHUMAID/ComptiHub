@@ -37,10 +37,6 @@ function parseTeamSize(teamSize) {
   return { min: exact, max: exact }
 }
 
-function isCompetitionActiveForTeams(competition) {
-  return ['open', 'active', 'upcoming'].includes(competition.status)
-}
-
 function deriveEffectiveStatus(team, competition) {
   if (team.status === 'dissolved') {
     return 'dissolved'

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Alert from '../../components/ui/Alert'
 import LoadingState from '../../components/feedback/LoadingState'
 import { adminSuggestionsService } from '../../features/admin/services/adminSuggestionsService'
@@ -16,9 +16,15 @@ export default function SuggestionsPage() {
   const [suggestions, setSuggestions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [decisionError, setDecisionError] = useState(null)
+  const [pendingDecisionId, setPendingDecisionId] = useState(null)
   const [search, setSearch] = useState('')
   const [expandedSuggestionId, setExpandedSuggestionId] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const pendingDecisionRef = useRef(null)
+  const searchRef = useRef(search)
+
+  searchRef.current = search
 
   useEffect(() => {
     let isCancelled = false
@@ -27,6 +33,9 @@ export default function SuggestionsPage() {
       try {
         setIsLoading(true)
         setError(null)
+        setDecisionError(null)
+        setPendingDecisionId(null)
+        pendingDecisionRef.current = null
         const nextSuggestions = await adminSuggestionsService.listSuggestions()
         if (!isCancelled) {
           setSuggestions(nextSuggestions)
@@ -59,22 +68,35 @@ export default function SuggestionsPage() {
     setExpandedSuggestionId((currentId) => (currentId === suggestionId ? null : suggestionId))
   }
 
-  function handleDecision(suggestionId) {
-    setSuggestions((currentSuggestions) =>
-      currentSuggestions.filter((suggestion) => suggestion.id !== suggestionId),
-    )
+  function removeDecidedSuggestion(suggestionId) {
+    setSuggestions((currentSuggestions) => {
+      const currentFilteredSuggestions = filterSuggestions(currentSuggestions, searchRef.current)
 
-    if (expandedSuggestionId === suggestionId) {
-      setExpandedSuggestionId(getNextExpandedSuggestionId(filteredSuggestions, suggestionId))
-    }
+      setExpandedSuggestionId((currentId) =>
+        currentId === suggestionId ? getNextExpandedSuggestionId(currentFilteredSuggestions, suggestionId) : currentId,
+      )
+
+      return currentSuggestions.filter((suggestion) => suggestion.id !== suggestionId)
+    })
   }
 
   async function decideSuggestion(suggestionId, decision) {
+    if (pendingDecisionRef.current !== null) {
+      return
+    }
+
+    pendingDecisionRef.current = suggestionId
+    setPendingDecisionId(suggestionId)
+
     try {
+      setDecisionError(null)
       await adminSuggestionsService.decideSuggestion(suggestionId, decision, '')
-      handleDecision(suggestionId)
-    } catch (error) {
-      console.error('Failed to decide on suggestion:', error)
+      removeDecidedSuggestion(suggestionId)
+    } catch (decisionError) {
+      setDecisionError(decisionError.message || 'Failed to update suggestion decision.')
+    } finally {
+      pendingDecisionRef.current = null
+      setPendingDecisionId(null)
     }
   }
 
@@ -105,6 +127,14 @@ export default function SuggestionsPage() {
           <section className="space-y-6 rounded-[1.6rem] border border-[rgba(77,70,50,0.18)] bg-[rgba(12,14,18,0.72)] p-4 sm:p-6">
             <SuggestionsControls search={search} onSearchChange={(event) => setSearch(event.target.value)} />
 
+            {decisionError && (
+              <Alert
+                variant="error"
+                title="Failed to update suggestion"
+                message={decisionError}
+              />
+            )}
+
             {filteredSuggestions.length === 0 ? (
               <Alert
                 variant="info"
@@ -120,8 +150,9 @@ export default function SuggestionsPage() {
                       key={suggestion.id}
                       suggestion={suggestion}
                       isExpanded={expandedSuggestionId === suggestion.id}
+                      isDecisionPending={pendingDecisionId !== null}
                       onToggleExpandedSuggestion={toggleExpandedSuggestion}
-                      onDecision={handleDecision}
+                      onDecision={decideSuggestion}
                     />
                   ))}
                 </div>

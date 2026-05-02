@@ -6,7 +6,7 @@ export const authLimiter = rateLimit({
   message: 'Too many authentication attempts. Please try again later.',
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  skip: (req) => process.env.NODE_ENV === 'test', // Skip rate limiting in test mode
+  skip: () => process.env.NODE_ENV === 'test',
 })
 
 export const apiLimiter = rateLimit({
@@ -14,5 +14,5 @@ export const apiLimiter = rateLimit({
   max: 100, // 100 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => process.env.NODE_ENV === 'test',
+  skip: () => process.env.NODE_ENV === 'test',
 })

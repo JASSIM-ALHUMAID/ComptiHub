@@ -14,10 +14,12 @@ import { adminModerationService } from '../../features/admin/services/adminModer
 export default function ModerationPage() {
   const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loadError, setLoadError] = useState(null)
+  const [actionError, setActionError] = useState(null)
   const [search, setSearch] = useState('')
   const [selectedUserId, setSelectedUserId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [actionForm, setActionForm] = useState(initialActionForm)
 
   useEffect(() => {
@@ -26,14 +28,14 @@ export default function ModerationPage() {
     async function loadUsers() {
       try {
         setIsLoading(true)
-        setError(null)
+        setLoadError(null)
         const nextUsers = await adminModerationService.listUsers()
         if (!isCancelled) {
           setUsers(nextUsers)
         }
       } catch (loadError) {
         if (!isCancelled) {
-          setError(loadError.message || 'Failed to load moderation users.')
+          setLoadError(loadError.message || 'Failed to load moderation users.')
         }
       } finally {
         if (!isCancelled) {
@@ -61,6 +63,10 @@ export default function ModerationPage() {
   }
 
   function closeModerationModal() {
+    if (isSubmitting) {
+      return
+    }
+
     setIsModalOpen(false)
   }
 
@@ -72,16 +78,27 @@ export default function ModerationPage() {
     }))
   }
 
-  function handleModerationSubmit(event) {
+  async function handleModerationSubmit(event) {
     event.preventDefault()
 
-    if (!selectedUser || !actionForm.reason.trim() || !actionForm.confirmed) {
+    if (isSubmitting || !selectedUser || !actionForm.reason.trim() || !actionForm.confirmed) {
       return
     }
 
-    setUsers((currentUsers) => applyModerationAction(currentUsers, selectedUser, actionForm))
+    setIsSubmitting(true)
+    setActionError(null)
 
-    closeModerationModal()
+    try {
+      await adminModerationService.createModerationAction(selectedUser.id, actionForm)
+      setUsers((currentUsers) => applyModerationAction(currentUsers, selectedUser, actionForm))
+
+      setIsModalOpen(false)
+    } catch (submitError) {
+      setActionError(submitError.message || 'Failed to apply moderation action.')
+      setIsModalOpen(false)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -89,15 +106,23 @@ export default function ModerationPage() {
       <main className="app-page space-y-8">
         {isLoading && <LoadingState title="Loading moderation users..." />}
 
-        {error && (
+        {loadError && (
           <Alert
             variant="error"
-            title="Failed to load users"
-            message={error}
+            title="Moderation error"
+            message={loadError}
           />
         )}
 
-        {!isLoading && !error && (
+        {actionError && (
+          <Alert
+            variant="error"
+            title="Moderation action failed"
+            message={actionError}
+          />
+        )}
+
+        {!isLoading && !loadError && (
           <>
             <ModerationHeader flaggedCount={flaggedCount} />
 
@@ -114,6 +139,7 @@ export default function ModerationPage() {
 
       <ModerationModal
         form={actionForm}
+        isSubmitting={isSubmitting}
         open={isModalOpen}
         targetUser={selectedUser}
         onChange={handleActionChange}

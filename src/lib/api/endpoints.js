@@ -2,6 +2,7 @@ export const endpoints = {
   auth: {
     signup: '/auth/signup',
     login: '/auth/login',
+    refresh: '/auth/refresh',
     logout: '/auth/logout',
     me: '/auth/me',
     basicInfo: '/auth/me',
@@ -33,10 +34,14 @@ export const endpoints = {
   },
   applications: {
     listMine: '/applications/me',
+    incoming: '/teams/applications/incoming',
     create: (teamId) => `/teams/${teamId}/applications`,
+    review: (id) => `/applications/${id}/status`,
   },
   adminModeration: {
     listUsers: '/admin/moderation/users',
+    createAction: (userId) => `/admin/moderation/users/${userId}/moderation-actions`,
+    listActions: (userId) => `/admin/moderation/users/${userId}/moderation-actions`,
     updateUserStatus: (userId) => `/admin/moderation/users/${userId}/status`,
   },
   adminSuggestions: {

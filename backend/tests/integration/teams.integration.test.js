@@ -1,18 +1,17 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from '../test-utils/vitest-node.js'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
-import { createApp } from '../../app.js'
-import { User } from '../../modules/auth/user.model.js'
-import { Team } from '../../modules/teams/team.model.js'
-import { Competition } from '../../modules/competitions/competition.model.js'
+import { createApp } from '../../src/app.js'
+import { User } from '../../src/modules/auth/user.model.js'
+import { Team } from '../../src/modules/teams/team.model.js'
+import { Competition } from '../../src/modules/competitions/competition.model.js'
 import bcrypt from 'bcrypt'
 
 let app
 let mongoServer
 let leaderToken
 let studentToken
-let competition
 let leaderUser
 let studentUser
 
@@ -24,7 +23,7 @@ describe('Teams Integration Tests', () => {
     app = createApp()
 
     // Create competition
-    competition = await Competition.create({
+    await Competition.create({
       _id: 'comp1',
       title: 'Test Competition',
       organizer: 'Test Org',

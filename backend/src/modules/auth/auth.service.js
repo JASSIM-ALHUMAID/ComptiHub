@@ -42,11 +42,13 @@ export async function signupStudent(input) {
 
   await createProfileForUser(user._id)
 
-  return authPayload(user)
+  const payload = authPayload(user)
+  await user.save()
+  return payload
 }
 
 export async function loginUser({ email, password }) {
-  const user = await User.findOne({ email }).select('+passwordHash')
+  const user = await User.findOne({ email }).select('+passwordHash +refreshTokens')
 
   if (!user) {
     throw new ApiError(401, 'Invalid email or password.')
@@ -67,7 +69,9 @@ export async function loginUser({ email, password }) {
   }
 
   await user.save()
-  return authPayload(user)
+  const payload = authPayload(user)
+  await user.save()
+  return payload
 }
 
 export async function updateDefaultRole(user, defaultRole) {

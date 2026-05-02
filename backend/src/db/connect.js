@@ -1,9 +1,13 @@
 import mongoose from 'mongoose'
 import { env } from '../config/env.js'
 
-export async function connectDatabase() {
+export async function connectDb(uri = env.mongodbUri) {
   mongoose.set('strictQuery', true)
-  return mongoose.connect(env.mongodbUri)
+  return mongoose.connect(uri)
+}
+
+export async function connectDatabase() {
+  return connectDb(env.mongodbUri)
 }
 
 export async function disconnectDatabase() {

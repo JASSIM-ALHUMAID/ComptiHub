@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { createTeamSchema, updateTeamSchema, teamStatusUpdateSchema, addMemberSchema } from '../../modules/teams/team.validation.js'
+import { describe, it, expect } from '../test-utils/vitest-node.js'
+import { createTeamSchema, updateTeamSchema, teamStatusUpdateSchema, addMemberSchema } from '../../src/modules/teams/team.validation.js'
 import { ZodError } from 'zod'
 
 describe('Team Validation', () => {

@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { createApplicationSchema, updateApplicationStatusSchema, applicationResponseSchema } from '../../modules/applications/application.validation.js'
+import { describe, it, expect } from '../test-utils/vitest-node.js'
+import { createApplicationSchema, updateApplicationStatusSchema, applicationResponseSchema } from '../../src/modules/applications/application.validation.js'
 import { ZodError } from 'zod'
 
 describe('Application Validation', () => {

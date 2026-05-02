@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { createCompetitionSchema, updateCompetitionSchema, competitionStatusUpdateSchema } from '../../modules/competitions/competition.validation.js'
+import { describe, it, expect } from '../test-utils/vitest-node.js'
+import { createCompetitionSchema, updateCompetitionSchema, competitionStatusUpdateSchema } from '../../src/modules/competitions/competition.validation.js'
 import { ZodError } from 'zod'
 
 describe('Competition Validation', () => {

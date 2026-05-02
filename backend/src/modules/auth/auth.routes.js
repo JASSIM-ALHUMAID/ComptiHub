@@ -45,7 +45,7 @@ authRouter.post('/refresh', async (req, res, next) => {
     }
 
     const { User } = await import('./user.model.js')
-    const user = await User.findById(payload.sub)
+    const user = await User.findById(payload.sub).select('+refreshTokens')
 
     if (!user || !user.verifyRefreshToken(refreshToken)) {
       throw new ApiError(401, 'Invalid or expired refresh token.')

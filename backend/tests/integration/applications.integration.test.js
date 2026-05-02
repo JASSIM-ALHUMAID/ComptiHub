@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from '../test-utils/vitest-node.js'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
-import { createApp } from '../../app.js'
-import { User } from '../../modules/auth/user.model.js'
-import { Team } from '../../modules/teams/team.model.js'
-import { Competition } from '../../modules/competitions/competition.model.js'
-import { Application } from '../../modules/applications/application.model.js'
+import { createApp } from '../../src/app.js'
+import { User } from '../../src/modules/auth/user.model.js'
+import { Team } from '../../src/modules/teams/team.model.js'
+import { Competition } from '../../src/modules/competitions/competition.model.js'
+import { Application } from '../../src/modules/applications/application.model.js'
 import bcrypt from 'bcrypt'
 
 let app
@@ -14,8 +14,6 @@ let mongoServer
 let leaderToken
 let studentToken
 let student2Token
-let competition
-let team
 let leaderUser
 let studentUser
 let student2User
@@ -28,20 +26,20 @@ describe('Applications Integration Tests', () => {
     app = createApp()
 
     // Create competition
-    competition = await Competition.create({
+    await Competition.create({
       _id: 'comp1',
       title: 'Test Competition',
       organizer: 'Test Org',
       category: 'Software',
       mode: 'Online',
       teamSize: '3-5',
-      deadline: '2025-12-31',
+      deadline: '2027-12-31',
       status: 'open',
       prize: '$1000',
       description: 'Test competition',
-      startDate: '2025-01-01',
-      endDate: '2025-01-15',
-      registrationDeadline: '2025-12-31',
+      startDate: '2027-01-01',
+      endDate: '2027-01-15',
+      registrationDeadline: '2027-12-31',
       participationType: 'team',
     })
 
@@ -81,7 +79,7 @@ describe('Applications Integration Tests', () => {
     student2Token = student2User.issueAccessToken()
 
     // Create team
-    team = await Team.create({
+    await Team.create({
       _id: 'team1',
       name: 'Test Team',
       competitionId: 'comp1',
