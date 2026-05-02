@@ -31,7 +31,6 @@ ComptiHub streamlines the competition and team formation experience for universi
 ### For All Users
 - Seamless role switching between Competitor and Team Leader
 - Manage personal profile and skills
-- Real-time notifications
 - Responsive design for desktop and mobile
 
 ## Tech Stack
@@ -717,7 +716,6 @@ Address any linting, build, or test errors before committing changes.
 - ✅ Backend API integration
 - ✅ MongoDB seed data
 - ✅ Admin panel implementation
-- ⏳ Real-time notifications
 - ✅ Deployment guide
 
 ## Contributing
