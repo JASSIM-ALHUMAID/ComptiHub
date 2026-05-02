@@ -3,7 +3,7 @@ import Button from '../../../components/ui/Button'
 import Modal from '../../../components/ui/Modal'
 import Select from '../../../components/ui/Select'
 
-export default function ModerationModal({ form, open, targetUser, onChange, onClose, onSubmit }) {
+export default function ModerationModal({ form, isSubmitting = false, open, targetUser, onChange, onClose, onSubmit }) {
   return (
     <Modal
       aria-describedby="moderation-modal-description"
@@ -105,9 +105,9 @@ export default function ModerationModal({ form, open, targetUser, onChange, onCl
                 <Button className="min-w-36 justify-center" size="nav" type="button" variant="secondary" onClick={onClose}>
                   Cancel
                 </Button>
-                <Button className="min-w-48 justify-center" size="nav" type="submit">
+                <Button className="min-w-48 justify-center" disabled={isSubmitting} size="nav" type="submit">
                   <Gavel className="mr-2 h-4 w-4" />
-                  Apply penalty
+                  {isSubmitting ? 'Applying...' : 'Apply penalty'}
                 </Button>
               </div>
             </form>

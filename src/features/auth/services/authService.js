@@ -1,6 +1,6 @@
 import { storage } from '../../../lib/utils/storage'
 import { demoUsers } from '../../../data/mocks/user'
-import { apiClient } from '../../../lib/api/client'
+import { ApiClientError, apiClient } from '../../../lib/api/client'
 import { endpoints } from '../../../lib/api/endpoints'
 
 const USERS_KEY = 'compitihub.auth.users'
@@ -89,8 +89,7 @@ function createId() {
   return String(Date.now())
 }
 
-function loginMockUser({ email, password }) {
-  const normalizedEmail = normalizeEmail(email)
+function loginDemoUser({ normalizedEmail, password }) {
   const normalizedPassword = password.trim()
 
   if (!normalizedEmail || !normalizedPassword) {
@@ -117,9 +116,17 @@ function loginMockUser({ email, password }) {
     'mock',
   )
 
+  clearSession()
   setSession(sessionUser)
-  storage.remove(TOKEN_KEY)
   return sessionUser
+}
+
+function canUseMockLogin(normalizedEmail) {
+  return normalizedEmail.endsWith('@demo.com') || normalizedEmail === 'admin@admin.com'
+}
+
+function isBackendUnavailable(error) {
+  return !(error instanceof ApiClientError) || error.status >= 500
 }
 
 export const authService = {
@@ -127,20 +134,30 @@ export const authService = {
   getToken,
 
   async login({ email, password }) {
-    const mockSession = loginMockUser({ email, password })
-    if (mockSession) {
-      return mockSession
+    const normalizedEmail = normalizeEmail(email)
+
+    try {
+      const data = await apiClient(endpoints.auth.login, {
+        method: 'POST',
+        body: { email: normalizedEmail, password: password.trim() },
+      })
+
+      const sessionUser = normalizeSessionUser(data.user, 'api')
+      setSession(sessionUser)
+      setToken(data.token)
+      return sessionUser
+    } catch (error) {
+      if (!canUseMockLogin(normalizedEmail) || !isBackendUnavailable(error)) {
+        throw error
+      }
+
+      const demoSession = loginDemoUser({ normalizedEmail, password })
+      if (demoSession) {
+        return demoSession
+      }
+
+      throw new Error('Invalid email or password.')
     }
-
-    const data = await apiClient(endpoints.auth.login, {
-      method: 'POST',
-      body: { email: normalizeEmail(email), password: password.trim() },
-    })
-
-    const sessionUser = normalizeSessionUser(data.user, 'api')
-    setSession(sessionUser)
-    setToken(data.token)
-    return sessionUser
   },
 
   async signup({ username, email, password, defaultRole }) {
@@ -285,19 +302,20 @@ export const authService = {
 
   async logout() {
     const sessionUser = getSession()
+    const token = getToken()
 
-    if (sessionUser?.source === 'api' && getToken()) {
+    clearSession()
+
+    if (sessionUser?.source === 'api' && token) {
       try {
         await apiClient(endpoints.auth.logout, {
           method: 'POST',
-          token: getToken(),
+          token,
         })
       } catch {
         // Best-effort logout; always clear local session state.
       }
     }
-
-    clearSession()
   },
 
   async createLocalDemoUser(user) {
