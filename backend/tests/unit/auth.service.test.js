@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from '../test-utils/vitest-node.js'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
-import { User } from '../../modules/auth/user.model.js'
-import { signupStudent, loginUser, updateBasicInfo, updateActiveRole } from '../../modules/auth/auth.service.js'
-import { ApiError } from '../../utils/apiError.js'
+import { User } from '../../src/modules/auth/user.model.js'
+import { signupStudent, loginUser, updateBasicInfo, updateActiveRole } from '../../src/modules/auth/auth.service.js'
+import { ApiError } from '../../src/utils/apiError.js'
 
 let mongoServer
 
@@ -81,7 +81,7 @@ describe('Auth Service', () => {
 
   describe('loginUser', () => {
     beforeEach(async () => {
-      const user = await User.create({
+      await User.create({
         username: 'testuser',
         email: 'test@example.com',
         passwordHash: await bcrypt.hash('SecurePassword123', 12),

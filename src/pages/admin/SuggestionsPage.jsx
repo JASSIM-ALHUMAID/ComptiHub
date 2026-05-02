@@ -121,7 +121,7 @@ export default function SuggestionsPage() {
                       suggestion={suggestion}
                       isExpanded={expandedSuggestionId === suggestion.id}
                       onToggleExpandedSuggestion={toggleExpandedSuggestion}
-                      onDecision={handleDecision}
+                      onDecision={decideSuggestion}
                     />
                   ))}
                 </div>

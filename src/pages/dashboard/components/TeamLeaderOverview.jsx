@@ -3,12 +3,10 @@ import { ClipboardList, ShieldCheck, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../../../components/ui/Card'
 import LoadingState from '../../../components/feedback/LoadingState'
-import { useAuth } from '../../../features/auth/hooks/useAuth'
 import { teamService } from '../../../features/teams/services/teamService'
 import { routes } from '../../../lib/constants/routes'
 
 export default function TeamLeaderOverview() {
-  const { user } = useAuth()
   const [teams, setTeams] = useState([])
   const [leaveRequests, setLeaveRequests] = useState([])
   const [isLoading, setIsLoading] = useState(true)

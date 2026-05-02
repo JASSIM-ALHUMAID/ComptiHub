@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import mongoose from 'mongoose'
-import { signupSchema, loginSchema, basicInfoSchema, activeRoleSchema, defaultRoleSchema } from '../../modules/auth/auth.validation.js'
+import { describe, it, expect } from '../test-utils/vitest-node.js'
+import { signupSchema, loginSchema, basicInfoSchema, activeRoleSchema, defaultRoleSchema } from '../../src/modules/auth/auth.validation.js'
 import { ZodError } from 'zod'
 
 describe('Auth Validation', () => {

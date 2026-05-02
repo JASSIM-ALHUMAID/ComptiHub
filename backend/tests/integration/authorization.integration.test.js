@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from '../test-utils/vitest-node.js'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
-import { createApp } from '../../app.js'
-import { User } from '../../modules/auth/user.model.js'
-import { Team } from '../../modules/teams/team.model.js'
+import { createApp } from '../../src/app.js'
+import { User } from '../../src/modules/auth/user.model.js'
+import { Team } from '../../src/modules/teams/team.model.js'
 import bcrypt from 'bcrypt'
 
 let app
@@ -34,7 +34,7 @@ describe('Authorization Tests', () => {
     studentToken = studentUser.issueAccessToken()
 
     // Create team leader user
-    const leaderUser = await User.create({
+    await User.create({
       username: 'leader',
       email: 'leader@example.com',
       passwordHash: await bcrypt.hash('Password123', 12),
@@ -43,8 +43,6 @@ describe('Authorization Tests', () => {
       activeRole: 'teamLeader',
       accountStatus: 'active',
     })
-    const leaderToken = leaderUser.issueAccessToken()
-
     // Create admin user
     adminUser = await User.create({
       username: 'admin',
@@ -95,7 +93,7 @@ describe('Authorization Tests', () => {
         .get('/api/v1/admin/suggestions')
         .set('Authorization', `Bearer ${adminToken}`)
 
-      expect([200, 401, 403]).not.toContain(response.status)
+      expect(response.status).not.toBe(403)
       // Status 200 or error due to missing data, but NOT 403 forbidden
     })
 
@@ -118,7 +116,7 @@ describe('Authorization Tests', () => {
 
   describe('Banned account access', () => {
     it('should reject login for banned account', async () => {
-      const bannedUser = await User.create({
+      await User.create({
         username: 'banned',
         email: 'banned@example.com',
         passwordHash: await bcrypt.hash('Password123', 12),

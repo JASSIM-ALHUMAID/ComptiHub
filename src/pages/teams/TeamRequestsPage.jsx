@@ -45,6 +45,9 @@ export default function TeamRequestsPage() {
     }
   }
 
+  const pending = useMemo(() => requests.filter((request) => request.status === 'pending'), [requests])
+  const reviewed = useMemo(() => requests.filter((request) => request.status !== 'pending'), [requests])
+
   if (activeRole !== 'teamLeader') {
     return (
       <main>
@@ -52,9 +55,6 @@ export default function TeamRequestsPage() {
       </main>
     )
   }
-
-  const pending = useMemo(() => requests.filter((request) => request.status === 'pending'), [requests])
-  const reviewed = useMemo(() => requests.filter((request) => request.status !== 'pending'), [requests])
 
   return (
     <main className="space-y-6">

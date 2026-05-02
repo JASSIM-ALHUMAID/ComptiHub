@@ -30,3 +30,23 @@ adminSuggestionsRouter.patch('/:id/decide', async (req, res, next) => {
   }
 })
 
+adminSuggestionsRouter.patch('/:id/approve', async (req, res, next) => {
+  try {
+    const { id } = suggestionIdParamsSchema.parse(req.params)
+    const suggestion = await reviewSuggestion(req.user, id, 'approved')
+    sendSuccess(res, { suggestion })
+  } catch (error) {
+    next(error)
+  }
+})
+
+adminSuggestionsRouter.patch('/:id/reject', async (req, res, next) => {
+  try {
+    const { id } = suggestionIdParamsSchema.parse(req.params)
+    const suggestion = await reviewSuggestion(req.user, id, 'rejected')
+    sendSuccess(res, { suggestion })
+  } catch (error) {
+    next(error)
+  }
+})
+

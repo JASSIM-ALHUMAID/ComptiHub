@@ -3,14 +3,12 @@ import { ArrowRight, FolderOpen, Rocket, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../../../components/ui/Card'
 import LoadingState from '../../../components/feedback/LoadingState'
-import { useAuth } from '../../../features/auth/hooks/useAuth'
 import { applicationService } from '../../../features/applications/services/applicationService'
 import { teamService } from '../../../features/teams/services/teamService'
 import { competitionService } from '../../../features/competitions/services/competitionService'
 import { routes } from '../../../lib/constants/routes'
 
 export default function CompetitorOverview() {
-  const { user } = useAuth()
   const [teams, setTeams] = useState([])
   const [applications, setApplications] = useState([])
   const [competitions, setCompetitions] = useState([])

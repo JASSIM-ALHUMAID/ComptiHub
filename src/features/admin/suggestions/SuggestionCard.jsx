@@ -99,7 +99,7 @@ export default function SuggestionCard({ suggestion, isExpanded, onToggleExpande
           </div>
 
           <div className="flex flex-col gap-3 border-t border-[rgba(77,70,50,0.18)] pt-5 sm:flex-row">
-            <Button className="flex-1 justify-center" size="nav" onClick={() => onDecision(suggestion.id)}>
+            <Button className="flex-1 justify-center" size="nav" onClick={() => onDecision(suggestion.id, 'approved')}>
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Approve proposal
             </Button>
@@ -107,7 +107,7 @@ export default function SuggestionCard({ suggestion, isExpanded, onToggleExpande
               className="sm:min-w-60 justify-center border-[rgba(255,180,171,0.24)] bg-[linear-gradient(135deg,rgba(255,180,171,0.08),rgba(255,255,255,0.02))] text-[var(--admin-danger)] shadow-none hover:bg-[rgba(255,180,171,0.12)]"
               size="nav"
               variant="secondary"
-              onClick={() => onDecision(suggestion.id)}
+              onClick={() => onDecision(suggestion.id, 'rejected')}
             >
               <XCircle className="mr-2 h-4 w-4" />
               Reject proposal
