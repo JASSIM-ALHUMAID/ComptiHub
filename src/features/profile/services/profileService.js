@@ -1,20 +1,19 @@
 import { apiClient } from '../../../lib/api/client'
 import { endpoints } from '../../../lib/api/endpoints'
 import { authService } from '../../auth/services/authService'
-import { getUserProfile, saveUserProfile } from '../../../data/mocks/profile'
-import { formatSkillLabel, getUserSkills, saveUserSkills } from '../../../data/mocks/skills'
 
-function getSessionSource() {
-  return authService.getSession()?.source ?? 'mock'
+function formatSkillLabel(skill) {
+  return skill
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
 }
 
 export const profileService = {
   formatSkillLabel,
 
   async getProfile(userId) {
-    if (getSessionSource() === 'mock') {
-      return getUserProfile(userId)
-    }
+    void userId
 
     const data = await apiClient(endpoints.profile.me, {
       token: authService.getToken(),
@@ -23,9 +22,7 @@ export const profileService = {
   },
 
   async saveProfile(userId, profile) {
-    if (getSessionSource() === 'mock') {
-      return saveUserProfile(userId, profile)
-    }
+    void userId
 
     const data = await apiClient(endpoints.profile.me, {
       method: 'PATCH',
@@ -43,9 +40,7 @@ export const profileService = {
   },
 
   async getSkills(userId) {
-    if (getSessionSource() === 'mock') {
-      return getUserSkills(userId)
-    }
+    void userId
 
     const data = await apiClient(endpoints.profile.skills, {
       token: authService.getToken(),
@@ -54,9 +49,7 @@ export const profileService = {
   },
 
   async saveSkills(userId, skills) {
-    if (getSessionSource() === 'mock') {
-      return saveUserSkills(userId, skills)
-    }
+    void userId
 
     const data = await apiClient(endpoints.profile.skills, {
       method: 'PUT',

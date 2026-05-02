@@ -14,11 +14,27 @@ import { adminSuggestionsRouter } from './modules/suggestions/suggestion.routes.
 import { adminUsersRouter } from './modules/moderation/moderation.routes.js'
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js'
 
+const localDevOriginPattern = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/
+
+function isAllowedCorsOrigin(origin) {
+  return !origin || origin === env.clientUrl || (env.nodeEnv !== 'production' && localDevOriginPattern.test(origin))
+}
+
 export function createApp() {
   const app = express()
 
   app.use(helmet())
-  app.use(cors({ origin: env.clientUrl, credentials: true }))
+  app.use(cors({
+    origin(origin, callback) {
+      if (isAllowedCorsOrigin(origin)) {
+        callback(null, true)
+        return
+      }
+
+      callback(new Error(`CORS origin not allowed: ${origin}`))
+    },
+    credentials: true,
+  }))
   app.use(express.json({ limit: '1mb' }))
   app.use(cookieParser())
   if (env.nodeEnv !== 'test') {
