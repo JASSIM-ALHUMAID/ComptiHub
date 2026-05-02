@@ -148,6 +148,426 @@ Run these from `backend/`:
 - **`npm run seed`** - Seed demo data into MongoDB
 - **`npm test`** - Run backend tests
 
+## Backend Setup
+
+The backend is an Express API server in `backend/`. It connects to MongoDB, signs JWTs, and exposes all app data through `/api/v1` routes.
+
+### Environment Variables
+
+Create `backend/.env` for local development:
+
+```env
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/compitihub
+JWT_SECRET=replace-with-a-long-random-secret
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
+```
+
+Required variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `MONGODB_URI` | MongoDB connection string for local MongoDB or MongoDB Atlas. |
+| `JWT_SECRET` | Secret used to sign access and refresh tokens. Use a long random value. |
+| `CLIENT_URL` | Frontend origin allowed by CORS, for example `http://localhost:5173` or a Vercel URL. |
+| `NODE_ENV` | Use `development` locally and `production` in deployment. |
+| `PORT` | Optional locally; defaults to `5000`. Render supplies this automatically in production. |
+
+### Install And Run
+
+From the repository root:
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+The API will be available at:
+
+```text
+http://localhost:5000/api/v1
+```
+
+Health check:
+
+```bash
+curl http://localhost:5000/api/v1/health
+```
+
+Expected response:
+
+```json
+{
+  "success": true,
+  "data": {
+    "status": "ok"
+  }
+}
+```
+
+### Seed Data
+
+Run the seed from `backend/`:
+
+```bash
+npm run seed
+```
+
+For MongoDB Atlas or any non-local database, explicitly confirm the reset of seeded demo records:
+
+```powershell
+$env:SEED_CONFIRM="RESET_DEMO_DATA"; npm run seed
+```
+
+Seeded accounts:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@admin.com` | `123456789` |
+| Competitor | `competitor@demo.com` | `123456789` |
+| Team leader | `leader@demo.com` | `123456789` |
+
+### Backend Tests
+
+Run backend tests from `backend/`:
+
+```bash
+npm test
+```
+
+## API Documentation
+
+Base URL:
+
+```text
+http://localhost:5000/api/v1
+```
+
+Deployed frontends should use the deployed backend base URL, for example:
+
+```text
+https://swe363-project-if7d.onrender.com/api/v1
+```
+
+All responses use this envelope:
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+Error responses use this envelope:
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Validation failed.",
+    "details": [
+      { "path": "email", "message": "Invalid email" }
+    ]
+  }
+}
+```
+
+Authenticated endpoints require this header:
+
+```http
+Authorization: Bearer <access-token>
+```
+
+### Auth
+
+#### `POST /auth/signup`
+
+Creates a student account and returns a session.
+
+Request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "newstudent",
+    "email": "newstudent@edu.com",
+    "password": "123456789",
+    "defaultRole": "competitor"
+  }'
+```
+
+Response `201`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "665f1a2b3c4d5e6f78901234",
+      "username": "newstudent",
+      "email": "newstudent@edu.com",
+      "systemRole": "student",
+      "defaultRole": "competitor",
+      "activeRole": "competitor",
+      "accountStatus": "active"
+    },
+    "token": "<access-token>",
+    "refreshToken": "<refresh-token>"
+  }
+}
+```
+
+#### `POST /auth/login`
+
+Logs in an existing user.
+
+Request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "competitor@demo.com",
+    "password": "123456789"
+  }'
+```
+
+Response `200`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "665f1a2b3c4d5e6f78901234",
+      "username": "Demo Competitor",
+      "email": "competitor@demo.com",
+      "systemRole": "student",
+      "defaultRole": "competitor",
+      "activeRole": "competitor",
+      "accountStatus": "active"
+    },
+    "token": "<access-token>",
+    "refreshToken": "<refresh-token>"
+  }
+}
+```
+
+#### Other Auth Endpoints
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| `POST` | `/auth/refresh` | No | Accepts `{ "refreshToken": "..." }` and returns a new access token. |
+| `POST` | `/auth/logout` | Yes | Revokes a supplied refresh token when provided. |
+| `GET` | `/auth/me` | Yes | Returns the current authenticated user. |
+| `PATCH` | `/auth/me` | Yes | Updates `{ "username", "email" }`. |
+| `PATCH` | `/auth/default-role` | Yes | Updates `{ "defaultRole": "competitor" | "teamLeader" }`. |
+| `PATCH` | `/auth/active-role` | Yes | Updates `{ "activeRole": "competitor" | "teamLeader" }`. |
+
+### Competitions
+
+#### `GET /competitions`
+
+Lists public open competitions. Supports optional query params: `search`, `category`, `status`, `sortBy`, `sortOrder`.
+
+Request:
+
+```bash
+curl "http://localhost:5000/api/v1/competitions?search=hackathon&sortBy=deadline&sortOrder=asc"
+```
+
+Response `200`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "competitions": [
+      {
+        "id": "665f1a2b3c4d5e6f78900001",
+        "title": "AI Innovation Challenge",
+        "organizer": "Computer Science Club",
+        "category": "AI",
+        "status": "open",
+        "participationType": "team",
+        "registrationDeadline": "2026-06-01"
+      }
+    ]
+  }
+}
+```
+
+#### Competition Endpoints
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| `GET` | `/competitions` | No | List public competitions. |
+| `GET` | `/competitions/:id` | No | Get one public competition. |
+| `GET` | `/admin/competitions` | Admin | List all competitions. |
+| `POST` | `/admin/competitions` | Admin | Create a competition. |
+| `PATCH` | `/admin/competitions/:id` | Admin | Update a competition. |
+| `DELETE` | `/admin/competitions/:id` | Admin | Delete a competition. |
+
+Example admin create request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/admin/competitions \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Robotics Sprint",
+    "organizer": "Engineering Club",
+    "category": "Robotics",
+    "mode": "Hybrid",
+    "teamSize": "2-4",
+    "status": "open",
+    "prize": "1000 SAR",
+    "description": "Build an autonomous robot prototype.",
+    "requirements": ["Student ID", "Prototype demo"],
+    "tags": ["robotics", "hardware"],
+    "links": "https://example.com",
+    "startDate": "2026-06-10",
+    "endDate": "2026-06-12",
+    "registrationDeadline": "2026-06-01",
+    "participationType": "team"
+  }'
+```
+
+### Teams And Applications
+
+Team and application routes require a student token unless marked public.
+
+| Method | Endpoint | Role | Description |
+| --- | --- | --- | --- |
+| `GET` | `/competitions/:id/teams` | Public | List recruiting teams for a competition. |
+| `GET` | `/teams/me` | Student | List teams for the current user. |
+| `POST` | `/teams` | Team leader | Create a team. |
+| `GET` | `/teams/:id` | Student | Get a team by ID. |
+| `PUT` | `/teams/:id` | Team leader | Update a team led by the current user. |
+| `POST` | `/teams/:id/leave-requests` | Student | Request to leave a team. |
+| `GET` | `/teams/leave-requests/incoming` | Team leader | List incoming leave requests. |
+| `PATCH` | `/leave-requests/:id/status` | Team leader | Approve or reject a leave request. |
+| `GET` | `/applications/me` | Student | List current user's applications. |
+| `POST` | `/teams/:teamId/applications` | Competitor | Apply to join a team. |
+| `GET` | `/teams/applications/incoming` | Team leader | List incoming team applications. |
+| `PATCH` | `/applications/:id/status` | Team leader | Accept or reject an application. |
+
+Example create team request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/teams \
+  -H "Authorization: Bearer <team-leader-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Code Falcons",
+    "competitionId": "665f1a2b3c4d5e6f78900001",
+    "description": "Looking for frontend and ML teammates.",
+    "requiredSkills": ["React", "Python"],
+    "totalSlots": 4
+  }'
+```
+
+Example apply to team request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/teams/665f1a2b3c4d5e6f78900002/applications \
+  -H "Authorization: Bearer <competitor-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "I can help with React and data visualization."
+  }'
+```
+
+Example review application request:
+
+```bash
+curl -X PATCH http://localhost:5000/api/v1/applications/665f1a2b3c4d5e6f78900003/status \
+  -H "Authorization: Bearer <team-leader-token>" \
+  -H "Content-Type: application/json" \
+  -d '{ "status": "accepted" }'
+```
+
+### Profile
+
+Profile routes require authentication.
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/profile/me` | Get the current user's profile. |
+| `PATCH` | `/profile/me` | Update profile fields. |
+| `GET` | `/profile/me/skills` | Get current user's skills. |
+| `PUT` | `/profile/me/skills` | Replace current user's skills. |
+| `GET` | `/profile/:userId` | Get another user's profile. |
+
+Example update profile request:
+
+```bash
+curl -X PATCH http://localhost:5000/api/v1/profile/me \
+  -H "Authorization: Bearer <access-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "university": "King Saud University",
+    "major": "Software Engineering",
+    "year": "Junior"
+  }'
+```
+
+Example replace skills request:
+
+```bash
+curl -X PUT http://localhost:5000/api/v1/profile/me/skills \
+  -H "Authorization: Bearer <access-token>" \
+  -H "Content-Type: application/json" \
+  -d '{ "skills": ["React", "Node.js", "MongoDB"] }'
+```
+
+### Admin Suggestions
+
+Suggestion routes require an admin token.
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/admin/suggestions?status=pending` | List competition suggestions. |
+| `PATCH` | `/admin/suggestions/:id/decide` | Approve or reject a suggestion using `{ "decision": "approved" | "rejected" }`. |
+| `PATCH` | `/admin/suggestions/:id/approve` | Approve a suggestion. |
+| `PATCH` | `/admin/suggestions/:id/reject` | Reject a suggestion. |
+
+Example:
+
+```bash
+curl -X PATCH http://localhost:5000/api/v1/admin/suggestions/665f1a2b3c4d5e6f78900004/decide \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{ "decision": "approved" }'
+```
+
+### Admin Moderation
+
+Moderation routes require an admin token.
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/admin/moderation/users` | List users. Supports `search`, `accountStatus`, and `systemRole`. |
+| `POST` | `/admin/moderation/users/:userId/moderation-actions` | Create a warning, suspension, or ban action. |
+| `GET` | `/admin/moderation/users/:userId/moderation-actions` | List moderation actions for a user. |
+| `PATCH` | `/admin/moderation/users/:userId/status` | Compatibility route that creates a moderation action. |
+
+Example moderation action request:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/admin/moderation/users/665f1a2b3c4d5e6f78900005/moderation-actions \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "penalty": "suspend",
+    "duration": "7 days",
+    "reason": "Repeatedly submitted inappropriate applications."
+  }'
+```
+
 ## Project Structure
 
 ```
