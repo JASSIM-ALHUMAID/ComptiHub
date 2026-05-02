@@ -29,16 +29,8 @@ export function AuthProvider({ children }) {
     setApplications([])
   }, [])
 
-  // Load applications when user authenticates via API
   useEffect(() => {
     if (!user) {
-      setApplications([])
-      setApplicationsError(null)
-      return
-    }
-
-    if (user.source !== 'api') {
-      // Mock users don't have API-backed applications
       setApplications([])
       setApplicationsError(null)
       return
@@ -93,7 +85,7 @@ export function AuthProvider({ children }) {
 
   const addApplication = useCallback(
     async (teamId, teamName, competitionTitle, message) => {
-      if (!user || user.source !== 'api') {
+      if (!user) {
         throw new Error('Must be authenticated to submit an application')
       }
 

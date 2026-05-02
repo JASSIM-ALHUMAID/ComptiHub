@@ -1,4 +1,3 @@
-import { adminModerationUsers } from '../../../data/mocks/adminModeration'
 import { apiClient } from '../../../lib/api/client'
 import { endpoints } from '../../../lib/api/endpoints'
 import { authService } from '../../auth/services/authService'
@@ -50,13 +49,6 @@ function normalizeUser(user) {
 
 export const adminModerationService = {
   async listUsers() {
-    const session = authService.getSession()
-
-    // Use mock data only for explicit non-API sessions.
-    if (session?.source !== 'api') {
-      return adminModerationUsers.map(normalizeUser)
-    }
-
     const data = await apiClient(endpoints.adminModeration.listUsers, {
       token: authService.getToken(),
     })
@@ -64,13 +56,6 @@ export const adminModerationService = {
   },
 
   async createModerationAction(userId, { penalty, duration, reason }) {
-    const session = authService.getSession()
-
-    if (session?.source !== 'api') {
-      // Mock implementation - just return success
-      return { success: true }
-    }
-
     const data = await apiClient(endpoints.adminModeration.createAction(userId), {
       method: 'POST',
       body: { penalty, duration, reason },

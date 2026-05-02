@@ -12,12 +12,11 @@ export default function TeamRequestsPage() {
   const [error, setError] = useState('')
   const [reviewingIds, setReviewingIds] = useState(new Set())
   const reviewingIdsRef = useRef(new Set())
-  const isApiSession = user?.source === 'api'
 
   useEffect(() => {
     let isCancelled = false
 
-    if (activeRole !== 'teamLeader' || !isApiSession) {
+    if (activeRole !== 'teamLeader' || !user) {
       setRequests([])
       setError('')
       return () => {
@@ -49,10 +48,10 @@ export default function TeamRequestsPage() {
     return () => {
       isCancelled = true
     }
-  }, [activeRole, isApiSession])
+  }, [activeRole, user])
 
   async function updateStatus(id, status) {
-    if (!isApiSession) {
+    if (!user) {
       return
     }
 

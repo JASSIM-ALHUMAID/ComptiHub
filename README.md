@@ -40,14 +40,18 @@ ComptiHub streamlines the competition and team formation experience for universi
 - **Build Tool**: [Vite 8](https://vitejs.dev) - Next-generation frontend tooling
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com) - Utility-first CSS framework
 - **Routing**: [React Router DOM 7](https://reactrouter.com) - Client-side routing
+- **Backend**: [Express](https://expressjs.com) and [Node.js](https://nodejs.org) - REST API server
+- **Database**: [MongoDB](https://www.mongodb.com) with [Mongoose](https://mongoosejs.com)
+- **Authentication**: JWT-based API authentication
 - **Icons**: [Lucide React](https://lucide.dev) - Beautiful, consistent icon library
 - **Code Quality**: [ESLint 9](https://eslint.org) - JavaScript linting
 
 ## Installation
 
 ### Prerequisites
-- Node.js 16.0 or higher
+- Node.js 20.0 or higher
 - npm or yarn package manager
+- MongoDB connection string, either local MongoDB or MongoDB Atlas
 
 ### Setup Steps
 
@@ -57,20 +61,66 @@ ComptiHub streamlines the competition and team formation experience for universi
    cd SWE363-project
    ```
 
-2. **Install dependencies**
+2. **Install frontend dependencies**
    ```bash
    npm install
    ```
 
-3. **Start the development server**
+3. **Install backend dependencies**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+4. **Configure backend environment**
+
+   Create `backend/.env`:
+
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://127.0.0.1:27017/compitihub
+   JWT_SECRET=replace-with-a-long-random-secret
+   CLIENT_URL=http://localhost:5173
+   NODE_ENV=development
+   ```
+
+   Use your MongoDB Atlas URI for `MONGODB_URI` if you want to use a hosted database.
+
+5. **Seed the database**
+
+   From `backend/`, seed local MongoDB with:
+
+   ```bash
+   npm run seed
+   ```
+
+   For MongoDB Atlas or any non-local database, explicitly confirm the reset of demo records:
+
+   ```powershell
+   $env:SEED_CONFIRM="RESET_DEMO_DATA"; npm run seed
+   ```
+
+6. **Start the backend API**
+
+   From `backend/`:
+
    ```bash
    npm run dev
    ```
-   The application will be available at `http://localhost:5173`
+
+7. **Start the frontend development server**
+
+   From the repository root:
+
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will be available at `http://localhost:5173` or the next available Vite port. The frontend calls the backend at `http://localhost:5000/api/v1` by default.
 
 ## Demo Accounts
 
-Use these seeded accounts to review the mock data across the main tabs:
+Use these seeded database accounts after running `npm run seed`:
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -78,15 +128,25 @@ Use these seeded accounts to review the mock data across the main tabs:
 | **Team Leader Demo** | `leader@demo.com` | `123456789` |
 | **Admin Demo** | `admin@admin.com` | `123456789` |
 
-- The competitor demo includes populated `Teams`, `Applications`, `Dashboard`, and `Profile` views.
-- The team leader demo includes populated `Teams`, `Applications`, `Dashboard`, `Join Requests`, and `Profile` views.
+These accounts are stored in MongoDB and use the same backend API as newly registered users.
 
 ## Available Scripts
+
+### Frontend
 
 - **`npm run dev`** - Start the development server with hot module replacement
 - **`npm run build`** - Build the project for production
 - **`npm run preview`** - Preview the production build locally
 - **`npm run lint`** - Run ESLint to check code quality
+
+### Backend
+
+Run these from `backend/`:
+
+- **`npm run dev`** - Start the API server with file watching
+- **`npm start`** - Start the API server
+- **`npm run seed`** - Seed demo data into MongoDB
+- **`npm test`** - Run backend tests
 
 ## Project Structure
 
@@ -105,7 +165,7 @@ src/
 │   ├── teams/              # Team management
 │   ├── applications/       # Application tracking
 │   ├── profile/            # User profile management
-│   └── admin/              # Admin panel (reserved)
+│   └── admin/              # Admin panel
 ├── features/               # Domain-specific features
 │   ├── auth/               # Authentication logic
 │   ├── account/            # Account and role management
@@ -124,8 +184,6 @@ src/
 │   ├── api/                # API client configuration
 │   ├── constants/          # App constants
 │   └── utils/              # Helper functions
-├── data/                   # Mock data for development
-│   └── mocks/              # Sample data
 ├── assets/                 # Static assets
 │   ├── brand/              # Logo and branding
 │   └── illustrations/      # Illustrations and images
@@ -144,8 +202,8 @@ src/
 
 ### Log In
 1. User logs in with credentials
-2. Chooses which role to enter with
-3. Redirected to the appropriate dashboard
+2. Enters the app with the account's active role
+3. Can switch student role from the UI when applicable
 
 ### Role Switching
 - Once logged in, users can switch between Competitor and Team Leader roles without logging out
@@ -179,21 +237,27 @@ src/
 
 ## Getting Started as a Developer
 
-1. **Start the dev server**
+1. **Start the backend API**
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+2. **Start the frontend dev server in a second terminal from the repository root**
    ```bash
    npm run dev
    ```
 
-2. **Create a new feature**
+3. **Create a new feature**
    - Add pages in `src/pages/`
    - Add feature logic in `src/features/`
    - Use shared components from `src/components/`
 
-3. **Add routing**
+4. **Add routing**
    - Update `src/app/router.jsx` with new routes
    - Use appropriate route guards (ProtectedRoute, AdminRoute, etc.)
 
-4. **Style with Tailwind**
+5. **Style with Tailwind**
    - Use Tailwind utility classes for styling
    - Avoid inline styles
    - Create reusable component variants if needed
@@ -208,13 +272,20 @@ The optimized build will be in the `dist/` directory.
 
 ## Code Quality
 
-Maintain code quality with ESLint:
+Run frontend checks from the repository root:
 
 ```bash
 npm run lint
+npm run build
 ```
 
-Address any linting errors before committing changes.
+Run backend tests from `backend/`:
+
+```bash
+npm test
+```
+
+Address any linting, build, or test errors before committing changes.
 
 ## Current Status
 
@@ -223,10 +294,11 @@ Address any linting errors before committing changes.
 - ✅ Public landing page
 - ✅ Competitor dashboard and features
 - ✅ Team leader dashboard and features
-- ⏳ Backend API integration
+- ✅ Backend API integration
+- ✅ MongoDB seed data
 - ✅ Admin panel implementation
 - ⏳ Real-time notifications
-- ⏳ Production deployment
+- ✅ Deployment guide
 
 ## Contributing
 

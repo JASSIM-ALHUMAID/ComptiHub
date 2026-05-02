@@ -18,14 +18,13 @@ const statusVariants = {
 
 export default function MyApplicationsPage() {
   const { activeRole } = useStudentRole()
-  const { applications, applicationsLoading, applicationsError, user } = useAuth()
+  const { applications, applicationsLoading, applicationsError } = useAuth()
 
   if (activeRole === 'teamLeader') {
     return <TeamRequestsPage />
   }
 
-  // Only show loading for API users
-  if (applicationsLoading && user?.source === 'api') {
+  if (applicationsLoading) {
     return <LoadingState title="Loading your applications..." />
   }
 
